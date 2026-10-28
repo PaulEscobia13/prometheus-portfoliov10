@@ -7,11 +7,13 @@ import CaseStudySection from "../../components/CaseStudySection";
 import RotatingFavicon from "../../components/RotatingFavicon";
 import ShowcaseSection from "../../components/ShowcaseSection";
 import PricingSection from "../../components/PricingSection";
+import TeamSection from "../../components/TeamSection";
 import "lenis/dist/lenis.css";
 import "./preview.css";
 import "./cases.css";
 import "./showcase.css";
 import "./pricing.css";
+import "./team.css";
 
 export const metadata: Metadata = {
   title: "Prometheus | Tech Products and Services",
@@ -32,6 +34,7 @@ export default function PrometheusPreview() {
         <CaseStudySection />
         <ShowcaseSection />
         <PricingSection />
+        <TeamSection />
       </main>
     </div>
   );

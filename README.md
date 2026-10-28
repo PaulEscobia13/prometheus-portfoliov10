@@ -37,3 +37,10 @@ This initial harness preserves supplied DOM and CSS for calibration. It is not t
 Review-panel typography now uses the captured font-size tokens, Gordita Medium (500) for titles and testimonials, the captured 30px title / 20px review override on short desktop screens, a 64px portrait, Libre Baskerville italic client name, and 60px adjacent controls. It uses a generic Review label instead of claiming Clutch verification.
 
 Pricing typography uses the self-hosted Geist font from the official geist package, scoped to PricingSection: heading 600, subtitle 500, features 400, and heading tracking -0.04em.
+
+
+### Team section
+
+After pricing, `#about` opens a full-screen Team cover. Scrolling opens its left and right halves to reveal the dark, four-person team layout; scrolling back closes it. The Meet the team button skips the animation and focuses the team heading, including during active smooth scrolling. Reduced motion and JavaScript-disabled browsing show the team directly without the extra scroll distance.
+
+Sample names, roles and portrait paths are centralized in `content/team.ts`. The four `public/team/placeholder-*.svg` files are intentionally generic illustrated placeholders. Replace these with real team portraits and update names/roles together. The section does not use Linear staff photos or claim the sample people work at Prometheus.

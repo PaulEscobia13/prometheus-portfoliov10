@@ -38,10 +38,21 @@ export default function SmoothScroll() {
       frame = requestAnimationFrame(animate);
     }
 
+    function scrollImmediately(event: Event) {
+      const top = (event as CustomEvent<number>).detail;
+      if (!Number.isFinite(top)) return;
+      event.preventDefault();
+      // A reveal skip must also cancel an in-flight smooth anchor navigation.
+      if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+      else window.scrollTo({ top, behavior: "instant" });
+    }
+
     configure();
+    window.addEventListener("prometheus:scroll-to", scrollImmediately);
     reducedMotion.addEventListener("change", configure);
     return () => {
       reducedMotion.removeEventListener("change", configure);
+      window.removeEventListener("prometheus:scroll-to", scrollImmediately);
       stop();
     };
   }, []);
