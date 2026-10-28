@@ -1,0 +1,91 @@
+.prometheus-preview { --prometheus-footer-radius: 7.6rem; }
+.prometheus-preview > .page-main { z-index: 2; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); }
+
+/* The FAQ is the rounded foreground sheet above the sticky burgundy drawer.
+   Clip this last section only, preserving sticky galleries and the team stage. */
+.prometheus-faq { position: relative; z-index: 2; padding: 12rem 0 14rem; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); background: #fff; color: #090914; scroll-margin-top: 10.8rem; }
+.prometheus-faq-container { width: min(100% - 12rem, 120rem); margin-inline: auto; }
+.prometheus-faq-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 4rem; }
+.prometheus-faq-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 10rem; font-weight: 400; line-height: 1.1; letter-spacing: -.05em; }
+.prometheus-faq-label { display: inline-flex; align-items: center; gap: 1.6rem; flex-shrink: 0; margin: 1.6rem 0 0; font-family: Manrope, Arial, sans-serif; font-size: 1.2rem; line-height: 1.5; }
+.prometheus-faq-label > span { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border: 1px solid #0909140d; border-radius: 50%; }
+.prometheus-faq-list { width: 80%; margin: 14.5rem 0 0 auto; }
+.prometheus-faq-item { padding: 0 0 3.2rem; border-bottom: 1px solid #0909141a; }
+.prometheus-faq-item + .prometheus-faq-item { margin-top: 4rem; }
+.prometheus-faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 3rem; min-height: 4.4rem; list-style: none; cursor: pointer; }
+.prometheus-faq-item summary::-webkit-details-marker { display: none; }
+.prometheus-faq-item summary::marker { content: ""; }
+.prometheus-faq-item h3 { margin: 0; padding-bottom: .32rem; font-family: Georgia, "Times New Roman", serif; font-size: 3.2rem; font-weight: 400; line-height: 1.15; letter-spacing: -.02em; }
+.prometheus-faq-arrow { flex-shrink: 0; transition: transform .4s ease; }
+.prometheus-faq-item[open]:not([data-expanded="false"]) .prometheus-faq-arrow { transform: rotate(90deg); }
+.prometheus-faq-answer { overflow: hidden; }
+.prometheus-faq-answer p { margin: 0; padding: 2.4rem 15% 0 0; font-family: Manrope, Arial, sans-serif; font-size: 1.8rem; font-weight: 400; line-height: 1.5; color: #606062; }
+.prometheus-faq-item summary:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 8px; border-radius: .3rem; }
+
+.prometheus-editorial-footer { position: sticky; bottom: 0; z-index: 1; margin-top: calc(-1 * var(--prometheus-footer-radius)); padding-top: var(--prometheus-footer-radius); border-radius: var(--prometheus-footer-radius) var(--prometheus-footer-radius) 0 0; background: #642b2d; color: #fff4ea; overflow: clip; scroll-margin-top: 10.8rem; }
+.prometheus-footer-artboard { position: relative; isolation: isolate; container-type: inline-size; width: 100%; aspect-ratio: 1774 / 806; overflow: hidden; background: #642b2d; color: #fff4ea; font-family: "Trebuchet MS", Arial, sans-serif; }
+.prometheus-footer-foreground { position: relative; z-index: 1; height: 100%; padding: 3.6cqw 9.5cqw 0; transform: translate3d(0, var(--footer-reveal-offset, 0px), 0); }
+.prometheus-footer-top { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-bottom: 1.7cqw; border-bottom: 1px solid #fff4ea45; }
+.prometheus-footer-top > :is(span, a) { color: #fff4ea; font: 700 1cqw/1.1 "Trebuchet MS", Arial, sans-serif; letter-spacing: .17em; text-transform: uppercase; text-decoration: none; }
+.prometheus-footer-main { margin-top: 1.9cqw; }
+.prometheus-footer-main h2 { max-width: 68cqw; margin: 0; color: #fff4ea; font: 400 5cqw/.94 Georgia, "Times New Roman", serif; letter-spacing: -.058em; }
+.prometheus-footer-main p { max-width: 53cqw; margin: 2.2cqw 0 0; color: #fff4ead8; font: 400 1.3cqw/1.58 "Trebuchet MS", Arial, sans-serif; }
+.prometheus-footer-lower { position: absolute; z-index: 1; top: 23.5cqw; left: 9.5cqw; right: 9.5cqw; display: flex; justify-content: space-between; align-items: flex-end; gap: 4cqw; scroll-margin-top: 12rem; }
+.prometheus-footer-cta { display: inline-flex; align-items: center; justify-content: center; gap: .4em; min-height: 4.4rem; padding: 1.45cqw 2cqw; border: 1px solid #fff4eab0; border-radius: 100px; color: #fff4ea; font: 700 1.12cqw/1.1 "Trebuchet MS", Arial, sans-serif; text-decoration: none; white-space: nowrap; transition: background .2s, color .2s; }
+.prometheus-footer-cta:hover { background: #fff4ea; color: #642b2d; }
+.prometheus-footer-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2cqw 3.7cqw; font: 500 1.1cqw/1.2 "Trebuchet MS", Arial, sans-serif; }
+.prometheus-footer-links a { color: #fff4ea; text-decoration: none; }
+.prometheus-footer-links a:hover, .prometheus-footer-top a:hover { text-decoration: underline; text-underline-offset: .3em; }
+.prometheus-editorial-footer a:focus-visible { outline: 2px solid #fff4ea; outline-offset: 6px; }
+.prometheus-footer-wordmark { position: absolute; z-index: 0; left: 50%; bottom: -.25em; transform: translateX(-50%) scaleX(1.075); transform-origin: center bottom; white-space: nowrap; color: #fff4ea; font: 400 14.7cqw/.9 Georgia, "Times New Roman", serif; letter-spacing: -.075em; pointer-events: none; user-select: none; }
+
+@media (max-width: 1100px) {
+  .prometheus-faq-header h2 { font-size: 8rem; }
+  .prometheus-faq-container { width: calc(100% - 8rem); }
+  .prometheus-faq-list { margin-top: 10rem; }
+}
+@media (max-width: 900px) {
+  .prometheus-preview { --prometheus-footer-radius: 5.2rem; }
+  .prometheus-footer-artboard { aspect-ratio: auto; min-height: 66cqw; }
+  .prometheus-footer-main h2 { font-size: 5.9cqw; }
+  .prometheus-footer-main p { font-size: 1.9cqw; }
+  .prometheus-footer-top > :is(span, a) { font-size: 1.4cqw; }
+  .prometheus-footer-lower { top: 37cqw; }
+  .prometheus-footer-links, .prometheus-footer-cta { font-size: 1.4cqw; }
+}
+@media (max-width: 767px) {
+  .prometheus-faq { padding: 8rem 0 9rem; scroll-margin-top: 6.8rem; }
+  .prometheus-faq-container { width: calc(100% - 4rem); }
+  .prometheus-faq-header { display: block; }
+  .prometheus-faq-header h2 { font-size: clamp(4rem, 8.5vw, 6.4rem); letter-spacing: -.05em; }
+  .prometheus-faq-label { margin-top: 2.4rem; font-size: 1rem; gap: 1rem; }
+  .prometheus-faq-label > span { width: 2.8rem; height: 2.8rem; }
+  .prometheus-faq-list { width: 100%; margin-top: 6.4rem; }
+  .prometheus-faq-item { padding-bottom: 2.4rem; }
+  .prometheus-faq-item + .prometheus-faq-item { margin-top: 2.4rem; }
+  .prometheus-faq-item summary { gap: 2rem; }
+  .prometheus-faq-item h3 { font-size: 2.4rem; }
+  .prometheus-faq-answer p { padding: 1.8rem 0 0; font-size: 1.5rem; }
+}
+@media (max-width: 600px) {
+  .prometheus-preview { --prometheus-footer-radius: 3.6rem; }
+  /* Normal flow on small screens keeps every footer link reachable. */
+  .prometheus-editorial-footer { position: relative; scroll-margin-top: 6.8rem; }
+  .prometheus-footer-artboard { aspect-ratio: auto; min-height: 53rem; }
+  .prometheus-footer-foreground { height: auto; padding: 8cqw 6.5cqw 23cqw; }
+  .prometheus-footer-top { padding-bottom: 5cqw; }
+  .prometheus-footer-top > :is(span, a) { font-size: 2.5cqw; }
+  .prometheus-footer-main { margin-top: 9cqw; }
+  .prometheus-footer-main h2 { max-width: 88cqw; font-size: 9.4cqw; line-height: 1.04; letter-spacing: -.06em; }
+  .prometheus-footer-main p { max-width: 85cqw; margin-top: 5cqw; font-size: max(1.4rem, 3.5cqw); line-height: 1.6; }
+  .prometheus-footer-lower { position: static; flex-direction: column; align-items: flex-start; gap: 6cqw; margin-top: 7cqw; }
+  .prometheus-footer-cta { max-width: 100%; padding: 3cqw 4cqw; font-size: max(1.2rem, 3cqw); white-space: normal; text-align: center; }
+  .prometheus-footer-links { gap: 0 9cqw; font-size: max(1.2rem, 3cqw); }
+  .prometheus-footer-links a { display: flex; align-items: center; min-height: 4.4rem; }
+  .prometheus-footer-wordmark { font-size: 15.6cqw; bottom: -.34em; transform: translateX(-50%) scaleX(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-faq-arrow, .prometheus-footer-cta { transition: none; }
+  .prometheus-editorial-footer { position: relative; }
+  .prometheus-footer-foreground { transform: none; }
+}

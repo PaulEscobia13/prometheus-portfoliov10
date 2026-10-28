@@ -8,12 +8,16 @@ import RotatingFavicon from "../../components/RotatingFavicon";
 import ShowcaseSection from "../../components/ShowcaseSection";
 import PricingSection from "../../components/PricingSection";
 import TeamSection from "../../components/TeamSection";
+import FAQSection from "../../components/FAQSection";
+import FooterSection from "../../components/FooterSection";
+import "@fontsource/manrope/latin-400.css";
 import "lenis/dist/lenis.css";
 import "./preview.css";
 import "./cases.css";
 import "./showcase.css";
 import "./pricing.css";
 import "./team.css";
+import "./closing.css";
 
 export const metadata: Metadata = {
   title: "Prometheus | Tech Products and Services",
@@ -27,7 +31,7 @@ export default function PrometheusPreview() {
       <RotatingFavicon />
       <Navigation brand="prometheus" />
       <main className="page-main">
-        <div className="prometheus-intro-stage">
+        <div id="overview" className="prometheus-intro-stage">
           <Hero brand="prometheus" />
           <Services />
         </div>
@@ -35,7 +39,9 @@ export default function PrometheusPreview() {
         <ShowcaseSection />
         <PricingSection />
         <TeamSection />
+        <FAQSection />
       </main>
+      <FooterSection />
     </div>
   );
 }
