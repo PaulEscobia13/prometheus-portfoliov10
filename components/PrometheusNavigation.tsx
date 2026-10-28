@@ -13,8 +13,16 @@ export default function PrometheusNavigation() {
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 16);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   useEffect(() => {
     const query = window.matchMedia("(max-width: 991px)");
@@ -43,7 +51,7 @@ export default function PrometheusNavigation() {
   const closeMenu = () => { setOpen(false); setServicesOpen(false); };
 
   return (
-    <nav aria-label="Main navigation" className="navbar prometheus-navbar" onKeyDown={event => {
+    <nav aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-menu-open={open} onKeyDown={event => {
       if (event.key === "Escape" && open) {
         closeMenu();
         toggle.current?.focus();
