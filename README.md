@@ -1,5 +1,7 @@
 Private Arounda reference study. Existing Prometheus projects are untouched.
 
+The `/prometheus` route is a separate background and wordmark experiment requested by the user. `/` remains the original reference. Install the supplied PNG on Windows with `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install-preview-background.ps1`. This uses `Downloads/Moody Red, Cream, and Teal Waves.png` by default, or accepts `-Source` with another path. The PNG was visible in chat but not supplied as a downloadable attachment to the cloud workspace, so the original image is not committed. The preview retains reference copy/assets and outbound Arounda links for now; it is not ready for publication as a Prometheus site. Gordita gives the wordmark a similar typographic style; Arounda's original logo is custom vector artwork, not a reproducible font wordmark.
+
 Run `npm ci`, `npm run dev`. Validate with `npm run typecheck` and `npm run build`.
 
 On Windows, install the four exact reference fonts from the site's CDN by running `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\download-reference-fonts.ps1` from this directory. This bypass applies only to execution of this local helper, not TLS verification or a persistent system policy. Font binaries remain local in ignored `public/fonts/`. Compare both browser tabs at 100% zoom (Ctrl+0). The helper cannot be executed in this Linux environment and its CDN requests are currently blocked here; successful font loading and visual parity still require browser verification.

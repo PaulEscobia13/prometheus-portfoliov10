@@ -1,0 +1,47 @@
+.prometheus-preview {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  background-color: #101216;
+}
+
+.prometheus-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%)),
+    url('/backgrounds/prometheus-waves.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.prometheus-preview .home-hero-bg-img,
+.prometheus-preview .home-hero-bg-img-mobile {
+  display: none;
+}
+
+.prometheus-preview .navbar_logo-wrapper {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.prometheus-wordmark {
+  display: block;
+  color: #fff;
+  font-family: var(--_typography---font--family--primary);
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: -.065em;
+  line-height: 1;
+}
+
+.prometheus-preview .trusted_wrapper {
+  background-color: rgb(8 10 14 / 18%);
+}
+
+@media (max-width: 479px) {
+  .prometheus-wordmark { font-size: 2.5rem; }
+}
