@@ -2,7 +2,7 @@ export const prometheusHero = {
   eyebrow: "Tech Products and Services",
   headline: [
     { text: "your tech partner that helps you create " },
-    { text: "websites", pill: "is-purple" },
+    { text: "Websites", pill: "is-purple" },
     { text: " and " },
     { text: "Digital systems", pill: "is-cyan" },
     { text: " with wonderful service" },
