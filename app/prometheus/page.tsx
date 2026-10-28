@@ -31,9 +31,11 @@ export default function PrometheusPreview() {
       <RotatingFavicon />
       <Navigation brand="prometheus" />
       <main className="page-main">
-        <div id="overview" className="prometheus-intro-stage">
-          <Hero brand="prometheus" />
-          <Services />
+        <div className="prometheus-background-stage">
+          <div id="overview" className="prometheus-intro-stage">
+            <Hero brand="prometheus" />
+            <Services />
+          </div>
           <CaseStudySection />
         </div>
         <ShowcaseSection />

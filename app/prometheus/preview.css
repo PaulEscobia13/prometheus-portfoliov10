@@ -238,12 +238,14 @@
   }
 }
 
+.prometheus-background-stage,
 .prometheus-intro-stage {
   position: relative;
   isolation: isolate;
   min-height: 100svh;
 }
 
+.prometheus-background-stage::before,
 .prometheus-intro-stage::before {
   content: "";
   position: absolute;
@@ -256,6 +258,12 @@
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
+}
+
+/* Keep the original hero/services image framing independent of the longer
+   cases backdrop, and blend their lower edges rather than zooming the hero. */
+.prometheus-intro-stage::before {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 14rem), transparent);
 }
 
 .prometheus-services {
