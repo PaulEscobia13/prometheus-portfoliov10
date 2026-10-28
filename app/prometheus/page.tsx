@@ -34,8 +34,8 @@ export default function PrometheusPreview() {
         <div id="overview" className="prometheus-intro-stage">
           <Hero brand="prometheus" />
           <Services />
+          <CaseStudySection />
         </div>
-        <CaseStudySection />
         <ShowcaseSection />
         <PricingSection />
         <TeamSection />

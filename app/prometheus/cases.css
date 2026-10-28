@@ -1,6 +1,6 @@
 .prometheus-cases {
   color: var(--prometheus-off-white);
-  background: radial-gradient(ellipse at top right, rgb(126 172 181 / 7%), transparent 55%), var(--prometheus-ink);
+  background: transparent;
   scroll-margin-top: 11rem;
 }
 
