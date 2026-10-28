@@ -22,6 +22,16 @@ export default function FooterReveal({ children }: { children: ReactNode }) {
     function schedule() {
       if (frame === undefined) frame = requestAnimationFrame(update);
     }
+    function revealFocusedLink() {
+      if (!root || !(main instanceof HTMLElement)) return;
+      // Keyboard navigation can focus a sticky link while the foreground page
+      // still covers it. Reveal the drawer without changing keyboard focus.
+      if (main.getBoundingClientRect().bottom <= root.getBoundingClientRect().top + 1) return;
+      const top = window.scrollY + main.getBoundingClientRect().bottom + root.offsetHeight - window.innerHeight;
+      const request = new window.CustomEvent("prometheus:scroll-to", { detail: top, cancelable: true });
+      if (window.dispatchEvent(request)) window.scrollTo({ top, behavior: "instant" });
+      schedule();
+    }
     const resize = new ResizeObserver(schedule);
     resize.observe(root);
     resize.observe(main);
@@ -29,12 +39,14 @@ export default function FooterReveal({ children }: { children: ReactNode }) {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     media.addEventListener("change", schedule);
+    root.addEventListener("focusin", revealFocusedLink);
     return () => {
       if (frame !== undefined) cancelAnimationFrame(frame);
       resize.disconnect();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       media.removeEventListener("change", schedule);
+      root.removeEventListener("focusin", revealFocusedLink);
     };
   }, []);
 

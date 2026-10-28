@@ -14,13 +14,12 @@
 - Team implemented in 08e4025: scroll-driven left/right Team cover, dark Linear-style layout, four clearly marked fictional profiles. User approved dummy data. Reduced-motion and native skip supported.
 - Last VERIFIED state (08e4025): 20 tests passed, lint no errors/two existing CaseStudies img warnings, TypeScript and production build passed. Desktop/mobile/keyboard checks done.
 
-## Current checkpoint: FAQ/footer UNFINISHED AND UNVERIFIED
-User requested commit/push immediately to preserve work near usage limit. This checkpoint adds:
-- components/FAQItem.tsx, FAQSection.tsx, FooterReveal.tsx, FooterSection.tsx
-- content/faq.ts, contact.ts
-- app/prometheus/closing.css and page composition changes
-- @fontsource/manrope 5.3.0 (installed and lockfile updated)
-No lint, typecheck, build, browser validation, or new tests have run for these additions yet. Do not describe this checkpoint as finished.
+## Current state: implementation complete, browser comparison pending
+The pushed checkpoint was `1f74b25`. Subsequent local work removed the footer's negative margin/top padding so reveal progress can reach zero, added focus handling that reveals covered footer links without moving keyboard focus, and added a normal-flow fallback for short viewports.
+
+The current FAQ/footer components and scoped styles are implemented. Automated tests now cover 25 cases, including five new FAQ/footer regression tests. Lint and TypeScript pass (lint retains two existing CaseStudies image warnings). The production build also passed.
+
+Visual QA was attempted but the browser tool reported: **Local browser use is disabled in Work settings**. Do not claim the FAQ/footer visual match has been verified. The user was directed to Settings > Browser > Agent permissions (codex://settings/browser-use), based on official desktop documentation. Resume browser QA after access is enabled.
 
 ## Authoritative references and decisions
 - FAQ: https://www.paradigm.design/?ref=unsection.com
@@ -34,12 +33,11 @@ No lint, typecheck, build, browser validation, or new tests have run for these a
 - Contact CTA currently reuses the reference's team calendar, explicitly documented in content/contact.ts: https://cal.com/rex-oliver-jumawid-mmz8ct/furniture-odyssey-consultation . Confirm suitability for general portfolio before any deployment. No booking was submitted.
 
 ## Priority next steps
-1. Inspect/fix footer geometry BEFORE validation. Current closing.css has negative top margin and top padding equal to radius on the sticky footer. This likely conflicts with FooterReveal's progress math, preventing offset reaching zero. Suggested fix: remove negative margin/top padding, keep footer sticky bottom0 behind main, round only final FAQ background so existing Team sticky stage is unaffected. Avoid clipping whole main, which could affect existing sticky sections/dialogs.
-2. Test keyboard access to footer links while drawer is covered by FAQ. Focus may need to scroll to the document end using existing prometheus:scroll-to event (handled by SmoothScroll) to reveal focused controls. Do not trap focus or interrupt navigation out of the footer.
-3. Verify FAQ rapid reversals, multiple rows open, Enter/Space toggles, focus outlines, reduced-motion changes, and non-JS native details fallback.
-4. Browser QA desktop1440x1000, mobile390x844 and320x740. Check no overflow or clipped links, drawer reveal 40px to0, stationary wordmark, preceding Team/gallery still correct. Mobile footer currently uses normal flow to keep all links reachable.
-5. Run npm test, npm run lint, npm run typecheck, npm run build. Add meaningful motion/cleanup regression tests if needed.
-6. Update README/delivery notes, screenshots, source ZIP and Git bundle after final implementation. Existing archives are only current through Team 08e4025; this Git push is authoritative for FAQ/footer checkpoint.
+1. Enable browser access and compare the local page against the two reference URLs. Verify footer layering and rounded corners, 40px-to-zero foreground movement, a stationary wordmark, and no overflow at 1440x1000, 390x844 and 320x740. Also test a short desktop viewport.
+2. Use actual keyboard Enter/Space on FAQ summaries and Tab into the footer from the final FAQ. Regression tests pass with controlled DOM boundaries, but real browser focus/scroll behavior remains unverified.
+3. Verify Team/gallery sticky behavior remains unchanged and all links remain reachable at the bottom.
+4. The contact CTA reuses the reference's Furniture Odyssey consultation calendar. Confirm suitability before a portfolio deployment. No booking has been submitted.
+5. Save final screenshots and refresh notes/archives after browser refinement. Do not merge or deploy without permission.
 
 ## Tooling
 - Node binary: C:/Users/Paul Escobia/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe

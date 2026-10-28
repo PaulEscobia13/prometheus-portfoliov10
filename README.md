@@ -4,7 +4,7 @@ The `/prometheus` route is a separate background and wordmark experiment request
 
 Run `npm ci`, `npm run dev`. Validate with `npm test`, `npm run lint`, `npm run typecheck` and `npm run build`.
 
-The pricing section follows the showcase at `/prometheus#pricing`. It uses the supplied three-plan reference layout with Prometheus colors, a highlighted Premium card, semantic feature lists, keyboard focus states and stacked mobile cards. The user requested keeping the reference prices for now: Essential $2,000/project, Premium $4,500/project and Custom Partnership. Edit `content/pricing.ts` to change the plans. Buttons use the existing `#contacts` destination; the Contacts section is still pending. The screenshot's floating navbar and template badges were not reproduced.
+The pricing section follows the showcase at `/prometheus#pricing`. It uses the supplied three-plan reference layout with Prometheus colors, a highlighted Premium card, semantic feature lists, keyboard focus states and stacked mobile cards. The user requested keeping the reference prices for now: Essential $2,000/project, Premium $4,500/project and Custom Partnership. Edit `content/pricing.ts` to change the plans. Buttons use `#contacts`, which now reaches the editorial contact footer. The screenshot's floating navbar and template badges were not reproduced.
 
 ESLint uses the Next.js Core Web Vitals and TypeScript presets. The TypeScript packages follow Microsoft's side-by-side compatibility setup: `@typescript/native` supplies TypeScript 7.0.2's `tsc` command, while the `typescript` alias supplies the TypeScript 6 API required by ESLint and other programmatic tooling. See [Microsoft's compatibility guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).
 
@@ -44,3 +44,12 @@ Pricing typography uses the self-hosted Geist font from the official geist packa
 After pricing, `#about` opens a full-screen Team cover. Scrolling opens its left and right halves to reveal the dark, four-person team layout; scrolling back closes it. The Meet the team button skips the animation and focuses the team heading, including during active smooth scrolling. Reduced motion and JavaScript-disabled browsing show the team directly without the extra scroll distance.
 
 Sample names, roles and portrait paths are centralized in `content/team.ts`. The four `public/team/placeholder-*.svg` files are intentionally generic illustrated placeholders. Replace these with real team portraits and update names/roles together. The section does not use Linear staff photos or claim the sample people work at Prometheus.
+
+
+### FAQ and contact footer
+
+`#faq` follows the team section. The Paradigm reference layout uses Georgia as the user-approved substitute for Canela Text, with locally hosted Manrope answer text. Native details controls work without JavaScript; enhanced 400ms height animations support rapid reversal, independent open answers, and reduced-motion changes. FAQ copy is adapted to Prometheus project scope in `content/faq.ts`.
+
+`#contacts` contains the burgundy editorial footer based on the supplied Furniture Odyssey reference. The desktop drawer is sticky behind the rounded FAQ sheet; foreground text moves from 40px to zero while the cropped wordmark remains in its artboard. Focus entering a covered footer link reveals it through the existing smooth-scroll integration. Mobile, short viewports, and reduced motion use normal flow for access. `content/contact.ts` centralizes links and the reference team booking URL; review the Furniture Odyssey consultation calendar before publishing a general portfolio.
+
+Automated regression coverage includes FAQ reversal, independent rows, reduced-motion changes, missing-animation fallback, footer progress/clamping, covered-link keyboard access and cleanup. Visual fidelity still requires browser verification; see HANDOVER.md for the current check status.
