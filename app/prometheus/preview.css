@@ -4,6 +4,7 @@
   --prometheus-off-white: #fff4ea;
   --prometheus-teal: #7eacb5;
   --prometheus-ink: #101216;
+  --prometheus-button-light: var(--prometheus-cream);
   position: relative;
   isolation: isolate;
   min-height: 100svh;
@@ -36,12 +37,32 @@
 }
 
 .prometheus-preview .button-primary:is(:hover, :focus-visible) :is(.button-primary_arrow, .button-primary_text-wrapper) {
-  background-color: var(--prometheus-cream);
+  background-color: var(--prometheus-button-light);
 }
 
 .prometheus-preview .nav-cta {
   color: var(--prometheus-ink);
-  background-color: var(--prometheus-off-white);
+  background-color: var(--prometheus-button-light);
+}
+
+/* The expanding circle is the captured navbar's animated background layer. */
+.prometheus-preview .nav-cta::before,
+.prometheus-preview .nav-cta:is(:hover, :focus-visible)::before {
+  background-color: var(--prometheus-red);
+}
+
+.prometheus-preview .nav-cta:is(:hover, :focus-visible)::before {
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+}
+
+.prometheus-preview .nav-cta:is(:hover, :focus-visible),
+.prometheus-preview .nav-cta .navbar_button-arrow,
+.prometheus-preview .nav-cta:is(:hover, :focus-visible) .navbar_button-arrow {
+  color: var(--prometheus-off-white);
 }
 
 .prometheus-preview .nav-cta .button_arrow-wrapper-2 {
@@ -76,6 +97,10 @@
 
 .prometheus-preview .homepage-h1-link.is-green {
   --pill-tilt: 3deg;
+}
+
+.prometheus-preview .homepage-h1-link.is-purple {
+  --pill-accent: var(--prometheus-red);
 }
 
 .prometheus-preview .homepage-h1-link.is-cyan {
@@ -120,6 +145,11 @@
     transition: none;
   }
   .prometheus-preview :is(.home-hero_h1-icon, .button-primary, .button-primary_icon, .button-primary_arrow, .button-primary_text-wrapper) {
+    transition: none;
+  }
+  .prometheus-preview .nav-cta::before,
+  .prometheus-preview .nav-cta .button_arrow-wrapper-2,
+  .prometheus-preview .nav-cta .navbar_button-arrow {
     transition: none;
   }
 }
