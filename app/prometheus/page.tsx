@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navigation from "../../components/Navigation";
 import Hero from "../../components/Hero";
 import SmoothScroll from "../../components/SmoothScroll";
+import Services from "../../components/Services";
 import "lenis/dist/lenis.css";
 import "./preview.css";
 
@@ -15,7 +16,10 @@ export default function PrometheusPreview() {
     <div className="page-wrapper prometheus-preview">
       <SmoothScroll />
       <Navigation brand="prometheus" />
-      <main className="page-main"><Hero brand="prometheus" /></main>
+      <main className="page-main">
+        <div className="prometheus-hero-stage"><Hero brand="prometheus" /></div>
+        <Services />
+      </main>
     </div>
   );
 }
