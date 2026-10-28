@@ -27,6 +27,7 @@ export default function SmoothScroll() {
         smoothWheel: true,
         syncTouch: false,
         infinite: false,
+        anchors: true,
         easing: (t: number) => t * (2 - t),
       });
 
