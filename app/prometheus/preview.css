@@ -4,7 +4,7 @@
   --prometheus-off-white: #fff4ea;
   --prometheus-teal: #7eacb5;
   --prometheus-ink: #101216;
-  --prometheus-button-light: var(--prometheus-cream);
+  --prometheus-button-light: var(--prometheus-off-white);
   position: relative;
   isolation: isolate;
   min-height: 100svh;
