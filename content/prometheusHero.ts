@@ -5,7 +5,8 @@ export const prometheusHero = {
     { text: "Websites", pill: "is-purple" },
     { text: " and " },
     { text: "Digital systems", pill: "is-cyan" },
-    { text: " with wonderful service" },
+    { text: " with " },
+    { text: "Wonderful Service", italic: true },
   ],
   paragraphs: [
     "With the emergence of AI we let the clients feel its advantage by making services free, super affordable, and fast.",

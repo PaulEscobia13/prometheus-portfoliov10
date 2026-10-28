@@ -17,6 +17,7 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
      `<p class="home-hero-subtitle">${escapeHtml(prometheusHero.eyebrow)}</p>`);
    const headline = prometheusHero.headline.map(part => {
      const text = escapeHtml(part.text);
+     if ("italic" in part) return `<em class="is-italic">${text}</em>`;
      if ("pill" in part) {
        const icons = pillArtwork[part.pill].map((file, index) => `<span aria-hidden="true" class="prometheus-pill-icon prometheus-pill-icon-${index + 1}"><span class="prometheus-icon-glyph" style="mask-image:url('/assets/${file}')"></span></span>`).join("");
        return `<a href="#services" class="homepage-h1-link prometheus-headline-pill ${part.pill}"><span>${text}</span>${icons}</a>`;
