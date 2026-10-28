@@ -17,8 +17,10 @@ export default function PrometheusPreview() {
       <SmoothScroll />
       <Navigation brand="prometheus" />
       <main className="page-main">
-        <div className="prometheus-hero-stage"><Hero brand="prometheus" /></div>
-        <Services />
+        <div className="prometheus-intro-stage">
+          <Hero brand="prometheus" />
+          <Services />
+        </div>
       </main>
     </div>
   );
