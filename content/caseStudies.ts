@@ -9,6 +9,14 @@ export type CaseStudy = {
   logo: string;
   liveUrl: string;
   screenshots?: readonly string[];
+  feedback: {
+    quote: string;
+    name: string;
+    role: string;
+    rating: number;
+    isSample: boolean;
+    portraitPosition: "left" | "right";
+  };
 };
 
 export const caseStudies: readonly CaseStudy[] = [
@@ -22,6 +30,14 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "Furniture business platform",
     logo: "/partners/furniture-odyssey-original.png",
     liveUrl: "https://furniture-odyssey-catalog-website.vercel.app/",
+    feedback: {
+      quote: "The team paid attention to how our business works and made the platform easy to use. From browsing products to managing orders, the experience feels connected, clear, and thoughtfully put together.",
+      name: "Alex Reyes",
+      role: "Sample client representative",
+      rating: 5,
+      isSample: true,
+      portraitPosition: "left",
+    },
   },
   {
     id: "piercing-corner",
@@ -33,5 +49,13 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "Studio website & operations",
     logo: "/partners/piercing-corner-original.png",
     liveUrl: "https://piercing-corner.vercel.app/",
+    feedback: {
+      quote: "The website and management tools make our day-to-day work feel more organized. The team listened carefully, kept things straightforward, and created an experience that feels welcoming for our clients and practical for our studio.",
+      name: "Mia Santos",
+      role: "Sample client representative",
+      rating: 5,
+      isSample: true,
+      portraitPosition: "right",
+    },
   },
 ];

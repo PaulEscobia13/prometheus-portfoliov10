@@ -124,7 +124,7 @@
 .prometheus-case-device.is-mobile::after { display: none; }
 @media (min-width: 1440px) { .prometheus-case-stack { gap: 24rem; } }
 @media (min-width: 768px) and (max-height: 740px) {
-  .prometheus-case-details { top: 8rem; }
+  .prometheus-case-details { top: 110px; }
   .prometheus-case-tags { margin-bottom: 2rem; }
   .prometheus-case-title { padding-bottom: 2rem; font-size: 2.6rem; }
   .prometheus-case-scope { padding-top: 2rem; }
@@ -144,4 +144,55 @@
   .prometheus-case-visual { min-height: 0; }
   .prometheus-case-screenshot-card { min-height: 32rem; }
   .prometheus-case-overview { min-height: 38rem; }
+}
+
+/* Values taken from the captured review panel, including its short-screen
+   desktop typography override. These replace the earlier project-scope layout. */
+.prometheus-case-title {
+  font-size: var(--_typography---font--size--h5);
+  line-height: var(--_typography---line-height--heading);
+  font-weight: 500;
+  padding-bottom: 4.2rem;
+  margin-bottom: 4.2rem;
+}
+.prometheus-case-rating-row { display: flex; align-items: center; gap: 2rem; min-height: 3rem; }
+.prometheus-case-review-source { font-size: 2.4rem; font-weight: 500; line-height: 1.2; letter-spacing: -.04em; }
+.prometheus-case-stars { display: inline-flex; gap: 1rem; color: var(--prometheus-red); flex-shrink: 0; }
+.prometheus-case-sample-label { margin-left: auto; color: var(--prometheus-cream); font-size: 1rem; white-space: nowrap; }
+.prometheus-case-testimonial {
+  max-width: 46rem;
+  margin: 2.4rem 0 0;
+  padding: 0;
+  border: 0;
+  color: rgb(255 244 234 / 90%);
+  font-family: var(--_typography---font--family--primary);
+  font-size: var(--_typography---font--size--text-m);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.prometheus-case-footer { align-items: center; margin-top: 2rem; }
+.prometheus-case-person { display: flex; align-items: center; gap: 1.8rem; min-width: 0; }
+.prometheus-case-avatar { display: block; flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; background-color: #333; background-image: url('/samples/client-portraits.png'); background-size: 200% 100%; background-repeat: no-repeat; }
+.prometheus-case-avatar.is-left { background-position: left center; }
+.prometheus-case-avatar.is-right { background-position: right center; }
+.prometheus-case-footer .prometheus-case-name { font-family: var(--_typography---font--family--accent); font-size: var(--_typography---font--size--text-l); font-weight: 400; font-style: italic; line-height: 1.5; }
+.prometheus-case-category { margin-top: 0; color: rgb(255 244 234 / 60%); font-size: var(--_typography---font--size--text-caption); font-weight: 500; }
+.prometheus-case-control-buttons { gap: 0; }
+.prometheus-case-controls :is(a, button) { background-color: #333; }
+.prometheus-case-device:focus-visible { outline: 3px solid var(--prometheus-cream); outline-offset: 6px; }
+@media (min-width: 1440px) and (max-height: 800px) {
+  .prometheus-case-title { font-size: 3rem; margin-bottom: 3rem; padding-bottom: 3rem; }
+  .prometheus-case-tags { margin-bottom: 3rem; }
+  .prometheus-case-testimonial { font-size: 2rem; }
+}
+@media (max-width: 991px) {
+  .prometheus-case-sample-label { margin-left: 0; }
+  .prometheus-case-rating-row { flex-wrap: wrap; gap: 1.2rem; }
+  .prometheus-case-footer { flex-wrap: wrap; }
+}
+@media (max-width: 767px) {
+  .prometheus-case-title { padding-bottom: 2.4rem; margin-bottom: 2.4rem; }
+  .prometheus-case-testimonial { max-width: none; }
+  .prometheus-case-footer { gap: 2rem 1rem; }
+  .prometheus-case-avatar { flex-basis: 56px; width: 56px; height: 56px; }
 }
