@@ -197,6 +197,32 @@
   border-color: rgb(237 220 198 / 30%);
 }
 
+.prometheus-preview .prometheus-partners {
+  justify-content: center;
+  gap: clamp(3rem, 10vw, 16rem);
+}
+
+.prometheus-partner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(12rem, 22vw, 24rem);
+  min-width: 0;
+  height: 8rem;
+}
+
+.prometheus-partner-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 479px) {
+  .prometheus-preview .prometheus-partners { gap: 2rem; }
+  .prometheus-partner { width: min(12rem, 100%); height: 7rem; }
+}
+
 @media (max-width: 479px) {
   .prometheus-wordmark { font-size: 2.5rem; }
 }
