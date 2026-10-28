@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Navigation from "../../components/Navigation";
 import Hero from "../../components/Hero";
+import SmoothScroll from "../../components/SmoothScroll";
+import "lenis/dist/lenis.css";
 import "./preview.css";
 
 export const metadata: Metadata = {
@@ -11,6 +13,7 @@ export const metadata: Metadata = {
 export default function PrometheusPreview() {
   return (
     <div className="page-wrapper prometheus-preview">
+      <SmoothScroll />
       <Navigation brand="prometheus" />
       <main className="page-main"><Hero brand="prometheus" /></main>
     </div>

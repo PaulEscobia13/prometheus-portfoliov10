@@ -52,11 +52,16 @@
 }
 
 .prometheus-preview .nav-cta:is(:hover, :focus-visible)::before {
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
+  top: -1px;
+  right: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
   border-radius: 50px;
+}
+
+.prometheus-preview .nav-cta:is(:hover, :focus-visible) {
+  /* Match the underlying surface to the fill, including antialiased edge pixels. */
+  background-color: var(--prometheus-red);
 }
 
 .prometheus-preview .nav-cta:is(:hover, :focus-visible),
