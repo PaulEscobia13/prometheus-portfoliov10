@@ -1,0 +1,230 @@
+<nav id="navbar" data-wf--navbar--variant="base" class="navbar" style="will-change: background; background-color: rgba(11, 11, 11, 0);"><div class="navbar-core-scripts w-embed w-script">
+
+
+
+
+</div><div class="navbar-core-styles w-embed"><style>
+  .navbar {
+    transform: translateY(0);
+    transition: all 0.4s ease;
+  }
+
+  .navbar.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .navbar_dropmenu-link .navbar_link-title-icon {
+    opacity: 0;
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
+    transform: translate(-10px, 0);
+  }
+
+  .navbar_dropmenu-link.is-services:hover .navbar_link-title {
+    color: #7824E2;
+  }
+
+  .navbar_dropmenu-link:hover .navbar_link-title-icon {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* .navbar_dropmenu-services .navbar_dropmenu-services-toggle.w--open .navbar_dropmenu-services-toggle-icon {
+    transform: rotate(-90deg);
+  } */
+
+  .navbar *::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+  }
+
+  .navbar * {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .navbar_links-main,
+  .navbar_dropmenu-desktop {
+    overflow-x: hidden !important;
+  }
+
+  [data-wf--navbar--variant='white'] .navbar_dropdown-toggle-icon:not(.is-green) path {
+    fill: black;
+  }
+
+  @media (max-width: 1279px) and (min-width: 992px) {
+    .navbar_dropmenu-link {
+      width: 100%;
+    }
+    .laptop-two-cols .navbar_dropmenu-link {
+      width: 47%;
+    }
+  }
+  @media (max-width: 1279px) {
+    .navbar_dropmenu .navbar_link-title {
+      font-size: 1.8rem;
+    }
+    .navbar_dropmenu {
+      overflow: hidden;
+    }
+  }
+
+  .navbar_link-title {
+    font-weight: 500 !important;
+  }
+
+  /* --- Анімований фон --- */
+  .button-cta {
+    overflow: hidden;
+  }
+  @media screen and (min-width: 480px) {
+    .button-cta::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+
+      /* Початковий стан: кружечок 44x44px справа */
+      top: 8px;
+      right: 8px;
+      width: 44px;
+      height: 44px;
+      background-color: black;
+      border-radius: 50%;
+
+      /*    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); */
+      transition: all 0.4s cubic-bezier(0.72, -0.22, 0.13, 1.18);
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .button-cta::before {
+      top: 7.5px;
+      right: 7.5px;
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  .button-cta .button_arrow-wrapper-2 {
+    transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .button-cta:hover .button_arrow-wrapper-2 {
+    transform: rotate(-45deg);
+  }
+  .navbar_button-arrow {
+    color: white;
+    transition: color 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .button-cta:hover .navbar_button-arrow {
+    color: black;
+  }
+
+  .button-cta:hover::before {
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    background-color: #d0f601;
+
+    /* Анімація для HOVER IN - швидка та різка */
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Burger animation styles */
+  .container.navmenu-container-laptop {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+    display: block !important;
+  }
+
+  .navmenu-container-laptop.open {
+    opacity: 1;
+    pointer-events: all;
+    display: block !important;
+  }
+
+  .navbar_control-btn-line_1,
+  .navbar_control-btn-line_2 {
+    rotate: 0deg;
+    transform: translateY(0);
+    transition:
+      rotate 0.25s ease-in-out,
+      transform 0.25s ease-in-out;
+  }
+
+  .open .navbar_control-btn-line_1 {
+    rotate: 45deg;
+    transform: translateY(6px);
+  }
+
+  .open .navbar_control-btn-line_2 {
+    rotate: -45deg;
+    transform: translateY(-6px);
+  }
+</style></div><div class="w-layout-blockcontainer container is-relative w-container"><div class="navbar_main"><a href="https://arounda.agency/" aria-current="page" class="navbar_logo-wrapper w-inline-block w--current"><div class="nabar_logo-white"><img src="/assets/65c0ca586cea1861e08b11cd_arounda-logo.svg" loading="eager" fetchpriority="high" alt="Arounda" class="navbar_logo"><img src="/assets/65c0dbbbebe159dbf22b6944_arounda-sign-logo.svg" loading="lazy" alt="Arounda" class="navbar_logo is-mobile"></div><div class="nabar_logo-black"><img src="/assets/67ea69f5accfa6984f69029b_arounda-logo-black.svg" loading="lazy" alt="Arounda logo" class="navbar_logo"><img src="/assets/67ea69f5f9dca934e37c173d_arounda-sign-logo-black.svg" loading="lazy" alt="Arounda logo small" class="navbar_logo is-mobile"></div></a><div data-lenis-prevent="" class="navbar_links-desktop"><a data-w-id="1597cced-062b-7e8d-be80-6dd33e03e61e" href="https://arounda.agency/works" class="navbar_link-main is-desktop w-inline-block"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">Works</div><div class="navbar_link-title is-green">Works</div></div></div></a><div data-hover="true" data-delay="250" data-w-id="1597cced-062b-7e8d-be80-6dd33e03e621" class="navbar_link-main is-dekstop w-dropdown"><div class="navbar_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">Services</div><div class="navbar_link-title is-green">Services</div></div></div><div class="navbar_dropdown-toggle-icon-wrapper"><div class="navbar_dropdown-toggle-icon w-embed"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.39284 8.82426C6.17588 9.05858 5.82412 9.05858 5.60716 8.82426L1.16272 4.02426C0.94576 3.78995 0.94576 3.41005 1.16272 3.17574C1.37968 2.94142 1.73143 2.94142 1.94839 3.17574L6 7.55147L10.0516 3.17574C10.2686 2.94142 10.6203 2.94142 10.8373 3.17574C11.0542 3.41005 11.0542 3.78995 10.8373 4.02426L6.39284 8.82426Z" fill="white"></path>
+</svg></div><div class="navbar_dropdown-toggle-icon is-green w-embed"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.39284 8.82426C6.17588 9.05858 5.82412 9.05858 5.60716 8.82426L1.16272 4.02426C0.94576 3.78995 0.94576 3.41005 1.16272 3.17574C1.37968 2.94142 1.73143 2.94142 1.94839 3.17574L6 7.55147L10.0516 3.17574C10.2686 2.94142 10.6203 2.94142 10.8373 3.17574C11.0542 3.41005 11.0542 3.78995 10.8373 4.02426L6.39284 8.82426Z" fill="var(--_theme---accent--primary)"></path>
+</svg></div></div></div><nav class="navbar_dropmenu is-desktop is-services w-dropdown-list" id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0" style="opacity: 0;"><div class="navbar_dropmenu-separator"></div><div class="w-layout-blockcontainer container is-relative is-desktop-dropmenu w-container"><div class="navbar_dropmenu-desktop is-services" style="height: 0px;"><div class="navbar_dropmenu-desktop-section-wrapper is-solutions"><div class="navbar_dropmenu-desktop-section is-core-services"><div class="navbar_dropmenu-label is-services">Core SERIVCES</div><div class="navbar_dropmenu-solutions-menu"><a href="https://arounda.agency/solutions/product-redesign" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">Product Redesign</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Modernize outdated systems without<br>pausing business operations</div></a><a href="https://arounda.agency/solutions/mvp" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">MVP Design &amp; Development</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Validate new ventures before<br>scaling investment</div></a><a href="https://arounda.agency/solutions/team-extension" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">Team Extension</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Extend your team with senior designers<br>who match your existing workflow</div></a></div></div></div><div class="navbar_dropmenu-desktop-section-wrapper is-services"><div class="navbar_dropmenu-desktop-section is-services"><div class="navbar_dropmenu-section is-services"><div class="navbar_dropmenu-label is-services">Design</div><div class="navbar_dropmenu-services-menu"><a href="https://arounda.agency/services/ui-ux-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">UI/UX Design</div></a><a href="https://arounda.agency/services/web-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Web Design</div></a><a href="https://arounda.agency/services/mobile-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Mobile App Design</div></a><a href="https://arounda.agency/services/branding" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Branding</div></a><a href="https://arounda.agency/services/ux-audit" class="navbar_dropmenu-link is-services has-tag w-inline-block" tabindex="0"><div class="navbar_link-title is-services">UX/UI Audit</div><div class="navbar_dropmenu-link-tag">FREE</div></a></div></div><div class="navbar_dropmenu-section is-services"><div class="navbar_dropmenu-label is-services">development</div><div class="navbar_dropmenu-services-menu"><a href="https://arounda.agency/services/web-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Web Development</div></a><a href="https://arounda.agency/services/mvp-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">MVP Development</div></a><a href="https://arounda.agency/services/mobile-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Mobile App Development</div></a></div></div></div></div></div></div></nav></div><div data-hover="true" data-delay="250" data-w-id="1597cced-062b-7e8d-be80-6dd33e03e6da" class="navbar_link-main is-dekstop w-dropdown"><div class="navbar_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-1" aria-controls="w-dropdown-list-1" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">Industries</div><div class="navbar_link-title is-green">Industries</div></div></div><div class="navbar_dropdown-toggle-icon-wrapper"><div class="navbar_dropdown-toggle-icon w-embed"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.39284 8.82426C6.17588 9.05858 5.82412 9.05858 5.60716 8.82426L1.16272 4.02426C0.94576 3.78995 0.94576 3.41005 1.16272 3.17574C1.37968 2.94142 1.73143 2.94142 1.94839 3.17574L6 7.55147L10.0516 3.17574C10.2686 2.94142 10.6203 2.94142 10.8373 3.17574C11.0542 3.41005 11.0542 3.78995 10.8373 4.02426L6.39284 8.82426Z" fill="white"></path>
+</svg></div><div class="navbar_dropdown-toggle-icon is-green w-embed"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.39284 8.82426C6.17588 9.05858 5.82412 9.05858 5.60716 8.82426L1.16272 4.02426C0.94576 3.78995 0.94576 3.41005 1.16272 3.17574C1.37968 2.94142 1.73143 2.94142 1.94839 3.17574L6 7.55147L10.0516 3.17574C10.2686 2.94142 10.6203 2.94142 10.8373 3.17574C11.0542 3.41005 11.0542 3.78995 10.8373 4.02426L6.39284 8.82426Z" fill="var(--_theme---accent--primary)"></path>
+</svg></div></div></div><nav class="navbar_dropmenu is-desktop is-not-full-width w-dropdown-list" id="w-dropdown-list-1" aria-labelledby="w-dropdown-toggle-1" style="opacity: 0;"><div class="navbar_dropmenu-separator"></div><div class="w-layout-blockcontainer container is-relative is-flex w-container"><div class="navbar_dropmenu-desktop" style="height: 0px;"><div class="navbar_dropmenu-desktop-section-wrapper is-regular"><div class="navbar_dropmenu-desktop-section is-2-col"><div class="navbar_dropmenu-section"><div class="navbar_dropmenu-label">Industries</div><div class="navbar_dropmenu-section-wrapper"><div class="navbar_dropmenu-section"><a href="https://arounda.agency/industries/ai" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5a02c438ec6f78f75_i2.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">AI &amp; ML</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Chatbots, Automation, Predictive Analytics</div></div></a><a href="https://arounda.agency/industries/fintech" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5dcfb3f7b02eb36b6_i3.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">Fintech</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Banking, Digital Payments, Exchanges</div></div></a><a href="https://arounda.agency/industries/healthcare" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd56c87b01cbe071648_i4.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">Healthcare &amp; Wellness</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Mental health, Insurance, Fitness</div></div></a><a href="https://arounda.agency/industries/cybersecurity" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/6a9ac4b249cba9c1599c01ba_Cybersecurity.avif" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">Cybersecurity</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Threat Detection, IAM, Compliance</div></div></a></div><div class="navbar_dropmenu-section"><a href="https://arounda.agency/industries/saas" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5dcfb3f7b02eb36bb_i1.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">SaaS</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">CRM, HR, AI, ERP, Automation tools</div></div></a><a href="https://arounda.agency/industries/web3" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd638b21fcd90541f7a_i6.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">Web 3, Blockchain</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Crypto, DeFi, DEX, CEX, NFT</div></div></a><a href="https://arounda.agency/industries/hr-tech" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/6a9ac4b2a0fdb5f38a062880_HR Tech.avif" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-black">HR tech</div><div class="navbar_link-title-icon w-embed"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66602 5.5L9.66602 5.5" stroke="#141515"></path>
+<path d="M5.66602 9.5L9.66602 5.5L5.66602 1.5" stroke="#141515"></path>
+</svg></div></div><div class="navbar_dropmenu-link-text">Recruiting, L&amp;D, Workforce Analytics</div></div></a></div></div></div></div></div></div></div></nav></div><a data-w-id="d75c9049-3f4c-f181-aad8-0d0e5c4aef2f" href="https://arounda.agency/pricing" class="navbar_link-main is-desktop w-inline-block"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">Pricing</div><div class="navbar_link-title is-green">Pricing</div></div></div></a><a data-w-id="1597cced-062b-7e8d-be80-6dd33e03e749" href="https://arounda.agency/about" class="navbar_link-main is-desktop w-inline-block"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">About</div><div class="navbar_link-title is-green">About</div></div></div></a><a data-w-id="52ff95ae-3a70-5303-27d0-7c5511a6dcaa" href="https://arounda.agency/blog" class="navbar_link-main is-desktop w-inline-block"><div class="navbar_link-title-wrapper is-toggle"><div class="navbar_link-titles-content"><div class="navbar_link-title">Blog</div><div class="navbar_link-title is-green">Blog</div></div></div></a></div><div class="navbar_content"><a href="https://arounda.agency/contact" class="button-cta nav-cta w-inline-block"><div class="button_text">Contact Us</div><div class="button_arrow-wrapper-2"><div class="code-embed navbar_button-arrow w-embed"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 7.00049L11.9999 7.00049" stroke="currentColor" stroke-width="2"></path>
+<path d="M5.99609 13L11.9961 7L5.99609 1" stroke="currentColor" stroke-width="2"></path>
+</svg></div></div></a><div class="navbar_control-btn"><div class="navbar_control-btn-line navbar_control-btn-line_1"></div><div class="navbar_control-btn-line navbar_control-btn-line_2"></div></div></div></div><div class="w-layout-blockcontainer container navmenu-container-laptop w-container"><div class="navbar_links-main"><a href="https://arounda.agency/works" class="navbar_link-main w-inline-block"><div class="navbar_link-title">Works</div></a><div data-hover="false" data-delay="100" data-w-id="668f60e7-eb71-80b0-1e9d-4f500daeb24c" class="navbar_link-main w-dropdown" style="background-color: rgba(249, 249, 255, 0);"><div class="navbar_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-2" aria-controls="w-dropdown-list-2" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0"><div class="navbar_link-title">Services</div><div class="navbar_dropdown-toggle-icon w-embed"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.58926 13.2364C9.26382 13.5879 8.73618 13.5879 8.41075 13.2364L1.74408 6.0364C1.41864 5.68492 1.41864 5.11508 1.74408 4.7636C2.06952 4.41213 2.59715 4.41213 2.92259 4.7636L9 11.3272L15.0774 4.76361C15.4028 4.41213 15.9305 4.41213 16.2559 4.76361C16.5814 5.11508 16.5814 5.68493 16.2559 6.0364L9.58926 13.2364Z" fill-rule="evenodd" clip-rule="evenodd" fill="#141515"></path>
+</svg>
+</div></div><nav class="navbar_dropmenu is-services w-dropdown-list" style="height: 0px; opacity: 0;" id="w-dropdown-list-2" aria-labelledby="w-dropdown-toggle-2"><div class="navbar_dropmenu-solutions-menu"><a href="https://arounda.agency/solutions/product-redesign" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">Product Redesign</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Modernize outdated systems without pausing business operations</div></a><a href="https://arounda.agency/solutions/mvp" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">MVP Design</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Validate new ventures before scaling investment</div></a><a href="https://arounda.agency/solutions/team-extension" class="navbar_dropmenu-link is-solutions w-inline-block" tabindex="0"><div class="navbar_link-title-wrapper"><div class="navbar_link-title is-services">Team Extension</div><div class="navbar_link-title-icon w-embed"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.59961 8.49991L14.3996 8.49991" stroke="#141515" stroke-width="1.6"></path>
+<path d="M8 14.8999L14.4 8.49991L8 2.09991" stroke="#141515" stroke-width="1.6"></path>
+</svg></div></div><div class="navbar_dropmenu-link-subtext is-services">Extend your team with senior designers who match your existing workflow</div></a></div><div class="navbar_dropmenu-services"><div class="navbar_dropmenu-services-toggle is-open" aria-expanded="true"><div class="navbar_dropmenu-label is-services">Design</div><div class="navbar_dropmenu-services-toggle-icon" style="translate: none; rotate: none; scale: none; transform: rotate(-90deg);"><div class="code-embed w-embed"><svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.48242 6.4818L14.2606 14.26" stroke-width="1.5" stroke="black"></path>
+<path d="M14.2606 6.48182V14.26H6.48242" stroke-width="1.5" stroke="black"></path>
+</svg>
+</div></div></div><div class="navbar_dropmenu-services-content-wrapper" style="opacity: 1; height: auto;"><div class="navbar_dropmenu-services-content"><div class="navbar_dropmenu-section is-services"><div class="navbar_dropmenu-services-menu"><a href="https://arounda.agency/services/ui-ux-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">UI/UX Design</div></a><a href="https://arounda.agency/services/web-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Web Design</div></a><a href="https://arounda.agency/services/mobile-design" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Mobile App Design</div></a><a href="https://arounda.agency/services/branding" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Branding</div></a><a href="https://arounda.agency/services/ux-audit" class="navbar_dropmenu-link is-services has-tag w-inline-block" tabindex="0"><div class="navbar_link-title is-services">UX/UI Audit</div><div class="navbar_dropmenu-link-tag">FREE</div></a></div></div></div></div></div><div class="navbar_dropmenu-services"><div class="navbar_dropmenu-services-toggle is-open" aria-expanded="true"><div class="navbar_dropmenu-label is-services">development</div><div class="navbar_dropmenu-services-toggle-icon" style="translate: none; rotate: none; scale: none; transform: rotate(-90deg);"><div class="code-embed w-embed"><svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.48242 6.4818L14.2606 14.26" stroke-width="1.5" stroke="black"></path>
+<path d="M14.2606 6.48182V14.26H6.48242" stroke-width="1.5" stroke="black"></path>
+</svg>
+</div></div></div><div class="navbar_dropmenu-services-content-wrapper" style="opacity: 1; height: auto;"><div class="navbar_dropmenu-services-content"><div class="navbar_dropmenu-section is-services"><div class="navbar_dropmenu-services-menu"><a href="https://arounda.agency/services/web-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Web Development</div></a><a href="https://arounda.agency/services/mvp-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">MVP Development</div></a><a href="https://arounda.agency/services/mobile-development" class="navbar_dropmenu-link is-services w-inline-block" tabindex="0"><div class="navbar_link-title is-services">Mobile App Development</div></a></div></div></div></div></div></nav></div><div data-hover="false" data-delay="100" data-w-id="1597cced-062b-7e8d-be80-6dd33e03e7e6" class="navbar_link-main laptop-two-cols w-dropdown" style="background-color: rgba(249, 249, 255, 0);"><div class="navbar_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3" aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0"><div class="navbar_link-title">Industries</div><div class="navbar_dropdown-toggle-icon w-embed"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.58926 13.2364C9.26382 13.5879 8.73618 13.5879 8.41075 13.2364L1.74408 6.0364C1.41864 5.68492 1.41864 5.11508 1.74408 4.7636C2.06952 4.41213 2.59715 4.41213 2.92259 4.7636L9 11.3272L15.0774 4.76361C15.4028 4.41213 15.9305 4.41213 16.2559 4.76361C16.5814 5.11508 16.5814 5.68493 16.2559 6.0364L9.58926 13.2364Z" fill-rule="evenodd" clip-rule="evenodd" fill="#141515"></path>
+</svg>
+</div></div><nav class="navbar_dropmenu w-dropdown-list" style="height: 0px; opacity: 0;" id="w-dropdown-list-3" aria-labelledby="w-dropdown-toggle-3"><a href="https://arounda.agency/industries/web3" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd638b21fcd90541f7a_i6.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">Web 3, Blockchain</div><div class="navbar_dropmenu-link-text">Crypto, DeFi, DEX, CEX, NFT</div></div></a><a href="https://arounda.agency/industries/saas" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5dcfb3f7b02eb36bb_i1.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">SaaS</div><div class="navbar_dropmenu-link-text">CRM, HR, AI, ERP, Automation tools</div></div></a><a href="https://arounda.agency/industries/ai" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5a02c438ec6f78f75_i2.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">AI &amp; ML</div><div class="navbar_dropmenu-link-text">Chatbots, Automation, Predictive Analytics</div></div></a><a href="https://arounda.agency/industries/healthcare" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd56c87b01cbe071648_i4.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">Healthcare &amp; Wellness</div><div class="navbar_dropmenu-link-text">Mental health, Insurance, Fitness</div></div></a><a href="https://arounda.agency/industries/fintech" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/65e85fd5dcfb3f7b02eb36b6_i3.webp" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">Fintech</div><div class="navbar_dropmenu-link-text">Banking, Digital Payments, Exchanges</div></div></a><a href="https://arounda.agency/industries/cybersecurity" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/6a9ac4b249cba9c1599c01ba_Cybersecurity.avif" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">Cybersecurity</div><div class="navbar_dropmenu-link-text">Threat Detection, IAM, Compliance</div></div></a><a href="https://arounda.agency/industries/hr-tech" class="navbar_dropmenu-link w-inline-block" tabindex="0"><img src="/assets/6a9ac4b2a0fdb5f38a062880_HR Tech.avif" loading="eager" alt="" class="navbar_dropmenu-icon"><div class="navbar_dropwmenu-link-text"><div class="navbar_link-title">HR Tech</div><div class="navbar_dropmenu-link-text">Recruiting, L&amp;D, Workforce Analytics</div></div></a></nav></div><a href="https://arounda.agency/pricing" class="navbar_link-main w-inline-block"><div class="navbar_link-title">Pricing</div></a><a href="https://arounda.agency/about" class="navbar_link-main w-inline-block"><div class="navbar_link-title">About</div></a><a href="https://arounda.agency/blog" class="navbar_link-main is-last w-inline-block"><div class="navbar_link-title">Blog</div></a></div></div></div></nav>
