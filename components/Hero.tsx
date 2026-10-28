@@ -3,6 +3,10 @@ import { join } from "node:path";
 import { prometheusHero } from "../content/prometheusHero";
 
 const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const pillArtwork = {
+  "is-purple": ["68b04f2d1b2bf2aaede8546b_tag_icon-.svg", "68b04f2d4809843bd2954ca4_tag_icon--2.svg", "68b04f2d287d42bae4264281_tag_icon--4.svg"],
+  "is-cyan": ["68b04f2d4b59b9f9721b3908_tag_icon--7.svg", "68b04f2d60272d7359aa5d6c_tag_icon--8.svg", "68b04f2d2e8445f3acc238d3_tag_icon--6.svg"],
+} as const;
 // Captured markup retained for baseline calibration; not the finished React implementation.
 export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prometheus" }) {
  let html = readFileSync(join(process.cwd(), "reference/hero.html"), "utf8");
@@ -11,12 +15,17 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
      `<p class="home-hero-subtitle">${escapeHtml(prometheusHero.eyebrow)}</p>`);
    const headline = prometheusHero.headline.map(part => {
      const text = escapeHtml(part.text);
-     if ("pill" in part) return `<a href="#services" class="homepage-h1-link ${part.pill}">${text}</a>`;
-     if ("italic" in part) return `<em class="home-hero_h1-word-purple">${text}</em>`;
+     if ("pill" in part) {
+       const icons = pillArtwork[part.pill].map((file, index) => `<span aria-hidden="true" class="prometheus-pill-icon prometheus-pill-icon-${index + 1}"><span class="prometheus-icon-glyph" style="mask-image:url('/assets/${file}')"></span></span>`).join("");
+       return `<a href="#services" class="homepage-h1-link prometheus-headline-pill ${part.pill}"><span>${text}</span>${icons}</a>`;
+     }
      return text;
    }).join("");
    html = html.replace(/<div class="homepage_h1-wrapper">[\s\S]*?(?=<div class="home-hero_icons-wrapper">)/,
      `<div class="homepage_h1-wrapper"><h1 class="home-hero_h1 prometheus-hero-title">${headline}</h1>`);
+   // Captured icons were positioned against the entire old headline. Each new
+   // pill owns its decorations, so line wrapping cannot detach them from a word.
+   html = html.replace(/<div class="home-hero_icons-wrapper">[\s\S]*?(?=<div class="home-hero-title-decor-play")/, "");
    prometheusHero.paragraphs.forEach((text, index) => {
      html = html.replace(new RegExp(`<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">[\\s\\S]*?<\\/p>`),
        `<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">${escapeHtml(text)}</p>`);
@@ -35,12 +44,6 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
      ).join("")}</div>`
    );
    html = html.replace("Partnering with enterprise platforms across global markets", "Trusted by our clients");
-   // Preserve the captured icon silhouettes while letting the theme set their color.
-   html = html.replace(/<img\b[^>]*class="home-hero_h1-icon ([^"]+)"[^>]*>/g, (tag, variant: string) => {
-     const source = tag.match(/src="([^"]+)"/)?.[1];
-     if (!source) return tag;
-     return `<span aria-hidden="true" class="home-hero_h1-icon ${variant}"><span class="prometheus-icon-glyph" style="mask-image:url('${source}')"></span></span>`;
-   });
  }
  return <div dangerouslySetInnerHTML={{__html:html}} />;
 }
