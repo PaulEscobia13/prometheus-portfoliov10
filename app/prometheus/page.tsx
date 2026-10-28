@@ -12,7 +12,7 @@ export default function PrometheusPreview() {
   return (
     <div className="page-wrapper prometheus-preview">
       <Navigation brand="prometheus" />
-      <main className="page-main"><Hero /></main>
+      <main className="page-main"><Hero brand="prometheus" /></main>
     </div>
   );
 }

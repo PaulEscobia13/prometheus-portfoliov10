@@ -1,8 +1,127 @@
 .prometheus-preview {
+  --prometheus-red: #bf4646;
+  --prometheus-cream: #eddcc6;
+  --prometheus-off-white: #fff4ea;
+  --prometheus-teal: #7eacb5;
+  --prometheus-ink: #101216;
   position: relative;
   isolation: isolate;
   min-height: 100svh;
-  background-color: #101216;
+  background-color: var(--prometheus-ink);
+}
+
+/* Captured components declare their own Webflow theme variables. Override those
+   component scopes as well as the page so future shared components inherit it. */
+.prometheus-preview,
+.prometheus-preview :is(.button-primary, .homepage-h1-link, .hero_title-tag, .home-hero_h1-icon) {
+  --_theme---accent--primary: var(--prometheus-red);
+  --_theme---accent--on-primary: var(--prometheus-off-white);
+  --_theme---text--primary: var(--prometheus-off-white);
+  --_theme---text--secondary: var(--prometheus-cream);
+  --_theme---link--default: var(--prometheus-teal);
+  --_theme---border--strong: rgb(237 220 198 / 40%);
+}
+
+.prometheus-preview .button-primary {
+  color: var(--prometheus-off-white);
+}
+
+.prometheus-preview .button-primary :is(.button-primary_arrow, .button-primary_text-wrapper) {
+  background-color: var(--prometheus-red);
+  transition: background-color .25s ease, color .25s ease, border-radius .25s ease;
+}
+
+.prometheus-preview .button-primary:is(:hover, :focus-visible) {
+  color: var(--prometheus-ink);
+}
+
+.prometheus-preview .button-primary:is(:hover, :focus-visible) :is(.button-primary_arrow, .button-primary_text-wrapper) {
+  background-color: var(--prometheus-cream);
+}
+
+.prometheus-preview .nav-cta {
+  color: var(--prometheus-ink);
+  background-color: var(--prometheus-off-white);
+}
+
+.prometheus-preview .nav-cta .button_arrow-wrapper-2 {
+  color: var(--prometheus-off-white);
+  background-color: var(--prometheus-red);
+}
+
+.prometheus-preview .navbar_link-title.is-green {
+  color: var(--prometheus-teal);
+}
+
+.prometheus-preview .home-hero-subtitle,
+.prometheus-preview .home-hero-quote_decor {
+  color: var(--prometheus-cream);
+}
+
+.prometheus-preview .hero_title-tag {
+  color: var(--prometheus-off-white);
+  background-color: rgb(126 172 181 / 20%);
+  border-color: rgb(237 220 198 / 30%);
+}
+
+.prometheus-preview .homepage-h1-link {
+  --pill-accent: var(--prometheus-cream);
+  --pill-tilt: -3deg;
+  color: var(--prometheus-off-white);
+  /* Independent rotation overrides only the captured animation's rotate:none. */
+  rotate: 0deg !important;
+  transform-origin: center;
+  transition: rotate .22s ease, color .22s ease, box-shadow .22s ease;
+}
+
+.prometheus-preview .homepage-h1-link.is-green {
+  --pill-tilt: 3deg;
+}
+
+.prometheus-preview .homepage-h1-link.is-cyan {
+  --pill-accent: var(--prometheus-teal);
+  --pill-tilt: -2deg;
+}
+
+.prometheus-preview .homepage-h1-link:is(:hover, :focus-visible) {
+  color: var(--pill-accent);
+  rotate: var(--pill-tilt) !important;
+}
+
+.prometheus-preview :is(.homepage-h1-link, .button-primary, .nav-cta):focus-visible {
+  outline: 2px solid var(--prometheus-cream);
+  outline-offset: 5px;
+}
+
+.prometheus-preview .home-hero_purple-icons-wrapper { color: var(--prometheus-red); }
+.prometheus-preview .home-hero_green-icons-wrapper { color: var(--prometheus-cream); }
+.prometheus-preview .home-hero_cyan-icons-wrapper { color: var(--prometheus-teal); }
+
+.prometheus-icon-glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+.prometheus-preview .home-hero_h1:has(.homepage-h1-link.is-purple:focus-visible) + .home-hero_icons-wrapper .home-hero_purple-icons-wrapper .home-hero_h1-icon,
+.prometheus-preview .home-hero_h1:has(.homepage-h1-link.is-green:focus-visible) + .home-hero_icons-wrapper .home-hero_green-icons-wrapper .home-hero_h1-icon,
+.prometheus-preview .home-hero_h1:has(.homepage-h1-link.is-cyan:focus-visible) + .home-hero_icons-wrapper .home-hero_cyan-icons-wrapper .home-hero_h1-icon {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-preview .homepage-h1-link,
+  .prometheus-preview .homepage-h1-link:is(:hover, :focus-visible) {
+    rotate: 0deg !important;
+    transition: none;
+  }
+  .prometheus-preview :is(.home-hero_h1-icon, .button-primary, .button-primary_icon, .button-primary_arrow, .button-primary_text-wrapper) {
+    transition: none;
+  }
 }
 
 .prometheus-preview::before {
@@ -30,7 +149,7 @@
 
 .prometheus-wordmark {
   display: block;
-  color: #fff;
+  color: var(--prometheus-off-white);
   font-family: var(--_typography---font--family--primary);
   font-size: 3rem;
   font-weight: 500;
@@ -40,6 +159,7 @@
 
 .prometheus-preview .trusted_wrapper {
   background-color: rgb(8 10 14 / 18%);
+  border-color: rgb(237 220 198 / 30%);
 }
 
 @media (max-width: 479px) {
