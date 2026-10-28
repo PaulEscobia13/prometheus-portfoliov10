@@ -11,6 +11,8 @@ const pillArtwork = {
 export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prometheus" }) {
  let html = readFileSync(join(process.cwd(), "reference/hero.html"), "utf8");
  if (brand === "prometheus") {
+   const playMarkup = html.match(/<div class="home-hero-title-decor-play"[^>]*>[\s\S]*?<\/div>/)?.[0] ?? "";
+   const inlinePlay = playMarkup.replace(/^<div\b[^>]*>/, '<span class="home-hero-title-decor-play">').replace(/<\/div>$/, "</span>");
    html = html.replace(/<h1 class="home-hero-subtitle">[\s\S]*?<\/h1>/,
      `<p class="home-hero-subtitle">${escapeHtml(prometheusHero.eyebrow)}</p>`);
    const headline = prometheusHero.headline.map(part => {
@@ -19,13 +21,14 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
        const icons = pillArtwork[part.pill].map((file, index) => `<span aria-hidden="true" class="prometheus-pill-icon prometheus-pill-icon-${index + 1}"><span class="prometheus-icon-glyph" style="mask-image:url('/assets/${file}')"></span></span>`).join("");
        return `<a href="#services" class="homepage-h1-link prometheus-headline-pill ${part.pill}"><span>${text}</span>${icons}</a>`;
      }
-     return text;
+     return text.replace(/^ with /, ` <span class="prometheus-hero-with">${inlinePlay} with</span> `);
    }).join("");
    html = html.replace(/<div class="homepage_h1-wrapper">[\s\S]*?(?=<div class="home-hero_icons-wrapper">)/,
      `<div class="homepage_h1-wrapper"><h1 class="home-hero_h1 prometheus-hero-title">${headline}</h1>`);
    // Captured icons were positioned against the entire old headline. Each new
    // pill owns its decorations, so line wrapping cannot detach them from a word.
    html = html.replace(/<div class="home-hero_icons-wrapper">[\s\S]*?(?=<div class="home-hero-title-decor-play")/, "");
+   if (playMarkup) html = html.replace(playMarkup, "");
    prometheusHero.paragraphs.forEach((text, index) => {
      html = html.replace(new RegExp(`<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">[\\s\\S]*?<\\/p>`),
        `<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">${escapeHtml(text)}</p>`);

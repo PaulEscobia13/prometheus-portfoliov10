@@ -41,7 +41,7 @@ export default function Services() {
       <div className="w-layout-blockcontainer home-container w-container">
         <div className="home-services-top">
           <p className="home-title-upcase">Services</p>
-          <h2 id="services-title" className="home-title home-services-title">What We Offer</h2>
+          <h2 id="services-title" className="home-title home-services-title"><em className="is-italic">What We Offer</em></h2>
         </div>
         <div className="home-services-content-wrapper">
           <div className="home-services-content">
