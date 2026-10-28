@@ -4,6 +4,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $directory = Join-Path $PSScriptRoot '../public/partners'
 $assets = @(
+    @{ Source = 'furniture_odyssey_fff4ea.png'; Destination = 'furniture_odyssey_fff4ea.png' },
+    @{ Source = 'piercing_corner_fff4ea.png'; Destination = 'piercing_corner_fff4ea.png' },
     @{ Source = 'Mid-Century Furniture Odyssey Logo.png'; Destination = 'furniture-odyssey-original.png' },
     @{ Source = 'piercing_corner_fixed.png'; Destination = 'piercing-corner-original.png' }
 )

@@ -219,22 +219,20 @@
   object-fit: contain;
 }
 
-/* Same artwork in both layers keeps size and transparency aligned. */
+/* Render the supplied neutral artwork directly; alpha masks lose internal detail. */
 .prometheus-partner-neutral {
   position: absolute;
   inset: 0;
-  background-color: var(--prometheus-off-white);
-  mask-size: contain;
-  mask-position: center;
-  mask-repeat: no-repeat;
   pointer-events: none;
+  opacity: 1;
+  transition: opacity 1.4s cubic-bezier(.45, 0, .2, 1);
 }
 
 .prometheus-partner-color {
   position: absolute;
   inset: 0;
   clip-path: circle(0% at 50% 50%);
-  transition: clip-path .6s cubic-bezier(.22, 1, .36, 1);
+  transition: clip-path 1.4s cubic-bezier(.45, 0, .2, 1);
   pointer-events: none;
 }
 
@@ -242,6 +240,7 @@
   .prometheus-partner:hover .prometheus-partner-color {
     clip-path: circle(75% at 50% 50%);
   }
+  .prometheus-partner:hover .prometheus-partner-neutral { opacity: 0; }
 }
 
 .prometheus-partner:focus-visible {
@@ -254,8 +253,11 @@
   clip-path: circle(75% at 50% 50%);
 }
 
+.prometheus-partner:focus-visible .prometheus-partner-neutral { opacity: 0; }
+
 @media (prefers-reduced-motion: reduce) {
-  .prometheus-partner-color { transition: none; }
+  .prometheus-partner-color,
+  .prometheus-partner-neutral { transition: none; }
 }
 
 @media (max-width: 479px) {
