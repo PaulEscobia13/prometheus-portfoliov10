@@ -245,26 +245,25 @@
   min-height: 100svh;
 }
 
-.prometheus-background-stage::before,
-.prometheus-intro-stage::before {
+.prometheus-background-stage { background-color: #0d1116; }
+
+.prometheus-background-stage::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: max(100svh, 177.6833vw);
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%)),
+    linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%) 85%, #0d1116),
     url('/backgrounds/prometheus-waves.png');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
 }
 
-/* Keep the original hero/services image framing independent of the longer
-   cases backdrop, and blend their lower edges rather than zooming the hero. */
-.prometheus-intro-stage::before {
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 14rem), transparent);
-}
+/* One 941 × 1672 image, scaled by viewport width rather than the full page
+   height. Its dark lower edge continues through cases without a second copy. */
 
 .prometheus-services {
   scroll-margin-top: 12rem;
