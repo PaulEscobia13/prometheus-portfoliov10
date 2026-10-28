@@ -3,8 +3,10 @@ import Navigation from "../../components/Navigation";
 import Hero from "../../components/Hero";
 import SmoothScroll from "../../components/SmoothScroll";
 import Services from "../../components/Services";
+import CaseStudySection from "../../components/CaseStudySection";
 import "lenis/dist/lenis.css";
 import "./preview.css";
+import "./cases.css";
 
 export const metadata: Metadata = {
   title: "Prometheus — background and wordmark study",
@@ -21,6 +23,7 @@ export default function PrometheusPreview() {
           <Hero brand="prometheus" />
           <Services />
         </div>
+        <CaseStudySection />
       </main>
     </div>
   );
