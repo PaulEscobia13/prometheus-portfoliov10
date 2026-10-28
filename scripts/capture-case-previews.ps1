@@ -11,8 +11,10 @@ if (-not $browser) { throw 'Chrome or Edge was not found in its standard Windows
 $destination = Join-Path $PSScriptRoot '../public/cases'
 New-Item -ItemType Directory -Force -Path $destination | Out-Null
 $cases = @(
-    @{ Name = 'furniture-odyssey'; Url = 'https://furniture-odyssey-catalog-website.vercel.app/' },
-    @{ Name = 'piercing-corner'; Url = 'https://piercing-corner.vercel.app/' }
+    @{ Name = 'furniture-odyssey'; Url = 'https://furniture-odyssey-catalog-website.vercel.app/'; Width = 1440; Height = 1000 },
+    @{ Name = 'furniture-odyssey-mobile'; Url = 'https://furniture-odyssey-catalog-website.vercel.app/'; Width = 390; Height = 844 },
+    @{ Name = 'piercing-corner'; Url = 'https://piercing-corner.vercel.app/'; Width = 1440; Height = 1000 },
+    @{ Name = 'piercing-corner-mobile'; Url = 'https://piercing-corner.vercel.app/'; Width = 390; Height = 844 }
 )
 foreach ($case in $cases) {
     $output = Join-Path $destination ($case.Name + '.png')
@@ -25,7 +27,7 @@ foreach ($case in $cases) {
     try {
         $capture = Join-Path $temporaryDirectory 'capture.png'
         $profile = Join-Path $temporaryDirectory 'profile'
-        $arguments = @('--headless=new', '--hide-scrollbars', '--window-size=1440,1000', '--virtual-time-budget=7000', "--user-data-dir=`"$profile`"", "--screenshot=`"$capture`"", $case.Url)
+        $arguments = @('--headless=new', '--hide-scrollbars', "--window-size=$($case.Width),$($case.Height)", '--virtual-time-budget=7000', "--user-data-dir=`"$profile`"", "--screenshot=`"$capture`"", $case.Url)
         $process = Start-Process -FilePath $browser -ArgumentList $arguments -PassThru
         if (-not $process.WaitForExit(60000)) {
             $process.Kill()

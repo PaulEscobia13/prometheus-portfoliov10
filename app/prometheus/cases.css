@@ -10,7 +10,7 @@
   grid-template-columns: minmax(0, 40.5rem) minmax(0, 1fr);
   gap: 5.5rem;
   align-items: start;
-  animation: case-arrive .45s ease both;
+  scroll-margin-top: 110px;
 }
 .prometheus-case-tags { display: flex; flex-wrap: wrap; margin-bottom: 4rem; }
 .prometheus-case-tags span {
@@ -62,16 +62,16 @@
 .prometheus-case-overview-features { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 2rem; }
 .prometheus-case-overview-features span { padding: .8rem 1.2rem; border: 1px solid rgb(255 244 234 / 20%); border-radius: 99px; font-size: 1.2rem; }
 .prometheus-case-screenshot { display: block; width: 100%; height: 100%; min-height: 54rem; max-height: 76rem; object-fit: cover; object-position: top; }
-.prometheus-case-controls { display: flex; align-items: center; gap: .8rem; width: 40.5rem; max-width: 100%; margin-top: 2.4rem; }
-.prometheus-case-counter { margin-right: auto; color: var(--prometheus-cream); font-size: 1.4rem; }
-.prometheus-case-controls button { display: grid; place-items: center; flex-shrink: 0; width: 6rem; height: 6rem; border: 0; border-radius: 50%; background: rgb(255 244 234 / 16%); color: var(--prometheus-off-white); cursor: pointer; transition: background-color .25s ease, transform .25s ease; }
-.prometheus-case-controls button:hover { background: var(--prometheus-red); transform: translateY(-2px); }
-.prometheus-case-controls button:focus-visible { outline: 2px solid var(--prometheus-cream); outline-offset: 4px; }
+.prometheus-case-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; flex-shrink: 0; }
+.prometheus-case-counter { color: var(--prometheus-cream); font-size: 1.4rem; }
+.prometheus-case-controls :is(a, button) { display: grid; place-items: center; flex-shrink: 0; width: 6rem; height: 6rem; border: 0; border-radius: 50%; background: rgb(255 244 234 / 16%); color: var(--prometheus-off-white); cursor: pointer; transition: background-color .25s ease, transform .25s ease; }
+.prometheus-case-controls :is(a, button):not(:disabled):hover { background: var(--prometheus-red); transform: translateY(-2px); }
+.prometheus-case-controls :is(a, button):focus-visible { outline: 2px solid var(--prometheus-cream); outline-offset: 4px; }
 .prometheus-case-announcement { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-@keyframes case-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
 @media (min-width: 1440px) {
   .prometheus-case-layout { grid-template-columns: minmax(0, 52rem) minmax(0, 1fr); gap: 11rem; }
-  .prometheus-case-controls { width: 52rem; }
+
 }
 @media (max-width: 991px) {
   .prometheus-case-layout { grid-template-columns: minmax(0, 31.6rem) minmax(0, 1fr); gap: 4rem; }
@@ -87,10 +87,61 @@
   .prometheus-case-visual, .prometheus-case-overview, .prometheus-case-screenshot { min-height: 38rem; }
   .prometheus-case-visual { border-radius: 2.4rem; }
   .prometheus-case-logo { height: 18rem; }
-  .prometheus-case-controls { width: 100%; }
+
 }
 @media (prefers-reduced-motion: reduce) {
   .prometheus-case-layout { animation: none; }
-  .prometheus-case-controls button { transition: none; }
-  .prometheus-case-controls button:hover { transform: none; }
+  .prometheus-case-controls :is(a, button) { transition: none; }
+  .prometheus-case-controls :is(a, button):not(:disabled):hover { transform: none; }
+}
+
+/* The recording uses normal page scroll: each summary sticks within its own
+   image stack, then releases when the next project reaches it. */
+.prometheus-case-stack { display: flex; flex-direction: column; gap: 14rem; }
+.prometheus-case-details { position: sticky; top: 110px; align-self: start; }
+.prometheus-case-gallery { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.prometheus-case-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-top: 3rem; }
+.prometheus-case-footer .prometheus-case-signature { margin-top: 0; min-width: 0; }
+.prometheus-case-footer .prometheus-case-name { font-size: 2.2rem; }
+.prometheus-case-footer .prometheus-case-live-link { margin-top: 1rem; }
+.prometheus-case-control-buttons { display: flex; gap: .8rem; }
+.prometheus-case-controls :disabled { opacity: .35; cursor: default; }
+.prometheus-case-scope-list { width: 100%; margin: 4rem 0 0; padding: 0; list-style: none; text-align: left; }
+.prometheus-case-scope-list li { display: flex; align-items: center; gap: 2rem; padding: 2.4rem 0; border-top: 1px solid rgb(255 244 234 / 18%); font-size: 1.8rem; }
+.prometheus-case-scope-list li span { color: var(--prometheus-cream); font-size: 1.2rem; }
+.prometheus-case-screenshot-card { display: grid; place-items: center; padding: 4rem 2rem; }
+.prometheus-case-device { position: relative; width: 88%; border: .8rem solid #111; border-radius: 1.8rem; background: #111; box-shadow: 0 3rem 6rem rgb(0 0 0 / 30%); transform: perspective(1200px) rotateX(5deg) rotateY(-8deg) rotateZ(-4deg); }
+.prometheus-case-device-bar { display: flex; align-items: center; gap: .5rem; height: 2.4rem; padding-inline: .8rem; background: #191919; color: var(--prometheus-cream); font-size: .8rem; }
+.prometheus-case-device-bar i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--prometheus-red); }
+.prometheus-case-device-bar i:nth-child(2) { background: var(--prometheus-cream); }
+.prometheus-case-device-bar i:nth-child(3) { background: var(--prometheus-teal); }
+.prometheus-case-device-bar span { margin-left: 1rem; }
+.prometheus-case-device .prometheus-case-screenshot { min-height: 0; max-height: none; aspect-ratio: 1.44; object-fit: cover; object-position: top; border-radius: 0 0 1rem 1rem; }
+.prometheus-case-device::after { content: ''; position: absolute; bottom: -1.4rem; left: -7%; width: 114%; height: 1.6rem; border-radius: 0 0 50% 50%; background: linear-gradient(#9a9a9a, #3b3b3b); box-shadow: 0 1rem 1.8rem rgb(0 0 0 / 25%); }
+.prometheus-case-device.is-mobile { width: min(48%, 24rem); padding: .3rem; border-radius: 2.8rem; transform: perspective(1200px) rotateY(-6deg) rotateZ(4deg); }
+.prometheus-case-device.is-mobile .prometheus-case-device-bar { display: none; }
+.prometheus-case-device.is-mobile .prometheus-case-screenshot { aspect-ratio: 390 / 844; border-radius: 1.8rem; }
+.prometheus-case-device.is-mobile::after { display: none; }
+@media (min-width: 1440px) { .prometheus-case-stack { gap: 24rem; } }
+@media (min-width: 768px) and (max-height: 740px) {
+  .prometheus-case-details { top: 8rem; }
+  .prometheus-case-tags { margin-bottom: 2rem; }
+  .prometheus-case-title { padding-bottom: 2rem; font-size: 2.6rem; }
+  .prometheus-case-scope { padding-top: 2rem; }
+  .prometheus-case-description { font-size: 1.6rem; }
+  .prometheus-case-footer { margin-top: 2rem; }
+}
+@media (max-width: 991px) {
+  .prometheus-case-footer { flex-wrap: wrap; }
+  .prometheus-case-controls { flex-direction: row; align-items: center; }
+}
+@media (max-width: 767px) {
+  .prometheus-case-stack { gap: 8rem; }
+  .prometheus-case-details { position: static; }
+  .prometheus-case-footer { flex-wrap: nowrap; }
+  .prometheus-case-controls { flex-direction: column; align-items: flex-end; }
+  .prometheus-case-controls :is(a, button) { width: 4.8rem; height: 4.8rem; }
+  .prometheus-case-visual { min-height: 0; }
+  .prometheus-case-screenshot-card { min-height: 32rem; }
+  .prometheus-case-overview { min-height: 38rem; }
 }

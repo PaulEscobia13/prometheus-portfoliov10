@@ -1,60 +1,61 @@
-"use client";
-
-import { useState } from "react";
 import type { CaseStudy } from "../content/caseStudies";
 
 export default function CaseStudies({ cases }: { cases: readonly CaseStudy[] }) {
-  const [index, setIndex] = useState(0);
-  const active = cases[index];
-  if (!active) return null;
-  const move = (direction: number) => setIndex(value => (value + direction + cases.length) % cases.length);
-
   return (
-    <section id="works" className="home-updated-section prometheus-cases" aria-labelledby="works-title" aria-roledescription="carousel">
+    <section id="works" className="home-updated-section prometheus-cases" aria-labelledby="works-title">
       <div className="home-container w-container">
         <h2 id="works-title" className="home-title-upcase prometheus-cases-eyebrow">Our cases</h2>
-        <div className="prometheus-case-layout" key={active.id}>
-          <article className="prometheus-case-details" aria-labelledby={`case-title-${active.id}`}>
-            <div className="prometheus-case-tags">{active.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
-            <h3 id={`case-title-${active.id}`} className="prometheus-case-title">{active.headline}</h3>
-            <div className="prometheus-case-scope">
-              <p className="prometheus-case-scope-label">What we built</p>
-              <p className="prometheus-case-description">{active.description}</p>
-              <ul className="prometheus-case-capabilities">{active.capabilities.map(item => <li key={item}>{item}</li>)}</ul>
-            </div>
-            <div className="prometheus-case-signature">
-              <p className="prometheus-case-name">{active.name}</p>
-              <p className="prometheus-case-category">Client project · {active.category}</p>
-            </div>
-            <a className="prometheus-case-live-link" href={active.liveUrl} target="_blank" rel="noopener noreferrer">View live website <span aria-hidden="true">↗</span></a>
-          </article>
-          <figure className={`prometheus-case-visual is-${active.id}`}>
-            {active.screenshot ? (
-              <img src={active.screenshot} alt={`${active.name} project screenshot`} className="prometheus-case-screenshot" />
-            ) : (
-              <div className="prometheus-case-overview">
-                <p className="prometheus-case-overview-label">Project overview</p>
-                <img src={active.logo} alt={active.name} className="prometheus-case-logo" />
-                <p className="prometheus-case-overview-title">{active.category}</p>
-                <div className="prometheus-case-overview-features">{active.capabilities.map(item => <span key={item}>{item}</span>)}</div>
+        <div className="prometheus-case-stack">
+          {cases.map((item, index) => (
+            <article id={`case-${item.id}`} className="prometheus-case-layout" key={item.id} aria-labelledby={`case-title-${item.id}`}>
+              <div className="prometheus-case-details">
+                <div className="prometheus-case-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+                <h3 id={`case-title-${item.id}`} className="prometheus-case-title">{item.headline}</h3>
+                <div className="prometheus-case-scope">
+                  <p className="prometheus-case-scope-label">What we built</p>
+                  <p className="prometheus-case-description">{item.description}</p>
+                </div>
+                <div className="prometheus-case-footer">
+                  <div className="prometheus-case-signature">
+                    <p className="prometheus-case-name">{item.name}</p>
+                    <p className="prometheus-case-category">{item.category}</p>
+                    <a className="prometheus-case-live-link" href={item.liveUrl} target="_blank" rel="noopener noreferrer">View live website <span aria-hidden="true">↗</span></a>
+                  </div>
+                  <div className="prometheus-case-controls" aria-label={`${item.name} case navigation`}>
+                    <span className="prometheus-case-counter">{String(index + 1).padStart(2, "0")} / {String(cases.length).padStart(2, "0")}</span>
+                    <div className="prometheus-case-control-buttons">
+                      {index > 0 ? <a href={`#case-${cases[index - 1].id}`} aria-label={`Previous case: ${cases[index - 1].name}`}><Arrow up /></a> : <button disabled aria-label="Previous case"><Arrow up /></button>}
+                      {index < cases.length - 1 ? <a href={`#case-${cases[index + 1].id}`} aria-label={`Next case: ${cases[index + 1].name}`}><Arrow /></a> : <button disabled aria-label="Next case"><Arrow /></button>}
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
-          </figure>
+              <div className="prometheus-case-gallery" aria-label={`${item.name} project gallery`}>
+                {(item.screenshots ?? []).map((source, imageIndex) => (
+                  <figure key={source} className={`prometheus-case-visual prometheus-case-screenshot-card is-${item.id}`}>
+                    <div className={`prometheus-case-device${source.includes("-mobile") ? " is-mobile" : ""}`}>
+                      <div className="prometheus-case-device-bar" aria-hidden="true"><i /><i /><i /><span>{item.name}</span></div>
+                      <img src={source} alt={`${item.name}, ${source.includes("-mobile") ? "mobile" : "desktop"} website preview ${imageIndex + 1}`} className="prometheus-case-screenshot" />
+                    </div>
+                  </figure>
+                ))}
+                {(!item.screenshots || item.screenshots.length < 2) && <ProjectOverview item={item} />}
+                {(!item.screenshots || item.screenshots.length === 0) && <ProjectScope item={item} />}
+              </div>
+            </article>
+          ))}
         </div>
-        <div className="prometheus-case-controls" data-case-controls onKeyDown={event => {
-          if (["ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"].includes(event.key)) {
-            event.preventDefault();
-            move(event.key === "ArrowUp" || event.key === "ArrowLeft" ? -1 : 1);
-          }
-        }}>
-          <span className="prometheus-case-counter" aria-hidden="true">{String(index + 1).padStart(2, "0")} / {String(cases.length).padStart(2, "0")}</span>
-          <button type="button" onClick={() => move(-1)} aria-label="Previous case"><Arrow up /></button>
-          <button type="button" onClick={() => move(1)} aria-label="Next case"><Arrow /></button>
-        </div>
-        <p className="prometheus-case-announcement" role="status" aria-live="polite" aria-atomic="true">{active.name}, case {index + 1} of {cases.length}</p>
       </div>
     </section>
   );
+}
+
+function ProjectOverview({ item }: { item: CaseStudy }) {
+  return <figure className={`prometheus-case-visual is-${item.id}`}><div className="prometheus-case-overview"><p className="prometheus-case-overview-label">Project overview</p><img src={item.logo} alt={item.name} className="prometheus-case-logo" /><p className="prometheus-case-overview-title">{item.category}</p></div></figure>;
+}
+
+function ProjectScope({ item }: { item: CaseStudy }) {
+  return <figure className={`prometheus-case-visual prometheus-case-scope-card is-${item.id}`}><div className="prometheus-case-overview"><p className="prometheus-case-overview-label">Project scope</p><p className="prometheus-case-overview-title">{item.name}</p><ul className="prometheus-case-scope-list">{item.capabilities.map((capability, index) => <li key={capability}><span>{String(index + 1).padStart(2, "0")}</span>{capability}</li>)}</ul></div></figure>;
 }
 
 function Arrow({ up = false }: { up?: boolean }) {

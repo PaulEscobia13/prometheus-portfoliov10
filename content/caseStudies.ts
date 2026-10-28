@@ -8,7 +8,7 @@ export type CaseStudy = {
   category: string;
   logo: string;
   liveUrl: string;
-  screenshot?: string;
+  screenshots?: readonly string[];
 };
 
 export const caseStudies: readonly CaseStudy[] = [
