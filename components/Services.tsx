@@ -46,7 +46,7 @@ export default function Services() {
         <div className="home-services-content-wrapper">
           <div className="home-services-content">
             {groups.map(group => (
-              <article key={group.title} className="home-services-content-item">
+              <article id={`services-${group.title.toLowerCase().replace(/\s+/g, "-")}`} key={group.title} className="home-services-content-item">
                 <h3 className="home-services-content-item-title">{group.title}</h3>
                 <div className="home-services-content-items">
                   {group.items.map(([title, description]) => (
