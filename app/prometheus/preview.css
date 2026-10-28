@@ -533,12 +533,19 @@
 }
 
 .prometheus-preview .trusted_wrapper {
+  --trusted-legend-height: 2.1rem;
   padding: .5rem 2.6rem;
   background-color: rgb(8 10 14 / 18%);
   border-color: rgb(237 220 198 / 30%);
 }
+.prometheus-preview .trusted_wrapper .hero_logos-heading {
+  line-height: var(--trusted-legend-height);
+}
 
 .prometheus-preview .prometheus-partners {
+  /* A fieldset starts its content below the full legend line, while the border
+     passes through its midpoint. Offset that half-line for equal visible gaps. */
+  transform: translateY(calc(var(--trusted-legend-height) / -2));
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 28rem));
   justify-items: center;
