@@ -35,3 +35,5 @@ On Windows, install the four exact reference fonts from the site's CDN by runnin
 This initial harness preserves supplied DOM and CSS for calibration. It is not the finished React implementation. Scripts, trackers, iframes and remote font requests are excluded. Fonts are missing; typography and screenshot parity are not validated. Navigation dropdowns, video and animation behavior have not been implemented. Original assets are reference material, not authorized Prometheus production content. Do not publish this reference publicly.
 
 Review-panel typography now uses the captured font-size tokens, Gordita Medium (500) for titles and testimonials, the captured 30px title / 20px review override on short desktop screens, a 64px portrait, Libre Baskerville italic client name, and 60px adjacent controls. It uses a generic Review label instead of claiming Clutch verification.
+
+Pricing typography uses the self-hosted Geist font from the official geist package, scoped to PricingSection: heading 600, subtitle 500, features 400, and heading tracking -0.04em.

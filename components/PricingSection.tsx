@@ -1,8 +1,9 @@
+import { GeistSans } from "geist/font/sans";
 import { pricingPlans } from "../content/pricing";
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="prometheus-pricing" aria-labelledby="pricing-title">
+    <section id="pricing" className={`prometheus-pricing ${GeistSans.variable}`} aria-labelledby="pricing-title">
       <div className="pricing-container">
         <header className="pricing-intro">
           <h2 id="pricing-title">Simple pricing that<br />scales with you.</h2>
