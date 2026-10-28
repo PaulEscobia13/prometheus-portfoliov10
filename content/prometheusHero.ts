@@ -1,11 +1,11 @@
 export const prometheusHero = {
   eyebrow: "Tech Products and Services",
   headline: [
-    { text: "Your tech partner that makes " },
+    { text: "your tech partner that helps you create " },
     { text: "websites", pill: "is-purple" },
-    { text: ", " },
-    { text: "digital systems", pill: "is-cyan" },
-    { text: " super affordable and user-friendly, with a wonderful service." },
+    { text: " and " },
+    { text: "Digital systems", pill: "is-cyan" },
+    { text: " with wonderful service" },
   ],
   paragraphs: [
     "With the emergence of AI we let the clients feel its advantage by making services free, super affordable, and fast.",
