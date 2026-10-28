@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { ShowcaseSheet } from "../content/showcase";
+import { calculateShowcaseLoop, resizePhase, wrapPhase as wrap } from "../lib/showcase-loop";
 
 type Origin = { x: number; y: number; a: number; b: number; c: number; d: number; width: number; height: number };
-const wrap = (value: number, length: number) => length ? ((value % length) + length) % length : 0;
 
 export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] }) {
   const stage = useRef<HTMLDivElement>(null);
@@ -14,8 +15,10 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const closeButton = useRef<HTMLButtonElement>(null);
   const sourceButton = useRef<HTMLButtonElement | null>(null);
   const sourceOrigin = useRef<Origin | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
   const phase = useRef(0);
   const period = useRef(0);
+  const precedingCycles = useRef(2);
   const pitch = useRef(0);
   const initialized = useRef(false);
   const velocity = useRef(0);
@@ -29,14 +32,32 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const [active, setActive] = useState<string | null>(null);
   const [selected, setSelected] = useState<ShowcaseSheet | null>(null);
   const [announcement, setAnnouncement] = useState("");
-  const [copies, setCopies] = useState(3);
+  const [copies, setCopies] = useState(4);
   const [keyboardFocused, setKeyboardFocused] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const paint = () => {
+  const paint = useCallback(() => {
     // Keep a complete predecessor cycle to the left even immediately before a
     // wrap, because that left-hand sheet overlaps the first visible sheet.
-    if (track.current) track.current.style.transform = `translate3d(${phase.current - period.current * 2}px,0,0)`;
-  };
+    if (track.current) track.current.style.transform = `translate3d(${phase.current - period.current * precedingCycles.current}px,0,0)`;
+  }, []);
+
+  const keyboardSelect = useCallback((index: number) => {
+    keyboardIndex.current = wrap(index, sheets.length);
+    setCurrentIndex(keyboardIndex.current);
+    const sheet = sheets[keyboardIndex.current];
+    const width = stage.current?.clientWidth ?? 0;
+    const sheetElement = track.current?.querySelector<HTMLElement>(".showcase-sheet");
+    const matrix = new DOMMatrix(sheetElement ? getComputedStyle(sheetElement).transform : undefined);
+    const scale = Math.hypot(matrix.m11, matrix.m12, matrix.m13) || 1;
+    const activeScale = Number(sheetElement ? getComputedStyle(sheetElement).getPropertyValue("--showcase-active-scale") : 1) || 1;
+    const projectedWidth = (sheetElement?.offsetWidth ?? 0) * Math.abs(matrix.a) / scale * activeScale;
+    phase.current = wrap(width / 2 - projectedWidth / 2 - keyboardIndex.current * pitch.current, period.current);
+    velocity.current = 0;
+    paint();
+    setActive(sheet.id);
+    setAnnouncement(`${sheet.title}, ${keyboardIndex.current + 1} of ${sheets.length}.`);
+  }, [sheets, paint, setCurrentIndex, setActive, setAnnouncement]);
 
   useEffect(() => {
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
@@ -50,20 +71,30 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     const measure = () => {
       const slot = track.current?.querySelector<HTMLElement>(".showcase-slot");
       if (!slot) return;
-      const nextPitch = slot.getBoundingClientRect().width;
-      const nextPeriod = nextPitch * sheets.length;
-      phase.current = initialized.current && period.current ? phase.current / period.current * nextPeriod : nextPitch * .38;
+      const nextCycle = track.current?.children[sheets.length] as HTMLElement | undefined;
+      // Measure between repeated cards rather than multiplying a rounded CSS
+      // width. Fractional flex positioning must use exactly the rendered period.
+      const nextPitch = nextCycle ? (nextCycle.getBoundingClientRect().left - slot.getBoundingClientRect().left) / sheets.length : slot.getBoundingClientRect().width;
+      const extent = slot.querySelector<HTMLElement>(".showcase-sheet")?.getBoundingClientRect().width ?? nextPitch;
+      const loop = calculateShowcaseLoop(stage.current?.clientWidth ?? 0, nextPitch, sheets.length, extent);
+      if (!loop.period) return;
+      phase.current = initialized.current ? resizePhase(phase.current, period.current, loop.period) : nextPitch * .38;
       initialized.current = true;
       pitch.current = nextPitch;
-      period.current = nextPeriod;
-      setCopies(Math.max(2, Math.ceil((stage.current?.clientWidth ?? 0) / nextPeriod) + 2));
+      period.current = loop.period;
+      precedingCycles.current = loop.precedingCycles;
+      setCopies(loop.copies);
+      const focused = document.activeElement;
+      if (focused === stage.current || stage.current?.parentElement?.querySelector(".showcase-controls")?.contains(focused)) {
+        keyboardSelect(keyboardIndex.current);
+      }
       paint();
     };
     measure();
     const observer = new ResizeObserver(measure);
     if (stage.current) observer.observe(stage.current);
     return () => observer.disconnect();
-  }, [sheets.length]);
+  }, [sheets.length, keyboardSelect, paint]);
 
   useEffect(() => {
     let frame: number | undefined;
@@ -100,7 +131,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       document.removeEventListener("visibilitychange", refresh);
       if (frame !== undefined) cancelAnimationFrame(frame);
     };
-  }, [paused, active, selected, dragging, reducedMotion, keyboardFocused]);
+  }, [paused, active, selected, dragging, reducedMotion, keyboardFocused, paint]);
 
   function originFor(element: HTMLButtonElement): Origin {
     const rect = element.getBoundingClientRect();
@@ -108,10 +139,13 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     return { x: rect.left, y: rect.top, a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, width: element.offsetWidth, height: element.offsetHeight };
   }
 
-  function openPreview(sheet: ShowcaseSheet, element: HTMLButtonElement) {
-    if (performance.now() < suppressClickUntil.current) return;
+  function openPreview(sheet: ShowcaseSheet, element: HTMLButtonElement, timeStamp: number) {
+    if (timeStamp < suppressClickUntil.current) return;
     sourceButton.current = element;
     keyboardIndex.current = Math.max(0, sheets.findIndex(item => item.id === sheet.id));
+    setCurrentIndex(keyboardIndex.current);
+    const focused = document.activeElement;
+    returnFocus.current = focused instanceof HTMLElement && !focused.closest('[aria-hidden="true"]') && focused !== document.body ? focused : stage.current;
     sourceOrigin.current = originFor(element);
     closing.current = false;
     setSelected(sheet);
@@ -157,19 +191,15 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     setActive(null);
     closing.current = false;
     // Keyboard users return to the gallery control, not an offscreen loop copy.
-    stage.current?.focus({ preventScroll: true });
+    returnFocus.current?.focus({ preventScroll: true });
   }
 
-  function keyboardSelect(index: number) {
-    keyboardIndex.current = wrap(index, sheets.length);
-    const sheet = sheets[keyboardIndex.current];
-    const width = stage.current?.clientWidth ?? 0;
-    const nativeWidth = track.current?.querySelector<HTMLElement>(".showcase-sheet")?.offsetWidth ?? 0;
-    phase.current = wrap(width / 2 - nativeWidth * .707106 / 2 - keyboardIndex.current * pitch.current, period.current);
-    velocity.current = 0;
-    paint();
-    setActive(sheet.id);
-    setAnnouncement(`${sheet.title}. Press Enter to open the preview.`);
+  function previewCurrent(timeStamp: number) {
+    keyboardSelect(keyboardIndex.current);
+    const candidates = Array.from(track.current?.querySelectorAll<HTMLButtonElement>(`[data-sheet-id="${sheets[keyboardIndex.current].id}"]`) ?? []);
+    const middle = (stage.current?.getBoundingClientRect().left ?? 0) + (stage.current?.clientWidth ?? 0) / 2;
+    candidates.sort((a, b) => Math.abs(a.getBoundingClientRect().left + a.getBoundingClientRect().width / 2 - middle) - Math.abs(b.getBoundingClientRect().left + b.getBoundingClientRect().width / 2 - middle));
+    if (candidates[0]) openPreview(sheets[keyboardIndex.current], candidates[0], timeStamp);
   }
 
   return (
@@ -191,14 +221,10 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
         onKeyDown={event => {
           if (event.target !== event.currentTarget) return;
           if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); keyboardSelect(keyboardIndex.current + (event.key === "ArrowRight" ? 1 : -1)); }
+          if (event.key === "Home" || event.key === "End") { event.preventDefault(); keyboardSelect(event.key === "Home" ? 0 : sheets.length - 1); }
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            keyboardSelect(keyboardIndex.current);
-            const candidates = Array.from(track.current?.querySelectorAll<HTMLButtonElement>(`[data-sheet-id="${sheets[keyboardIndex.current].id}"]`) ?? []);
-            const width = stage.current?.clientWidth ?? 0;
-            const left = stage.current?.getBoundingClientRect().left ?? 0;
-            candidates.sort((a, b) => Math.abs(a.getBoundingClientRect().left - left - width / 2) - Math.abs(b.getBoundingClientRect().left - left - width / 2));
-            if (candidates[0]) openPreview(sheets[keyboardIndex.current], candidates[0]);
+            previewCurrent(event.timeStamp);
           }
           if (event.key === "Escape") setActive(null);
         }}
@@ -221,7 +247,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
           pointer.lastX = event.clientX;
         }}
         onPointerUp={event => {
-          if (drag.current?.moved) suppressClickUntil.current = performance.now() + 250;
+          if (drag.current?.moved) suppressClickUntil.current = event.timeStamp + 250;
           drag.current = null;
           setDragging(false);
           setActive(null);
@@ -232,7 +258,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
         <div ref={track} className="showcase-track" aria-hidden="true">
           {Array.from({ length: copies }, (_, copy) => sheets.map((sheet, index) => (
             <div className="showcase-slot" key={`${copy}-${sheet.id}`} style={{ zIndex: sheets.length * copies - (copy * sheets.length + index) }}>
-              <button type="button" tabIndex={-1} data-sheet-id={sheet.id} data-lit={active === sheet.id} className={`showcase-sheet tone-${sheet.tone}`} onPointerDown={event => { if (event.pointerType === "mouse") event.preventDefault(); }} onPointerEnter={event => { if (event.pointerType !== "touch" && !drag.current?.moved) setActive(sheet.id); }} onPointerLeave={() => { if (!drag.current?.moved) setActive(null); }} onClick={event => openPreview(sheet, event.currentTarget)}>
+              <button type="button" tabIndex={-1} data-sheet-id={sheet.id} data-lit={active === sheet.id} className={`showcase-sheet tone-${sheet.tone}`} onPointerDown={event => { if (event.pointerType === "mouse") event.preventDefault(); }} onPointerEnter={event => { if (event.pointerType !== "touch" && !drag.current?.moved) setActive(sheet.id); }} onPointerLeave={() => { if (!drag.current?.moved) setActive(null); }} onClick={event => openPreview(sheet, event.currentTarget, event.timeStamp)}>
                 <SheetContent sheet={sheet} />
               </button>
             </div>
@@ -241,16 +267,23 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       </div>
       <div className="showcase-toolbar">
         <p>{sheets.some(sheet => sheet.image) ? "Concept explorations" : "Blank concept sheets"}</p>
+        <div className="showcase-controls" role="group" aria-label={`Browse all ${sheets.length} concepts`} onFocusCapture={() => setKeyboardFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) { setKeyboardFocused(false); if (!selected) setActive(null); } }}>
+          <button type="button" aria-label="Previous concept" onClick={() => keyboardSelect(keyboardIndex.current - 1)}>←</button>
+          <button type="button" className="showcase-preview-trigger" aria-label={`Preview ${sheets[currentIndex].title}, ${currentIndex + 1} of ${sheets.length}`} onClick={event => previewCurrent(event.timeStamp)}>Preview {String(currentIndex + 1).padStart(2, "0")} <span aria-hidden="true">/ {sheets.length}</span></button>
+          <button type="button" aria-label="Next concept" onClick={() => keyboardSelect(keyboardIndex.current + 1)}>→</button>
+        </div>
         <button type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} disabled={reducedMotion}>{reducedMotion ? "Motion reduced" : paused ? "Play motion" : "Pause motion"}</button>
       </div>
       <p className="showcase-sr-only" role="status" aria-live="polite">{announcement}</p>
       <dialog ref={dialog} className="showcase-dialog" aria-labelledby="showcase-preview-title" data-lenis-prevent="" onCancel={event => { event.preventDefault(); void closePreview(); }} onClick={event => { if (event.target === event.currentTarget) void closePreview(); }}>
         {selected && <>
+          <div className="showcase-preview-frame">
           <div ref={panel} className={`showcase-preview-panel tone-${selected.tone}`}>
             <SheetContent sheet={selected} />
           </div>
           <div className="showcase-preview-caption"><h3 id="showcase-preview-title">{selected.title}</h3><p>{selected.image ? "Concept exploration" : "Image placeholder"}</p></div>
           <button ref={closeButton} type="button" className="showcase-preview-close" aria-label="Close preview" onClick={() => void closePreview()}><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" strokeWidth="1.8" /></svg></button>
+          </div>
         </>}
       </dialog>
     </section>
@@ -258,5 +291,5 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
 }
 
 function SheetContent({ sheet }: { sheet: ShowcaseSheet }) {
-  return sheet.image ? <img src={sheet.image} alt="" draggable={false} className="showcase-image" /> : <div className="showcase-blank"><span>{sheet.title}</span><span aria-hidden="true">{sheet.id.slice(-2)}</span></div>;
+  return sheet.image ? <Image src={sheet.image} alt="" width={1400} height={800} unoptimized draggable={false} className="showcase-image" /> : <div className="showcase-blank"><span>{sheet.title}</span><span aria-hidden="true">{sheet.id.slice(-2)}</span></div>;
 }

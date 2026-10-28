@@ -3,10 +3,10 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if (-not (Test-Path -LiteralPath $SourceDirectory -PathType Container)) {
-    throw "Put your 8-16 generated images in $SourceDirectory, or pass -SourceDirectory."
+    throw "Put your generated images in $SourceDirectory, or pass -SourceDirectory."
 }
 $files = @(Get-ChildItem -LiteralPath $SourceDirectory -File | Where-Object { $_.Extension -match '^\.(png|jpe?g|webp|avif)$' } | Sort-Object Name)
-if ($files.Count -lt 8 -or $files.Count -gt 16) { throw 'The source folder must contain 8 to 16 PNG, JPEG, WebP, or AVIF images.' }
+if ($files.Count -lt 1 -or $files.Count -gt 12) { throw 'The source folder must contain 1 to 12 PNG, JPEG, WebP, or AVIF images. Unfilled gallery slots stay as placeholders.' }
 $destination = Join-Path $PSScriptRoot '../public/showcase'
 if (Test-Path -LiteralPath $destination) {
     $existing = @(Get-ChildItem -LiteralPath $destination -File | Where-Object { $_.Name -match '^sheet-\d{2}\.(png|jpe?g|webp|avif)$' })

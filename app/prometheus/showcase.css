@@ -1,6 +1,12 @@
+/* The captured shell uses 100vw, which includes desktop scrollbar width.
+   Keep this route inside the available width and avoid shifts on modal open. */
+html:has(.prometheus-showcase) { width: 100%; scrollbar-gutter: stable; }
+body:has(.prometheus-showcase), .prometheus-preview.page-wrapper { width: 100%; max-width: 100%; }
+
 .prometheus-showcase {
   --sheet-width: clamp(38rem, 35.75vw, 78rem);
   --sheet-step: clamp(17rem, 16vw, 34rem);
+  --showcase-active-scale: 1.025;
   color: var(--prometheus-off-white);
   background: #080909;
   padding: 8rem 0 2.4rem;
@@ -8,7 +14,7 @@
   scroll-margin-top: 10rem;
 }
 .prometheus-showcase h2 {
-  margin: 0 2rem 5.8rem;
+  margin: 0 2rem 4rem;
   color: var(--prometheus-off-white);
   font-family: var(--_typography---font--family--primary);
   font-size: clamp(3.2rem, 5.1vw, 9.6rem);
@@ -51,36 +57,49 @@
 .tone-cream { background: #eddcc6; }
 .tone-teal { background: #bfd1d0; }
 .tone-rose { background: #dcb7ac; }
-.showcase-stage[data-active]:not([data-active=""]) .showcase-sheet { opacity: .38; }
-.showcase-stage[data-active]:not([data-active=""]) .showcase-sheet[data-lit="true"] { opacity: 1; transform: translateY(-12px) rotateX(-35.264deg) rotateY(-45deg) scale(1.025); }
+.showcase-stage[data-active]:not([data-active=""]) .showcase-sheet { opacity: .48; }
+.showcase-stage[data-active]:not([data-active=""]) .showcase-sheet[data-lit="true"] { opacity: 1; transform: translateY(-12px) rotateX(-35.264deg) rotateY(-45deg) scale(var(--showcase-active-scale)); }
 .showcase-stage[data-dragging="true"] .showcase-sheet { cursor: grabbing; }
 .showcase-blank { display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%; padding: 2.4rem; font-family: var(--_typography---font--family--primary); }
 .showcase-blank > span:first-child { font-size: 1.4rem; font-weight: 500; letter-spacing: .015em; }
 .showcase-blank > span:last-child { align-self: flex-end; font-size: 4rem; font-weight: 400; opacity: .18; line-height: 1; }
 .showcase-image { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; pointer-events: none; }
 .showcase-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 2rem 3.2rem 0; color: var(--prometheus-cream); font-size: 1.2rem; }
-.showcase-toolbar button { border: 1px solid rgb(255 244 234 / 25%); border-radius: 99px; padding: .8rem 1.4rem; color: var(--prometheus-off-white); background: transparent; font: inherit; cursor: pointer; }
+.showcase-toolbar button { min-height: 4.4rem; min-width: 4.4rem; border: 1px solid rgb(255 244 234 / 25%); border-radius: 99px; padding: .8rem 1.4rem; color: var(--prometheus-off-white); background: transparent; font: inherit; cursor: pointer; }
+.showcase-toolbar button:hover { background: rgb(255 244 234 / 8%); }
+.showcase-controls { display: flex; align-items: center; gap: .8rem; }
+.showcase-preview-trigger { white-space: nowrap; }
+.showcase-preview-trigger span { color: var(--prometheus-cream); opacity: .65; }
 .showcase-toolbar button:disabled { opacity: .6; cursor: default; }
 .showcase-toolbar button:focus-visible { outline: 2px solid var(--prometheus-teal); outline-offset: 3px; }
 .showcase-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .showcase-dialog { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; padding: 0; border: 0; background: transparent; overflow: hidden; color: var(--prometheus-off-white); }
 .showcase-dialog[open] { display: grid; place-items: center; }
 .showcase-dialog::backdrop { background: rgb(0 0 0 / 78%); }
-.showcase-preview-panel { width: min(72vw, 110rem, calc(76svh * 1.75)); aspect-ratio: 7 / 4; color: #514d48; transform-origin: top left; overflow: hidden; box-shadow: 0 3rem 10rem rgb(0 0 0 / 35%); }
+.showcase-preview-frame { position: relative; width: min(72vw, 128rem, calc(76svh * 1.75)); }
+.showcase-preview-panel { width: 100%; aspect-ratio: 7 / 4; color: #514d48; transform-origin: top left; overflow: hidden; box-shadow: 0 3rem 10rem rgb(0 0 0 / 35%); }
 .showcase-preview-panel .showcase-blank { padding: 3.2rem; }
-.showcase-preview-close { position: fixed; top: 2.4rem; right: 2.4rem; display: grid; place-items: center; width: 4.4rem; height: 4.4rem; border: 1px solid rgb(255 244 234 / 30%); border-radius: 50%; color: var(--prometheus-off-white); background: var(--prometheus-red); cursor: pointer; }
+.showcase-preview-close { position: absolute; top: -1.6rem; left: -1.6rem; display: grid; place-items: center; width: 4.4rem; height: 4.4rem; border: 1px solid rgb(255 244 234 / 30%); border-radius: 50%; color: var(--prometheus-off-white); background: var(--prometheus-red); cursor: pointer; }
 .showcase-preview-close:focus-visible { outline: 2px solid var(--prometheus-off-white); outline-offset: 4px; }
-.showcase-preview-caption { position: fixed; bottom: 2.4rem; left: 50%; transform: translateX(-50%); text-align: center; }
-.showcase-preview-caption h3 { color: var(--prometheus-off-white); font-size: 1.6rem; font-weight: 500; }
-.showcase-preview-caption p { margin-top: .4rem; color: var(--prometheus-cream); font-size: 1.2rem; }
+.showcase-preview-caption { position: absolute; bottom: 1.6rem; right: 1.6rem; padding: 1rem 1.4rem; border-radius: .8rem; background: var(--prometheus-off-white); color: var(--prometheus-ink); box-shadow: 0 .4rem 2rem rgb(0 0 0 / 12%); }
+.showcase-preview-caption h3 { color: inherit; font-size: 1.4rem; font-weight: 500; }
+.showcase-preview-caption p { margin-top: .4rem; font-size: 1.1rem; }
 @media (max-width: 767px) {
   .prometheus-showcase { padding-top: 6rem; }
-  .prometheus-showcase h2 { margin-bottom: 4rem; }
-  .showcase-toolbar { padding-inline: 1.6rem; }
-  .showcase-preview-panel { width: min(92vw, calc(72svh * 1.75)); }
-  .showcase-preview-close { top: 1.6rem; right: 1.6rem; }
+  .prometheus-showcase h2 { font-size: clamp(2.4rem, 7.8vw, 3.8rem); margin-bottom: 4rem; }
+  .showcase-toolbar { flex-wrap: wrap; gap: 1.6rem; padding-inline: 1.6rem; }
+  .showcase-toolbar > p { flex-basis: 100%; }
+  .showcase-controls { gap: .4rem; }
+  .showcase-toolbar button { padding-inline: 1rem; }
+  .showcase-toolbar > button { margin-left: auto; }
+  .showcase-preview-frame { width: min(92vw, calc(72svh * 1.75)); }
+  .showcase-preview-close { left: -.6rem; }
+  .showcase-preview-caption { bottom: .8rem; right: .8rem; padding: .8rem 1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .showcase-track { will-change: auto; }
   .showcase-sheet { transition: none; }
+}
+@media (max-width: 359px) {
+  .prometheus-preview .prometheus-nav-inner { gap: .4rem; }
 }
