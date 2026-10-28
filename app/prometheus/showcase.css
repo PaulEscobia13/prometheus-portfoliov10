@@ -8,7 +8,7 @@ body:has(.prometheus-showcase), .prometheus-preview.page-wrapper { width: 100%; 
   --sheet-step: clamp(17rem, 16vw, 34rem);
   --showcase-active-scale: 1.025;
   color: var(--prometheus-off-white);
-  background: #080909;
+  background: linear-gradient(to bottom, #0d1116, #080909 18rem);
   padding: 8rem 0 2.4rem;
   overflow: clip;
   scroll-margin-top: 10rem;
