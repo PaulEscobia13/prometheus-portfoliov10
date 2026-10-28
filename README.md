@@ -4,6 +4,8 @@ The `/prometheus` route is a separate background and wordmark experiment request
 
 Run `npm ci`, `npm run dev`. Validate with `npm test`, `npm run lint`, `npm run typecheck` and `npm run build`.
 
+The pricing section follows the showcase at `/prometheus#pricing`. It uses the supplied three-plan reference layout with Prometheus colors, a highlighted Premium card, semantic feature lists, keyboard focus states and stacked mobile cards. The user requested keeping the reference prices for now: Essential $2,000/project, Premium $4,500/project and Custom Partnership. Edit `content/pricing.ts` to change the plans. Buttons use the existing `#contacts` destination; the Contacts section is still pending. The screenshot's floating navbar and template badges were not reproduced.
+
 ESLint uses the Next.js Core Web Vitals and TypeScript presets. The TypeScript packages follow Microsoft's side-by-side compatibility setup: `@typescript/native` supplies TypeScript 7.0.2's `tsc` command, while the `typescript` alias supplies the TypeScript 6 API required by ESLint and other programmatic tooling. See [Microsoft's compatibility guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).
 
 Gallery regression tests cover wrap positioning and overlap order, responsive resizing, reduced-motion preference changes, preview animation cancellation, pointer cancellation, visibility changes, and effect cleanup. Component tests mount the gallery in JSDOM with controlled browser API stubs; browser testing is still required for CSS projection, actual modal behavior and visual comparison with the recording.
