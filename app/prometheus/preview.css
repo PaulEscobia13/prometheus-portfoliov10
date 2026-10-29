@@ -185,6 +185,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: .8rem;
+  /* Keep nearby magnetic CTA updates from re-rasterizing the small tag text. */
+  isolation: isolate;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .prometheus-preview .home-section-hero .button-primary,
+  .prometheus-preview .nav-cta,
+  .prometheus-preview .prometheus-footer-cta { will-change: translate; }
 }
 
 .prometheus-preview .home-hero-tags .hero_title-tag {
