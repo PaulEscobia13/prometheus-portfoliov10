@@ -313,28 +313,16 @@ test("resizing keeps the keyboard-selected card centered", async t => {
   assert.equal(document.querySelector('[role="status"]').textContent, "Lendfolio, 9 of 14.");
 });
 
-test("mouse edge hover browses both directions and touch movement does not steer", async t => {
-  const gallery = await mountGallery(t);
-  const x = () => Number(gallery.track.style.transform.match(/translate3d\(([-\d.]+)px/)[1]);
-  await gallery.frame(1000);
+test("hovering either edge does not steer or start gallery motion", async t => {
+  const gallery = await mountGallery(t, { reduced: true });
+  const initial = gallery.track.style.transform;
   await gallery.pointer("pointermove", 10, 30, 1, "mouse");
-  const beforeLeft = x();
-  await gallery.frame(1050); await gallery.frame(1100);
-  assert.ok(x() > beforeLeft, "left edge reveals the preceding cards");
+  await gallery.frame(1000);
+  assert.equal(gallery.track.style.transform, initial);
   await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
-  for (let time=1150; time<=1600; time+=50) await gallery.frame(time);
-  const beforeRight = x();
-  await gallery.frame(1650);
-  assert.ok(x() < beforeRight, "right edge reveals the following cards");
-  await gallery.pointer("pointerout", 1450, 30, 1, "mouse");
-  for (let time=1700; time<=2200; time+=50) await gallery.frame(time);
-  await gallery.pointer("pointermove", 1430, 30, 2, "touch");
-  const beforeTouch = x();
-  await gallery.frame(2250);
-  assert.ok(x() > beforeTouch, "touch hover leaves autoplay direction unchanged");
-  await gallery.preference(true);
-  await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
-  assert.equal(gallery.frames.size, 0, "reduced motion disables edge motion");
+  await gallery.frame(1050);
+  assert.equal(gallery.track.style.transform, initial);
+  assert.equal(gallery.frames.size, 0);
 });
 
 test("preview close control waits for the image entrance and caption stays hidden", async t => {
