@@ -16,7 +16,11 @@ Final showcase artwork remains separate. Optional local files `public/showcase/s
 
 The Prometheus navbar is transparent at the top and switches after 16px of scroll to a 62% dark tint with the captured 5px backdrop blur. An open mobile menu also enables the dark glass. This keeps #FFF4EA controls readable when cream service cards scroll underneath; a darker fallback applies without backdrop-filter support. The scroll listener is passive and removed on unmount, and reduced-motion preferences disable the tint transition.
 
-Mobile navigation follows the captured Arounda control/panel geometry: two 24px by 3px bars in a borderless 38px control rotate into an X; the light floating panel has a square upper-left corner, 24px other corners, 24px primary labels and thin dividers. It overlays content without changing hero layout. Services expands to the three real service-category anchors. Escape, an outside tap and selecting a destination close the panel; a closed mobile panel is inert. The existing Prometheus labels/order and neutral palette are retained rather than restoring Industries or Blog.
+Mobile navigation follows the captured Arounda control/panel geometry: two 24px by 3px bars in a borderless 38px control rotate into an X; the light floating panel has a square upper-left corner, 24px other corners, 24px primary labels and thin dividers.
+It overlays content without changing hero layout.
+Services links directly to the services section without a submenu.
+Escape, an outside tap and selecting a destination close the panel; a closed mobile panel is inert.
+The existing Prometheus labels/order and neutral palette are retained rather than restoring Industries or Blog.
 
 The Prometheus favicon alternates every four seconds between the two user-supplied flame PNGs. Install the originals from Downloads with `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install-favicons.ps1` (`Maroon Flame on Cream Gradient.png` and `redlojo (4).png`). Each image is rendered once to a 64px PNG with a 14px corner radius and transparent corners; the timer reuses these data URLs. The component removes its own favicon and timer on unmount and leaves the Arounda route alone. Browsers may throttle background-tab timers. Original inline image attachments are not available as downloadable files in the cloud workspace, so they are not committed. Timing and corner transparency were verified in Chromium with synthetic test artwork; the Windows copy helper requires local execution.
 

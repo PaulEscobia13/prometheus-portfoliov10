@@ -509,14 +509,6 @@
 }
 .prometheus-nav-primary-link:focus-visible .prometheus-nav-label-roll { transform: translateY(-50%); }
 .prometheus-nav-links a:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: -3px; border-radius: .5rem; }
-.prometheus-services-toggle { display: grid; place-items: center; flex: 0 0 4.4rem; width: 4.4rem; height: 4.4rem; margin-right: .8rem; padding: 0; border: 1px solid rgb(16 18 22 / 12%); border-radius: 50%; background: transparent; color: var(--prometheus-ink); cursor: pointer; }
-.prometheus-services-toggle svg { transition: transform .25s ease; }
-.prometheus-services-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
-.prometheus-services-toggle:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 3px; }
-.prometheus-services-submenu[hidden] { display: none; }
-.prometheus-services-submenu:not([hidden]) { display: block; padding: 0 1.6rem 1.2rem; }
-.prometheus-services-submenu a { display: block; padding: 1.2rem 0; font-size: 1.6rem; line-height: 1.5; }
-.prometheus-services-submenu a:hover { color: var(--prometheus-red); }
 @media (max-width: 991px) {
   .prometheus-preview .prometheus-navbar { height: 8rem; }
   .prometheus-navbar > .container { width: calc(100% - 4rem); }
@@ -547,7 +539,6 @@
   .prometheus-nav-links,
   .prometheus-nav-links[data-open="true"],
   .prometheus-burger-line,
-  .prometheus-services-toggle svg,
   .prometheus-nav-links a { transition: none; }
 }
 

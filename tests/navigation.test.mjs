@@ -7,7 +7,7 @@ import NavigationModule from "../components/PrometheusNavigation.tsx";
 
 const Navigation = NavigationModule.default ?? NavigationModule;
 
-test("desktop and mobile menu retain section anchors, services expansion, dismissal and focus return", async () => {
+test("desktop and mobile menu retain section anchors, direct Services navigation, dismissal and focus return", async () => {
   const dom = new JSDOM("<div id='root'></div>", { pretendToBeVisual: true });
   const saved = new Map();
   const install = (name, value) => {
@@ -33,11 +33,10 @@ test("desktop and mobile menu retain section anchors, services expansion, dismis
     assert.equal(toggle.getAttribute("aria-expanded"), "true");
     assert.equal(menu.hasAttribute("inert"), false);
     assert.equal(document.activeElement.getAttribute("href"), "#services");
-    await click(document.querySelector(".prometheus-services-toggle"));
-    assert.equal(document.querySelector("#prometheus-services-submenu").hidden, false);
-    await click(menu.querySelector('a[href="#services-business-systems"]'));
+    assert.equal(document.querySelector(".prometheus-services-toggle"), null);
+    assert.equal(document.querySelector("#prometheus-services-submenu"), null);
+    await click(menu.querySelector('a[href="#services"]'));
     assert.equal(toggle.getAttribute("aria-expanded"), "false");
-    assert.equal(document.querySelector("#prometheus-services-submenu").hidden, true);
     for (const target of ["#services", "#works", "#pricing"]) {
       await open();
       const link = menu.querySelector(`a[href="${target}"]`);
