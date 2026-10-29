@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { elasticOut, springStep } from "../lib/pointer-motion";
 
 const targets = ".prometheus-hero-title, .home-section-hero .button-primary, .prometheus-navbar .nav-cta, .prometheus-footer-cta";
-type Magnet = { x: number; y: number; vx: number; vy: number; aimX: number; aimY: number };
+type Magnet = { x: number; y: number; fromX: number; fromY: number; elapsed: number; aimX: number; aimY: number };
 
 export default function HeroPointer() {
   useEffect(() => {
@@ -24,34 +25,34 @@ export default function HeroPointer() {
     let frame: number | undefined;
     let x = 0, y = 0, pointerX = 0, pointerY = 0;
     let positioned = false;
+    let vx = 0, vy = 0, scale = .1, scaleVelocity = 0;
     let lastTime: number | undefined;
 
     function paint(time = 0) {
       frame = undefined;
       const elapsed = lastTime === undefined ? 1000 / 60 : Math.max(1, Math.min(32, time - lastTime));
       lastTime = time;
-      const follow = 1 - Math.exp(-elapsed / 65);
-      x += (pointerX - x) * follow;
-      y += (pointerY - y) * follow;
+      const seconds = elapsed / 1000;
+      const horizontal = springStep(x, vx, pointerX, seconds, 350, 18, .3);
+      const vertical = springStep(y, vy, pointerY, seconds, 350, 18, .3);
+      x = horizontal.position; vx = horizontal.velocity;
+      y = vertical.position; vy = vertical.velocity;
+      const growth = springStep(scale, scaleVelocity, active ? 1 : .1, seconds, 200, 20);
+      scale = growth.position; scaleVelocity = growth.velocity;
+      face.style.transform = `scale(${scale})`;
       if (positioned) badge.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-      let settling = positioned && Math.abs(pointerX - x) + Math.abs(pointerY - y) > .1;
-      // Small substeps keep the same damped spring stable across refresh rates.
-      const steps = Math.ceil(elapsed / (1000 / 120));
-      const dt = elapsed / steps / (1000 / 60);
-      for (const [element, spring] of magnets) {
-        for (let i = 0; i < steps; i++) {
-          spring.vx = (spring.vx + (spring.aimX - spring.x) * .21 * dt) * Math.pow(.78, dt);
-          spring.vy = (spring.vy + (spring.aimY - spring.y) * .21 * dt) * Math.pow(.78, dt);
-          spring.x += spring.vx * dt;
-          spring.y += spring.vy * dt;
-        }
-        const resting = Math.abs(spring.aimX - spring.x) + Math.abs(spring.aimY - spring.y) + Math.abs(spring.vx) + Math.abs(spring.vy) < .04;
-        if (resting && element !== active) {
+      let settling = positioned && (Math.abs(pointerX - x) + Math.abs(pointerY - y) + Math.abs(vx) + Math.abs(vy) > .1 || Math.abs((active ? 1 : .1) - scale) + Math.abs(scaleVelocity) > .001);
+      for (const [element, tween] of magnets) {
+        tween.elapsed = Math.min(1, tween.elapsed + seconds);
+        const eased = elasticOut(tween.elapsed);
+        tween.x = tween.fromX + (tween.aimX - tween.fromX) * eased;
+        tween.y = tween.fromY + (tween.aimY - tween.fromY) * eased;
+        if (tween.elapsed >= 1 && element !== active) {
           element.style.removeProperty("translate");
           magnets.delete(element);
         } else {
-          element.style.translate = `${spring.x}px ${spring.y}px`;
-          if (!resting) settling = true;
+          element.style.translate = `${tween.x}px ${tween.y}px`;
+          if (tween.elapsed < 1) settling = true;
         }
       }
       if (settling) frame = requestAnimationFrame(paint);
@@ -61,8 +62,11 @@ export default function HeroPointer() {
     function reset() {
       active = null;
       badge.removeAttribute("data-visible");
-      for (const spring of magnets.values()) spring.aimX = spring.aimY = 0;
-      if (magnets.size) schedule();
+      for (const tween of magnets.values()) {
+        tween.fromX = tween.x; tween.fromY = tween.y; tween.elapsed = 0;
+        tween.aimX = tween.aimY = 0;
+      }
+      if (positioned || magnets.size) schedule();
     }
     function move(event: PointerEvent) {
       if (!media.matches || event.pointerType !== "mouse") { reset(); return; }
@@ -75,11 +79,12 @@ export default function HeroPointer() {
         const isButton = active.matches("a");
         badge.dataset.cta = String(isButton);
         if (isButton) {
-          const spring = magnets.get(active) ?? { x: 0, y: 0, vx: 0, vy: 0, aimX: 0, aimY: 0 };
+          const spring = magnets.get(active) ?? { x: 0, y: 0, fromX: 0, fromY: 0, elapsed: 0, aimX: 0, aimY: 0 };
           magnets.set(active, spring);
           const rect = active.getBoundingClientRect();
-          spring.aimX = Math.max(-24, Math.min(24, (pointerX - (rect.left - spring.x + rect.width / 2)) * .38));
-          spring.aimY = Math.max(-16, Math.min(16, (pointerY - (rect.top - spring.y + rect.height / 2)) * .38));
+          spring.fromX = spring.x; spring.fromY = spring.y; spring.elapsed = 0;
+          spring.aimX = (pointerX - (rect.left + rect.width / 2)) * .35;
+          spring.aimY = (pointerY - (rect.top + rect.height / 2)) * .35;
         }
       }
       if (positioned || magnets.size) schedule();
@@ -91,6 +96,8 @@ export default function HeroPointer() {
       frame = undefined;
       lastTime = undefined;
       positioned = false;
+      vx = vy = scaleVelocity = 0; scale = .1;
+      face.style.transform = "scale(.1)";
       for (const element of magnets.keys()) element.style.removeProperty("translate");
       magnets.clear();
     }
