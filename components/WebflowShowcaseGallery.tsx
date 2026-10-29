@@ -82,13 +82,18 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     const rebuild = () => { edge = 0; if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
     window.addEventListener("resize", fitPreview);
+    const updateEdge = (direction: number) => {
+      if (edge === direction) return;
+      edge = direction;
+      slider?.set("speed", edge ? .55 : 0);
+    };
     const move = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || event.buttons || preference.matches) { edge = 0; return; }
+      if (event.pointerType !== "mouse" || event.buttons || preference.matches || slider?.state().isOpen) { updateEdge(0); return; }
       const bounds = element.getBoundingClientRect();
       const x = (event.clientX - bounds.left) / Math.max(1, bounds.width);
-      edge = x < .2 ? -1 : x > .8 ? 1 : 0;
+      updateEdge(x < .2 ? -1 : x > .8 ? 1 : 0);
     };
-    const leave = () => { edge = 0; };
+    const leave = () => { updateEdge(0); };
     const key = (event: KeyboardEvent) => {
       if (event.key === " " && !event.repeat && !slider?.state().isOpen) {
         event.preventDefault(); paused = !paused;
@@ -101,9 +106,10 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       if (edge && !paused && !preference.matches && !document.hidden && !slider?.state().isOpen && bounds.bottom > 0 && bounds.top < innerHeight) {
         element.dispatchEvent(new WheelEvent("wheel", { deltaX: edge * 100, cancelable: true }));
       }
-    }, 240);
+    }, 650);
     element.addEventListener("pointermove", move);
     element.addEventListener("pointerleave", leave);
+    element.addEventListener("pointerdown", leave);
     element.addEventListener("keydown", key);
     return () => {
       cancelled = true;
@@ -112,6 +118,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       window.clearInterval(timer);
       element.removeEventListener("pointermove", move);
       element.removeEventListener("pointerleave", leave);
+      element.removeEventListener("pointerdown", leave);
       element.removeEventListener("keydown", key);
       (slider ?? element._mw)?.destroy();
     };
@@ -122,7 +129,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     <section id="showcase" className="prometheus-showcase prometheus-webflow-showcase" aria-labelledby="showcase-title">
       <div className="webgl_slider_heading_center"><h2 id="showcase-title">#MadeByPrometheus</h2></div>
       <p className="showcase-sr-only" id="webflow-showcase-instructions">Drag or scroll to browse concepts. Use the left and right arrow keys, Enter to open a concept, and Escape to close. Hover near either edge to browse in that direction.</p>
-      <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.16" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
+      <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.65" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
         {sheets.map(sheet => (
           <div key={sheet.id} data-webgl-item="" data-title={sheet.title}>
             <button type="button" className="prometheus-webflow-opener" aria-label={`Preview ${sheet.title}`} />
