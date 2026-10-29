@@ -72,7 +72,7 @@ body:has(.prometheus-showcase), .prometheus-preview.page-wrapper { width: 100%; 
 .showcase-preview-panel { width: 100%; aspect-ratio: 7 / 4; color: #514d48; transform-origin: top left; overflow: hidden; box-shadow: 0 3rem 10rem rgb(0 0 0 / 35%); }
 .showcase-preview-panel .showcase-blank { padding: 3.2rem; }
 .showcase-preview-panel .showcase-image { object-fit: contain; object-position: center; background: #101216; }
-.showcase-preview-close { position: absolute; top: clamp(24px, 5%, 48px); left: -22px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgb(255 244 234 / 30%); border-radius: 50%; color: var(--prometheus-off-white); background: var(--prometheus-red); cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity .22s ease, transform .22s ease, visibility .22s; }
+.showcase-preview-close { position: absolute; top: clamp(24px, 5%, 48px); left: -22px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgb(255 244 234 / 30%); border-radius: 50%; color: var(--prometheus-off-white); background: var(--prometheus-red); cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity .12s ease, transform .12s ease, visibility .12s; }
 .showcase-preview-frame[data-ready="true"] .showcase-preview-close { opacity: 1; visibility: visible; transform: translateY(0); }
 .showcase-preview-close:focus-visible { outline: 2px solid var(--prometheus-off-white); outline-offset: 4px; }
 @media (max-width: 767px) {
