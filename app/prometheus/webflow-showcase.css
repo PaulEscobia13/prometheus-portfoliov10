@@ -52,3 +52,6 @@
   .prometheus-webflow-stage-slot { --mw-stage-h: clamp(440px, 76svh, 800px); }
   .prometheus-webflow-close { left: -12px; top: 24px; }
 }
+
+/* Let a vertical touch gesture leave the preview and continue down the page. */
+.prometheus-webflow-stage[data-webgl-canvas][data-mw-open] { touch-action: pan-y; }
