@@ -153,16 +153,17 @@
   place-items: center;
   width: 5.6rem;
   height: 5.6rem;
-  padding: 1rem;
+  padding: 0;
   border: 1px solid rgb(255 244 234 / 35%);
   border-radius: 50%;
+  overflow: hidden;
   background: #bf4646;
   box-shadow: 0 .4rem 2rem rgb(0 0 0 / 16%);
   pointer-events: none;
   opacity: 0;
   transition: opacity .15s ease, width .2s ease, height .2s ease;
 }
-.prometheus-logo-cursor img { width: 100%; height: 100%; object-fit: contain; }
+.prometheus-logo-cursor img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .prometheus-logo-cursor[data-visible] { opacity: 1; }
 .prometheus-logo-cursor[data-cta="true"] { width: 6.4rem; height: 6.4rem; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {

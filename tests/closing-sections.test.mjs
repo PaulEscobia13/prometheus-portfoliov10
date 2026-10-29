@@ -19,14 +19,19 @@ test("logo cursor scopes mouse feedback, gently moves CTAs, resets on motion cha
     React.createElement("div", { className: "prometheus-navbar" }, React.createElement("a", { className: "nav-cta", href: "#contacts" }, "Contacts"))), { reduced: true });
   const title = document.querySelector("h1"), cta = document.querySelector("a"), badge = document.querySelector(".prometheus-logo-cursor");
   cta.getBoundingClientRect = () => ({ left: 100, top: 100, width: 120, height: 44 });
-  const move = (target, pointerType = "mouse") => {
-    const event = new window.MouseEvent("pointermove", { bubbles: true, clientX: 200, clientY: 135 });
+  const move = (target, pointerType = "mouse", clientX = 200, clientY = 135) => {
+    const event = new window.MouseEvent("pointermove", { bubbles: true, clientX, clientY });
     Object.defineProperty(event, "pointerType", { value: pointerType });
     target.dispatchEvent(event);
   };
   move(title);
   assert.equal(badge.dataset.visible, "true");
   assert.equal(title.classList.contains("has-logo-cursor"), true);
+  assert.ok(badge.querySelector("img").src.endsWith("/favicons/prometheus-cursor.png"));
+  move(title, "mouse", 300, 235);
+  env.flush();
+  const followedX = Number(badge.style.transform.match(/translate3d\(([^p]+)/)[1]);
+  assert.ok(followedX > 200 && followedX < 300, "logo eases toward the pointer rather than snapping");
   move(cta); env.flush();
   assert.equal(title.classList.contains("has-logo-cursor"), false);
   assert.equal(badge.dataset.cta, "true");

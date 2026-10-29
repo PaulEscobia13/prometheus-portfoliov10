@@ -11,7 +11,7 @@ export default function HeroPointer() {
     badge.className = "prometheus-logo-cursor";
     badge.setAttribute("aria-hidden", "true");
     const logo = document.createElement("img");
-    logo.src = "/favicons/prometheus-cream.png";
+    logo.src = "/favicons/prometheus-cursor.png";
     logo.alt = "";
     badge.append(logo);
     document.body.append(badge);
@@ -19,15 +19,29 @@ export default function HeroPointer() {
     let magnetic: HTMLElement | null = null;
     let frame: number | undefined;
     let x = 0, y = 0, dx = 0, dy = 0, aimX = 0, aimY = 0;
+    let pointerX = 0, pointerY = 0;
+    let lastTime: number | undefined;
 
-    function paint() {
+    function paint(time = 0) {
       frame = undefined;
-      if (!magnetic) return;
+      const elapsed = lastTime === undefined ? 1000 / 60 : Math.max(1, Math.min(32, time - lastTime));
+      lastTime = time;
+      const follow = 1 - Math.exp(-elapsed / 65);
+      if (active) {
+        x += (pointerX - x) * follow;
+        y += (pointerY - y) * follow;
+        badge.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      }
+      let settling = !!active && Math.abs(pointerX - x) + Math.abs(pointerY - y) > .1;
+      if (magnetic) {
       dx += (aimX - dx) * .16;
       dy += (aimY - dy) * .16;
       magnetic.style.translate = `${dx}px ${dy}px`;
-      if (Math.abs(aimX - dx) + Math.abs(aimY - dy) > .05) frame = requestAnimationFrame(paint);
+      if (Math.abs(aimX - dx) + Math.abs(aimY - dy) > .05) settling = true;
       else if (!active) { magnetic.style.removeProperty("translate"); magnetic = null; dx = dy = 0; }
+      }
+      if (settling) frame = requestAnimationFrame(paint);
+      else lastTime = undefined;
     }
     function schedule() { if (frame === undefined) frame = requestAnimationFrame(paint); }
     function reset() {
@@ -47,18 +61,21 @@ export default function HeroPointer() {
         active?.classList.add("has-logo-cursor");
       }
       if (!active) return;
-      x = event.clientX; y = event.clientY;
-      badge.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      pointerX = event.clientX; pointerY = event.clientY;
+      if (!badge.hasAttribute("data-visible")) {
+        x = pointerX; y = pointerY;
+        badge.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      }
       badge.dataset.visible = "true";
       const isButton = active.matches("a");
       badge.dataset.cta = String(isButton);
       if (isButton) {
         magnetic = active;
         const rect = magnetic.getBoundingClientRect();
-        aimX = Math.max(-8, Math.min(8, (x - (rect.left - dx + rect.width / 2)) * .14));
-        aimY = Math.max(-6, Math.min(6, (y - (rect.top - dy + rect.height / 2)) * .14));
-        schedule();
+        aimX = Math.max(-8, Math.min(8, (pointerX - (rect.left - dx + rect.width / 2)) * .14));
+        aimY = Math.max(-6, Math.min(6, (pointerY - (rect.top - dy + rect.height / 2)) * .14));
       }
+      schedule();
     }
     function configure() {
       if (media.matches) return;
