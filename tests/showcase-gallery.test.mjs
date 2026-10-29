@@ -11,7 +11,7 @@ const ShowcaseGallery = ShowcaseGalleryModule.default ?? ShowcaseGalleryModule;
 // JSDOM does not implement layout, media preferences, observers, pointer capture
 // or WAAPI. These controlled boundaries exercise the real component's effects
 // and event handlers; CSS projection and browser modality are verified manually.
-async function mountGallery(t, { reduced = false } = {}) {
+async function mountGallery(t, { reduced = false, deferOpening = false } = {}) {
   const dom = new JSDOM("<!doctype html><html><body><div id='root'></div></body></html>", { pretendToBeVisual: true, url: "http://localhost/prometheus" });
   const { window } = dom;
   const previousGlobals = new Map();
@@ -91,7 +91,9 @@ async function mountGallery(t, { reduced = false } = {}) {
   window.HTMLElement.prototype.hasPointerCapture = id => capturedPointers.has(id);
   window.HTMLElement.prototype.releasePointerCapture = id => capturedPointers.delete(id);
   window.HTMLElement.prototype.animate = function (keyframes, options) {
-    const animation = { element: this, keyframes, options, canceled: false, finished: Promise.resolve(), cancel() { this.canceled = true; } };
+    let finish = () => {};
+    const finished = deferOpening && options.duration === 650 ? new Promise(resolve => { finish = resolve; }) : Promise.resolve();
+    const animation = { element: this, keyframes, options, canceled: false, finished, finish, cancel() { this.canceled = true; } };
     animations.push(animation);
     return animation;
   };
@@ -333,4 +335,31 @@ test("mouse edge hover browses both directions and touch movement does not steer
   await gallery.preference(true);
   await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
   assert.equal(gallery.frames.size, 0, "reduced motion disables edge motion");
+});
+
+test("preview close control waits for the image entrance and caption stays hidden", async t => {
+  const gallery = await mountGallery(t, { deferOpening: true });
+  await gallery.key("Enter");
+  const frame = document.querySelector(".showcase-preview-frame");
+  const close = document.querySelector(".showcase-preview-close");
+  assert.equal(frame.dataset.ready, "false");
+  assert.equal(close.disabled, true);
+  assert.equal(document.activeElement, gallery.dialog);
+  assert.equal(document.querySelector(".showcase-preview-caption"), null);
+  await act(async () => gallery.animations[0].finish());
+  assert.equal(frame.dataset.ready, "true");
+  assert.equal(close.disabled, false);
+  assert.equal(document.activeElement, close);
+  await gallery.click(close);
+  assert.equal(gallery.dialog.open, false);
+});
+
+test("Escape can dismiss the preview before its delayed controls appear", async t => {
+  const gallery = await mountGallery(t, { deferOpening: true });
+  await gallery.key("Enter");
+  await act(async () => gallery.dialog.dispatchEvent(new window.Event("cancel", { cancelable: true })));
+  assert.equal(gallery.dialog.open, false);
+  await act(async () => gallery.animations[0].finish());
+  assert.equal(gallery.dialog.open, false);
+  assert.equal(document.querySelector(".showcase-preview-close"), null);
 });
