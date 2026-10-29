@@ -5,7 +5,7 @@ import type { ShowcaseSheet } from "../content/showcase";
 import ShowcaseGallery from "./ShowcaseGallery";
 import "../app/prometheus/webflow-showcase.css";
 
-type Slider = { destroy(): void; state(): { isOpen: boolean } };
+type Slider = { destroy(): void; set(key: string, value: number): void; state(): { isOpen: boolean } };
 type SliderRoot = HTMLDivElement & { _mw?: Slider };
 type SliderWindow = Window & { MwSlider?: { init(root: HTMLElement): Slider | null } };
 let runtime: Promise<void> | undefined;
@@ -52,6 +52,13 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     let edge = 0;
     let paused = false;
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
+    const fitPreview = () => {
+      if (!slider) return;
+      // Upstream adds a 7%-of-width inset before frameGap. Replace that
+      // generous inset with a small responsive safe margin for our artwork.
+      const baseInset = Math.max(28, Math.min(96, element.clientWidth * .07));
+      slider.set("frameGap", (element.clientWidth <= 767 ? 16 : 24) - baseInset);
+    };
     const initialize = () => {
       if (cancelled) return;
       (slider ?? element._mw)?.destroy();
@@ -65,6 +72,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       element.setAttribute("data-webgl-canvas", "");
       slider = (window as SliderWindow).MwSlider?.init(element) ?? undefined;
       if (!slider) setFallback(true);
+      else fitPreview();
     };
     void loadRuntime().then(() => {
       if (cancelled) return;
@@ -73,6 +81,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     }).catch(() => { if (!cancelled) setFallback(true); });
     const rebuild = () => { edge = 0; if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
+    window.addEventListener("resize", fitPreview);
     const move = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" || event.buttons || preference.matches) { edge = 0; return; }
       const bounds = element.getBoundingClientRect();
@@ -99,6 +108,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     return () => {
       cancelled = true;
       preference.removeEventListener("change", rebuild);
+      window.removeEventListener("resize", fitPreview);
       window.clearInterval(timer);
       element.removeEventListener("pointermove", move);
       element.removeEventListener("pointerleave", leave);
