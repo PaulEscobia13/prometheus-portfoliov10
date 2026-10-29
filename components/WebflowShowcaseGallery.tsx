@@ -50,6 +50,20 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     let cancelled = false;
     let slider: Slider | undefined;
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
+    let savedOverflow: string | undefined;
+    const syncPreview = () => {
+      const open = element.hasAttribute("data-mw-open");
+      if (open && savedOverflow === undefined) {
+        savedOverflow = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = "hidden";
+        element.setAttribute("data-lenis-prevent", "");
+      } else if (!open && savedOverflow !== undefined) {
+        document.documentElement.style.overflow = savedOverflow;
+        savedOverflow = undefined;
+        element.removeAttribute("data-lenis-prevent");
+      }
+      fitPreview();
+    };
     const fitPreview = () => {
       if (!slider) return;
       // Upstream adds a 7%-of-width inset before frameGap. Replace that
@@ -80,10 +94,14 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     const rebuild = () => { if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
     window.addEventListener("resize", fitPreview);
+    const previewObserver = new MutationObserver(syncPreview);
+    previewObserver.observe(element, { attributes: true, attributeFilter: ["data-mw-open"] });
     return () => {
       cancelled = true;
       preference.removeEventListener("change", rebuild);
       window.removeEventListener("resize", fitPreview);
+      previewObserver.disconnect();
+      if (savedOverflow !== undefined) document.documentElement.style.overflow = savedOverflow;
       (slider ?? element._mw)?.destroy();
     };
   }, [sheets, fallback]);
@@ -93,7 +111,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     <section id="showcase" className="prometheus-showcase prometheus-webflow-showcase" aria-labelledby="showcase-title">
       <div className="webgl_slider_heading_center"><h2 id="showcase-title">#MadeByPrometheus</h2></div>
       <p className="showcase-sr-only" id="webflow-showcase-instructions">Drag or scroll to browse concepts. Use the left and right arrow keys, Enter to open a concept, and Escape to close.</p>
-      <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.65" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
+      <div className="prometheus-webflow-stage-slot"><div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.65" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
         {sheets.map(sheet => (
           <div key={sheet.id} data-webgl-item="" data-title={sheet.title}>
             <button type="button" className="prometheus-webflow-opener" aria-label={`Preview ${sheet.title}`} />
@@ -105,7 +123,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
             </div>
           </div>
         ))}
-      </div>
+      </div></div>
     </section>
   );
 }
