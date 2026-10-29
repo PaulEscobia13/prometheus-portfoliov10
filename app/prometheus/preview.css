@@ -455,7 +455,7 @@
 
 /* Arounda-inspired compact header: brand, contact pill, and a two-line menu. */
 .prometheus-preview .prometheus-navbar {
-  height: 10.4rem;
+  height: 10.9rem;
   background: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -467,7 +467,7 @@
   box-shadow: 0 1px 0 rgb(255 244 234 / 8%);
 }
 .prometheus-navbar > .container { width: calc(100% - 8rem); max-width: 144rem; }
-.prometheus-preview .prometheus-nav-inner { min-height: 10.4rem; justify-content: flex-end; flex-wrap: nowrap; gap: 2.8rem; }
+.prometheus-preview .prometheus-nav-inner { min-height: 10.9rem; justify-content: flex-end; flex-wrap: nowrap; gap: 2.8rem; }
 .prometheus-preview .prometheus-navbar .navbar_logo-wrapper { margin-right: auto; }
 .prometheus-preview .prometheus-navbar .nav-cta {
   width: auto;
