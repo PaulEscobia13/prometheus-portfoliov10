@@ -1,5 +1,7 @@
-.prometheus-preview { --prometheus-footer-radius: 7.6rem; }
-.prometheus-preview > .page-main { z-index: 2; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); }
+/* Carry the footer surface behind the FAQ's rounded bottom corners.
+   Keep the dark content surface on main so the earlier sections retain their theme. */
+.prometheus-preview { --prometheus-footer-radius: 7.6rem; background-color: #642b2d; }
+.prometheus-preview > .page-main { z-index: 2; background-color: var(--prometheus-ink); border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); }
 
 /* The FAQ is the rounded foreground sheet above the sticky burgundy drawer.
    Clip this last section only, preserving sticky galleries and the team stage. */
@@ -22,7 +24,7 @@
 .prometheus-faq-answer p { margin: 0; padding: 2.4rem 15% 0 0; font-family: Manrope, Arial, sans-serif; font-size: 1.8rem; font-weight: 400; line-height: 1.5; color: #606062; }
 .prometheus-faq-item summary:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 8px; border-radius: .3rem; }
 
-.prometheus-editorial-footer { position: sticky; bottom: 0; z-index: 1; border-radius: var(--prometheus-footer-radius) var(--prometheus-footer-radius) 0 0; background: #642b2d; color: #fff4ea; overflow: clip; scroll-margin-top: 10.8rem; }
+.prometheus-editorial-footer { position: sticky; bottom: 0; z-index: 1; border-radius: 0; background: #642b2d; color: #fff4ea; overflow: clip; scroll-margin-top: 10.8rem; }
 .prometheus-footer-artboard { position: relative; isolation: isolate; container-type: inline-size; width: 100%; aspect-ratio: 1774 / 806; overflow: hidden; background: #642b2d; color: #fff4ea; font-family: "Trebuchet MS", Arial, sans-serif; }
 .prometheus-footer-foreground { position: relative; z-index: 1; height: 100%; padding: 3.6cqw 9.5cqw 0; transform: translate3d(0, var(--footer-reveal-offset, 0px), 0); }
 .prometheus-footer-top { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-bottom: 1.7cqw; border-bottom: 1px solid #fff4ea45; }
