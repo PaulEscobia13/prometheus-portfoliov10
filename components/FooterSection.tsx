@@ -1,7 +1,10 @@
 import { contact, footerLinks } from "../content/contact";
+import FooterWordmark from "./FooterWordmark";
+import { getShowcaseSheets } from "../lib/showcase-assets";
 import FooterReveal from "./FooterReveal";
 
 export default function FooterSection() {
+  const images = getShowcaseSheets().flatMap(sheet => sheet.image ? [sheet.image] : []);
   return (
     <FooterReveal>
       <div className="prometheus-footer-artboard">
@@ -18,7 +21,7 @@ export default function FooterSection() {
             </nav>
           </div>
         </div>
-        <div className="prometheus-footer-wordmark" aria-hidden="true">PROMETHEUS</div>
+        <FooterWordmark images={images} />
       </div>
     </FooterReveal>
   );
