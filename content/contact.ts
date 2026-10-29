@@ -1,6 +1,5 @@
-// Same team calendar as the supplied Furniture Odyssey footer reference.
 export const contact = {
-  meetingUrl: "https://cal.com/rex-oliver-jumawid-mmz8ct/furniture-odyssey-consultation",
+  meetingUrl: "https://cal.com/rex-oliver-jumawid-mmz8ct/project-consultation",
   meetingLabel: "Book a 30-minute meeting with the team",
 } as const;
 
