@@ -122,7 +122,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     <section id="showcase" className="prometheus-showcase prometheus-webflow-showcase" aria-labelledby="showcase-title">
       <div className="webgl_slider_heading_center"><h2 id="showcase-title">#MadeByPrometheus</h2></div>
       <p className="showcase-sr-only" id="webflow-showcase-instructions">Drag or scroll to browse concepts. Use the left and right arrow keys, Enter to open a concept, and Escape to close. Hover near either edge to browse in that direction.</p>
-      <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.38" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
+      <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.16" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
         {sheets.map(sheet => (
           <div key={sheet.id} data-webgl-item="" data-title={sheet.title}>
             <button type="button" className="prometheus-webflow-opener" aria-label={`Preview ${sheet.title}`} />
