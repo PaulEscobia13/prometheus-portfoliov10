@@ -199,6 +199,11 @@
 
 .prometheus-preview .home-hero-tags .hero_title-tag {
   display: block;
+  /* The captured 32px backdrop blur re-samples shared compositing layers when
+     magnetic buttons move. These labels should react only to their own hover. */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition: background-color .3s ease, color .3s ease;
 }
 
 @media (max-width: 767px) {
