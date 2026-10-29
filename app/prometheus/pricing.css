@@ -1,4 +1,5 @@
-.pricing-reveal-backdrop { background: var(--prometheus-off-white); }
+/* Continue the showcase background behind the expanding pricing reveal. */
+.pricing-reveal-backdrop { background: #080909; }
 .prometheus-pricing {
   padding: 12rem 0 clamp(7.2rem, 7vw, 11.2rem);
   background:
