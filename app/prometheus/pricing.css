@@ -28,6 +28,15 @@
   font-weight: 500;
   line-height: 1.6;
 }
+.pricing-early-rate-note {
+  max-width: 60rem;
+  margin: 3.2rem auto 0;
+  color: rgb(255 244 234 / 76%);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
 .pricing-plans {
   position: relative;
   isolation: isolate;
