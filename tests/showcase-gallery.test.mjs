@@ -363,3 +363,30 @@ test("Escape can dismiss the preview before its delayed controls appear", async 
   assert.equal(gallery.dialog.open, false);
   assert.equal(document.querySelector(".showcase-preview-close"), null);
 });
+
+test("wheel gestures glide, reverse promptly and preserve vertical page scrolling and pinch zoom", async t => {
+  const gallery = await mountGallery(t);
+  const wheel = async options => {
+    const event = new window.WheelEvent("wheel", { bubbles: true, cancelable: true, ...options });
+    await act(async () => gallery.stage.dispatchEvent(event));
+    return event;
+  };
+  const x = () => Number(gallery.track.style.transform.match(/translate3d\(([-\d.]+)px/)[1]);
+  await gallery.frame(1000);
+  const before = x();
+  assert.equal((await wheel({ deltaX: 120 })).defaultPrevented, true);
+  assert.equal(x(), before, "wheel input eases through frames instead of jumping");
+  await gallery.frame(1050); await gallery.frame(1100);
+  assert.ok(x() < before, "scrolling right moves cards left");
+  const reversed = x();
+  await wheel({ deltaX: -120 });
+  await gallery.frame(1150);
+  assert.ok(x() > reversed, "opposite input reverses on the next frame");
+  assert.equal((await wheel({ deltaY: 90 })).defaultPrevented, false, "vertical page scrolling remains native");
+  assert.equal((await wheel({ deltaY: 90, ctrlKey: true })).defaultPrevented, false, "pinch zoom remains native");
+  await gallery.preference(true);
+  const still = x();
+  await wheel({ deltaX: 40 });
+  assert.notEqual(x(), still, "reduced motion supports direct manual browsing");
+  assert.equal(gallery.frames.size, 0, "reduced motion has no coasting frames");
+});
