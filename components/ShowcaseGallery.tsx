@@ -24,6 +24,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const velocity = useRef(0);
   const coasting = useRef(false);
   const edgeDrive = useRef(0);
+  const wakeMotion = useRef<(() => void) | null>(null);
   const closing = useRef(false);
   const keyboardIndex = useRef(0);
   const drag = useRef<{ id: number; x: number; y: number; lastX: number; lastTime: number; moved: boolean } | null>(null);
@@ -133,15 +134,57 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       if (visible && !document.hidden && !reducedMotion) frame = requestAnimationFrame(tick);
       else { velocity.current = 0; coasting.current = false; }
     };
+    wakeMotion.current = () => {
+      if (frame === undefined && visible && !document.hidden && !reducedMotion) {
+        last = 0;
+        frame = requestAnimationFrame(tick);
+      }
+    };
     const observer = new IntersectionObserver(entries => { visible = entries[0]?.isIntersecting ?? false; refresh(); }, { threshold: .01 });
     if (stage.current) observer.observe(stage.current);
     document.addEventListener("visibilitychange", refresh);
     return () => {
+      wakeMotion.current = null;
       observer.disconnect();
       document.removeEventListener("visibilitychange", refresh);
       if (frame !== undefined) cancelAnimationFrame(frame);
     };
   }, [paused, active, selected, dragging, reducedMotion, keyboardFocused, edgeDirection, paint]);
+
+  useEffect(() => {
+    const element = stage.current;
+    if (!element) return;
+    const wheel = (event: WheelEvent) => {
+      // Keep pinch-to-zoom and open previews independent from the conveyor.
+      if (event.ctrlKey || selected || drag.current?.moved) return;
+      const horizontal = event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY);
+      const raw = horizontal && !event.shiftKey ? event.deltaX : event.deltaY || event.deltaX;
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? element.clientWidth : 1;
+      const delta = Math.max(-400, Math.min(400, raw * unit));
+      if (!delta) return;
+      // Horizontal gestures belong to the gallery. Vertical scrolling still
+      // moves the page, while lending its momentum to the visible cards.
+      if (horizontal && event.cancelable) event.preventDefault();
+      edgeDrive.current = 0;
+      setEdgeDirection(0);
+      setActive(null);
+      setKeyboardFocused(false);
+      if (reducedMotion) {
+        phase.current = wrap(phase.current - delta, period.current);
+        velocity.current = 0;
+        paint();
+        return;
+      }
+      // Reverse promptly instead of fighting a previous throw. Subsequent
+      // samples accumulate in the same time-based damping used for dragging.
+      if (Math.sign(velocity.current) === Math.sign(delta)) velocity.current = 0;
+      velocity.current = Math.max(-1800, Math.min(1800, velocity.current - delta * 3));
+      coasting.current = true;
+      wakeMotion.current?.();
+    };
+    element.addEventListener("wheel", wheel, { passive: false });
+    return () => element.removeEventListener("wheel", wheel);
+  }, [selected, reducedMotion, paint]);
 
   function originFor(element: HTMLButtonElement): Origin {
     const rect = element.getBoundingClientRect();
@@ -232,7 +275,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   return (
     <section id="showcase" className="prometheus-showcase" aria-labelledby="showcase-title">
       <h2 id="showcase-title">#MadeByPrometheus</h2>
-      <p id="showcase-instructions" className="showcase-sr-only">Angled concept gallery. Drag horizontally, or use the left and right arrow keys. Press Enter to preview a sheet, Space to pause or resume motion, and Escape to close a preview.</p>
+      <p id="showcase-instructions" className="showcase-sr-only">Angled concept gallery. Drag or scroll horizontally, or use the left and right arrow keys. Press Enter to preview a sheet, Space to pause or resume motion, and Escape to close a preview.</p>
       <div ref={stage} className="showcase-stage" tabIndex={0} role="group" aria-label="Concept gallery" aria-describedby="showcase-instructions" data-active={active ?? ""} data-dragging={dragging} data-preview={selected?.id ?? ""}
         onFocus={event => {
           if (event.target !== event.currentTarget) return;
