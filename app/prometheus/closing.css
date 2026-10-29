@@ -7,7 +7,8 @@
    Clip this last section only, preserving sticky galleries and the team stage. */
 .prometheus-faq { position: relative; z-index: 2; padding: 8rem 0 9rem; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); background: #fff; color: #090914; scroll-margin-top: 10.8rem; }
 .prometheus-faq-container { display: grid; grid-template-columns: minmax(0, .65fr) minmax(0, 1.65fr); align-items: start; gap: 6rem; width: min(100% - 12rem, 120rem); margin-inline: auto; }
-.prometheus-faq-header { display: flex; flex-direction: column; align-items: flex-start; gap: 3.2rem; }
+/* Follow the question list while scrolling, bounded by the FAQ grid. */
+.prometheus-faq-header { position: sticky; top: 13.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 3.2rem; }
 .prometheus-faq-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 7.2rem; font-weight: 400; line-height: 1.1; letter-spacing: -.05em; }
 .prometheus-faq-socials { display: flex; flex-wrap: wrap; gap: 1.2rem; }
 .prometheus-faq-socials a { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; border: 1px solid #09091426; border-radius: 50%; color: #090914; transition: color .2s, border-color .2s; }
@@ -63,7 +64,7 @@
 @media (max-width: 767px) {
   .prometheus-faq { padding: 8rem 0 9rem; scroll-margin-top: 6.8rem; }
   .prometheus-faq-container { grid-template-columns: 1fr; gap: 3.2rem; width: calc(100% - 4rem); }
-  .prometheus-faq-header { gap: 2.4rem; }
+  .prometheus-faq-header { position: static; gap: 2.4rem; }
   .prometheus-faq-header h2 { font-size: clamp(4rem, 8.5vw, 6.4rem); letter-spacing: -.05em; }
   .prometheus-faq-list { width: 100%; margin-top: 0; }
   .prometheus-faq-item { padding-bottom: 0; }
