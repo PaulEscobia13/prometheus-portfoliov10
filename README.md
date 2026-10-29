@@ -72,7 +72,7 @@ Budget ranges are editable in `components/ProjectInquiry.tsx`.
 
 ### Showcase artwork footer
 
-The large footer wordmark crossfades between the same local artwork used by #MadeByPrometheus every 4.5 seconds while visible.
+The large footer wordmark crossfades between the same local artwork used by #MadeByPrometheus every 1.5 seconds while visible.
 Artwork is clipped inside the existing letters, preserving the footer layout and cream base.
 The gallery and footer read their canonical fourteen slots through `lib/showcase-assets.ts`.
 Only the next artwork is loaded as needed; failed images preserve the previous appearance.

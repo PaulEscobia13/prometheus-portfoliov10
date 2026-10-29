@@ -102,7 +102,7 @@
 
 /* Showcase artwork stays inside the existing wordmark silhouette. */
 .footer-wordmark-base { display: block; }
-.footer-wordmark-art { position: absolute; inset: 0; display: block; background-size: cover; background-position: center; background-repeat: no-repeat; background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; opacity: 0; transition: opacity 1.2s ease; }
+.footer-wordmark-art { position: absolute; inset: 0; display: block; background-size: cover; background-position: center; background-repeat: no-repeat; background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; opacity: 0; transition: opacity .45s ease; }
 .footer-wordmark-art[data-active="true"] { opacity: 1; }
 @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
   .footer-wordmark-art { display: none; }
