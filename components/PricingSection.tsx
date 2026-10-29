@@ -9,7 +9,7 @@ export default function PricingSection() {
       <div className="pricing-container">
         <header className="pricing-intro">
           <h2 id="pricing-title"><em>Get a Premium Experience<br />at a Discounted Rate.</em></h2>
-          <p><strong>We help you get where you want to go.</strong></p>
+          <p><strong>We’ll help you find the product you’re looking for.</strong></p>
         </header>
 
         <div className="pricing-plans">
