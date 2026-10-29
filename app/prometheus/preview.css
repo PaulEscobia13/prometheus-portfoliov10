@@ -314,11 +314,26 @@
   background-repeat: no-repeat;
 }
 
-/* Move only the artwork and light; page content and contrast stay stable. */
+/* Two staggered passes crossfade before each reset, so the waves always
+   travel in one direction without a visible jump or a reversing animation. */
 @media (prefers-reduced-motion: no-preference) {
-  .prometheus-background-stage::before {
+  .prometheus-background-stage::before,
+  .prometheus-background-stage::after {
     background-size: 100% 100%, 150% auto;
-    animation: prometheus-ambient-waves 6s ease-in-out infinite alternate;
+    animation: prometheus-ambient-waves 10s linear infinite;
+  }
+  .prometheus-background-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: max(100svh, 177.6833vw);
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%) 85%, #0d1116),
+      url('/backgrounds/prometheus-waves.png');
+    background-repeat: no-repeat;
+    animation-delay: -5s;
   }
   .prometheus-intro-stage::before {
     content: "";
@@ -330,16 +345,19 @@
       radial-gradient(ellipse at 25% 60%, rgb(216 75 60 / 38%), transparent 55%),
       radial-gradient(ellipse at 75% 30%, rgb(191 70 70 / 22%), transparent 50%);
     background-size: 220% 180%;
-    animation: prometheus-ambient-light 4s ease-in-out infinite alternate;
+    animation: prometheus-ambient-light 8s linear infinite;
   }
 }
 @keyframes prometheus-ambient-waves {
-  from { background-position: center top, 0% top; }
-  to { background-position: center top, 100% top; }
+  0% { background-position: center top, 0% top; opacity: 0; }
+  50% { background-position: center top, 50% top; opacity: 1; }
+  100% { background-position: center top, 100% top; opacity: 0; }
 }
 @keyframes prometheus-ambient-light {
-  from { background-position: 0% 20%, 100% 0%; opacity: .45; }
-  to { background-position: 100% 80%, 0% 100%; opacity: 1; }
+  0%, 100% { background-position: 0% 50%, 100% 50%; }
+  25% { background-position: 50% 0%, 50% 100%; }
+  50% { background-position: 100% 50%, 0% 50%; }
+  75% { background-position: 50% 100%, 50% 0%; }
 }
 
 /* One 941 × 1672 image, scaled by viewport width rather than the full page
