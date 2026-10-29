@@ -45,14 +45,14 @@ export default function FooterWordmark({ images }: { images: string[] }) {
       finally {
         pending = false;
         image.onload = image.onerror = null;
-        if (allowed()) timer = setTimeout(advance, 1500);
+        if (allowed()) timer = setTimeout(advance, 700);
       }
     }
 
     function refresh() {
       stop();
       if (preference.matches) { setActive(null); hasImage = false; }
-      if (allowed() && !pending) timer = setTimeout(advance, hasImage ? 1500 : 600);
+      if (allowed() && !pending) timer = setTimeout(advance, hasImage ? 700 : 600);
     }
     const observer = new IntersectionObserver(entries => {
       visible = entries[0]?.isIntersecting ?? false;
