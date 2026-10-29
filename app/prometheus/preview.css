@@ -331,7 +331,7 @@
 .prometheus-services .home-services-content {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: stretch;
+  align-items: start;
   gap: 1.6rem;
   padding: 2.4rem;
   background: var(--prometheus-off-white);
