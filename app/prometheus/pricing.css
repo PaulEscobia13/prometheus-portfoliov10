@@ -112,7 +112,7 @@
 .pricing-plan-description { flex-grow: 1; margin: 0 0 2.4rem; color: rgb(16 18 22 / 68%); font-size: 1.5rem; line-height: 1.55; letter-spacing: -.025em; }
 .pricing-plan-features { display: grid; align-content: start; gap: 1.2rem; margin: 0 0 3.2rem; padding: 0; list-style: none; }
 .pricing-plan-features li { display: flex; align-items: flex-start; gap: 1.2rem; color: rgb(16 18 22 / 78%); font-size: 1.5rem; line-height: 1.6; }
-.pricing-plan-features li::before { content: ''; flex: 0 0 .8rem; height: 1px; margin-top: 1.15rem; background: #895b5a; }
+.pricing-plan-features li::before { content: ''; flex: 0 0 .4rem; width: .4rem; height: .4rem; margin-top: 1rem; border-radius: 50%; background: #895b5a; }
 .pricing-plan-action {
   display: inline-flex;
   align-self: flex-start;
