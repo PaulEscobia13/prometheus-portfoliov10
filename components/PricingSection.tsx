@@ -1,5 +1,6 @@
 import { GeistSans } from "geist/font/sans";
 import { pricingPlans } from "../content/pricing";
+import { contact } from "../content/contact";
 import PricingReveal from "./PricingReveal";
 
 export default function PricingSection() {
@@ -28,7 +29,7 @@ export default function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <a className="pricing-plan-action" href="#contacts" aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
+              <a className="pricing-plan-action" href={contact.meetingUrl} aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
             </article>
           ))}
         </div>
