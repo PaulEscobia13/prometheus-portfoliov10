@@ -314,6 +314,20 @@
   background-repeat: no-repeat;
 }
 
+/* Drift only the artwork; the contrast overlay and page content stay still.
+   The slightly oversized image gives it room to move without exposing edges. */
+@media (prefers-reduced-motion: no-preference) {
+  .prometheus-background-stage::before {
+    background-size: 100% 100%, 108% auto;
+    animation: prometheus-ambient-waves 28s ease-in-out infinite alternate;
+  }
+}
+@keyframes prometheus-ambient-waves {
+  0% { background-position: center top, 20% top; }
+  50% { background-position: center top, 80% top; }
+  100% { background-position: center top, 40% top; }
+}
+
 /* One 941 × 1672 image, scaled by viewport width rather than the full page
    height. Its dark lower edge continues through cases without a second copy. */
 
