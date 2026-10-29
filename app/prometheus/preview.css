@@ -647,6 +647,39 @@
   line-height: 1;
 }
 
+
+/* Ignite the wordmark without changing its size or shifting the navigation. */
+.prometheus-navbar .navbar_logo-wrapper:focus-visible {
+  outline: 2px solid var(--prometheus-cream);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .prometheus-navbar .prometheus-wordmark {
+    background-image: linear-gradient(90deg, var(--prometheus-red) 0% 48%, var(--prometheus-off-white) 52% 100%);
+    background-size: 220% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: background-position 300ms ease, filter 300ms ease;
+  }
+  .prometheus-navbar .navbar_logo-wrapper:focus-visible .prometheus-wordmark {
+    background-position: 0 0;
+    filter: drop-shadow(0 0 10px rgb(191 70 70 / 35%));
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .prometheus-navbar .navbar_logo-wrapper:hover .prometheus-wordmark {
+      background-position: 0 0;
+      filter: drop-shadow(0 0 10px rgb(191 70 70 / 35%));
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-navbar .prometheus-wordmark { transition: none; }
+}
+
 .prometheus-preview .trusted_wrapper {
   --trusted-legend-height: 2.1rem;
   padding: .5rem 2.6rem;
