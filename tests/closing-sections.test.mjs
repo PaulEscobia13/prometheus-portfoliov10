@@ -26,16 +26,27 @@ test("logo cursor scopes mouse feedback, gently moves CTAs, resets on motion cha
   };
   move(title);
   assert.equal(badge.dataset.visible, "true");
-  assert.equal(title.classList.contains("has-logo-cursor"), true);
+  assert.equal(title.style.cursor, "", "native cursor remains visible");
   assert.ok(badge.querySelector("img").src.endsWith("/favicons/prometheus-cursor.png"));
   move(title, "mouse", 300, 235);
   env.flush();
   const followedX = Number(badge.style.transform.match(/translate3d\(([^p]+)/)[1]);
   assert.ok(followedX > 200 && followedX < 300, "logo eases toward the pointer rather than snapping");
   move(cta); env.flush();
-  assert.equal(title.classList.contains("has-logo-cursor"), false);
+  assert.equal(title.style.cursor, "");
   assert.equal(badge.dataset.cta, "true");
-  assert.match(cta.style.translate, /^0\.896/);
+  assert.ok(parseFloat(cta.style.translate) > 0);
+  for (let i = 1; i < 100; i++) env.flush(i * 16.667);
+  assert.ok(parseFloat(cta.style.translate) > 8, "CTA pulls farther toward the mouse");
+  document.dispatchEvent(new window.Event("pointerleave"));
+  let overshot = false;
+  for (let i = 100; i < 220; i++) {
+    env.flush(i * 16.667);
+    if (parseFloat(cta.style.translate) < -.05) overshot = true;
+  }
+  assert.equal(overshot, true, "release crosses neutral for a gentle rubber bounce");
+  assert.equal(cta.style.translate, "", "spring settles and clears its transform");
+  move(cta); env.flush();
   env.changeMotion(false);
   assert.equal(cta.style.translate, "");
   assert.equal(env.frames.size, 0);
@@ -103,7 +114,7 @@ async function mount(t, children, { reduced = false, animate = true } = {}) {
     }
   });
   return { media, listeners, animations, frames, observers, layout, scrolls, unmount,
-    flush() { for (const [key, fn] of [...frames]) { frames.delete(key); fn(); } },
+    flush(time) { for (const [key, fn] of [...frames]) { frames.delete(key); fn(time); } },
     changeMotion(value) { media.matches = value; for (const fn of listeners) fn(); },
   };
 }
