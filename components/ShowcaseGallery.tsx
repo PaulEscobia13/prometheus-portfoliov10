@@ -23,11 +23,13 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const initialized = useRef(false);
   const velocity = useRef(0);
   const coasting = useRef(false);
+  const edgeDrive = useRef(0);
   const closing = useRef(false);
   const keyboardIndex = useRef(0);
   const drag = useRef<{ id: number; x: number; y: number; lastX: number; lastTime: number; moved: boolean } | null>(null);
   const suppressClickUntil = useRef(0);
   const [paused, setPaused] = useState(false);
+  const [edgeDirection, setEdgeDirection] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(true);
   const [dragging, setDragging] = useState(false);
   const [active, setActive] = useState<string | null>(null);
@@ -103,7 +105,9 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     const tick = (time: number) => {
       const dt = last ? Math.min((time - last) / 1000, .05) : 0;
       last = time;
-      const target = paused || active || selected || dragging || keyboardFocused ? 0 : pitch.current * .22;
+      const target = paused || selected || dragging || keyboardFocused ? 0
+        : edgeDirection ? edgeDrive.current * pitch.current * .9
+        : active ? 0 : pitch.current * .22;
       // Preserve release velocity, then ease back to the conveyor speed. Time
       // based damping keeps flicks consistent across 60Hz and 120Hz displays.
       if (!dragging) {
@@ -136,7 +140,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       document.removeEventListener("visibilitychange", refresh);
       if (frame !== undefined) cancelAnimationFrame(frame);
     };
-  }, [paused, active, selected, dragging, reducedMotion, keyboardFocused, paint]);
+  }, [paused, active, selected, dragging, reducedMotion, keyboardFocused, edgeDirection, paint]);
 
   function originFor(element: HTMLButtonElement): Origin {
     const rect = element.getBoundingClientRect();
@@ -218,6 +222,8 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
           if (keyboard && !selected) keyboardSelect(keyboardIndex.current);
         }}
         onPointerLeave={() => {
+          edgeDrive.current = 0;
+          setEdgeDirection(0);
           if (drag.current && !drag.current.moved) drag.current = null;
           if (!drag.current) setActive(null);
         }}
@@ -241,12 +247,22 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
         }}
         onPointerDown={event => {
           if (event.isPrimary && event.button === 0) {
+            edgeDrive.current = 0;
+            setEdgeDirection(0);
             coasting.current = false;
             drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastTime: event.timeStamp, moved: false };
           }
         }}
         onPointerMove={event => {
           const pointer = drag.current;
+          if (!pointer && event.pointerType === "mouse") {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / Math.max(1, bounds.width)));
+            // Outer quarters browse toward the pointer, speeding up gradually
+            // toward the edge. The center keeps the existing card-hover pause.
+            edgeDrive.current = x < .25 ? (.25 - x) / .25 : x > .75 ? (.75 - x) / .25 : 0;
+            setEdgeDirection(Math.sign(edgeDrive.current));
+          }
           if (!pointer || pointer.id !== event.pointerId) return;
           const dx = event.clientX - pointer.x;
           if (!pointer.moved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(event.clientY - pointer.y)) {
