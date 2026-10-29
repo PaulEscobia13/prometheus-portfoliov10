@@ -49,8 +49,6 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     if (!element) return;
     let cancelled = false;
     let slider: Slider | undefined;
-    let edge = 0;
-    let paused = false;
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
     const fitPreview = () => {
       if (!slider) return;
@@ -79,47 +77,13 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       // The upstream bundle may have initialized this root on script load.
       initialize();
     }).catch(() => { if (!cancelled) setFallback(true); });
-    const rebuild = () => { edge = 0; if ((window as SliderWindow).MwSlider) initialize(); };
+    const rebuild = () => { if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
     window.addEventListener("resize", fitPreview);
-    const updateEdge = (direction: number) => {
-      if (edge === direction) return;
-      edge = direction;
-      slider?.set("speed", edge ? .55 : 0);
-    };
-    const move = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || event.buttons || preference.matches || slider?.state().isOpen) { updateEdge(0); return; }
-      const bounds = element.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / Math.max(1, bounds.width);
-      updateEdge(x < .2 ? -1 : x > .8 ? 1 : 0);
-    };
-    const leave = () => { updateEdge(0); };
-    const key = (event: KeyboardEvent) => {
-      if (event.key === " " && !event.repeat && !slider?.state().isOpen) {
-        event.preventDefault(); paused = !paused;
-      }
-    };
-    // Edge browsing uses the renderer's own wheel/chase path, so it shares
-    // the same flexible-card motion instead of running another animation.
-    const timer = window.setInterval(() => {
-      const bounds = element.getBoundingClientRect();
-      if (edge && !paused && !preference.matches && !document.hidden && !slider?.state().isOpen && bounds.bottom > 0 && bounds.top < innerHeight) {
-        element.dispatchEvent(new WheelEvent("wheel", { deltaX: edge * 100, cancelable: true }));
-      }
-    }, 650);
-    element.addEventListener("pointermove", move);
-    element.addEventListener("pointerleave", leave);
-    element.addEventListener("pointerdown", leave);
-    element.addEventListener("keydown", key);
     return () => {
       cancelled = true;
       preference.removeEventListener("change", rebuild);
       window.removeEventListener("resize", fitPreview);
-      window.clearInterval(timer);
-      element.removeEventListener("pointermove", move);
-      element.removeEventListener("pointerleave", leave);
-      element.removeEventListener("pointerdown", leave);
-      element.removeEventListener("keydown", key);
       (slider ?? element._mw)?.destroy();
     };
   }, [sheets, fallback]);
@@ -128,7 +92,7 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
   return (
     <section id="showcase" className="prometheus-showcase prometheus-webflow-showcase" aria-labelledby="showcase-title">
       <div className="webgl_slider_heading_center"><h2 id="showcase-title">#MadeByPrometheus</h2></div>
-      <p className="showcase-sr-only" id="webflow-showcase-instructions">Drag or scroll to browse concepts. Use the left and right arrow keys, Enter to open a concept, and Escape to close. Hover near either edge to browse in that direction.</p>
+      <p className="showcase-sr-only" id="webflow-showcase-instructions">Drag or scroll to browse concepts. Use the left and right arrow keys, Enter to open a concept, and Escape to close.</p>
       <div ref={root} className="prometheus-webflow-stage" data-scroll-span="-3" data-hover-dim="0.65" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1" data-fit="contain" data-checker="false" role="group" aria-label="Concept gallery" aria-describedby="webflow-showcase-instructions" tabIndex={0}>
         {sheets.map(sheet => (
           <div key={sheet.id} data-webgl-item="" data-title={sheet.title}>
