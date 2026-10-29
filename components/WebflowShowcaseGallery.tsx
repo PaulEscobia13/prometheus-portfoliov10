@@ -5,7 +5,7 @@ import type { ShowcaseSheet } from "../content/showcase";
 import ShowcaseGallery from "./ShowcaseGallery";
 import "../app/prometheus/webflow-showcase.css";
 
-type Slider = { destroy(): void; set(key: string, value: number): void; state(): { isOpen: boolean } };
+type Slider = { close(): void; destroy(): void; set(key: string, value: number): void; state(): { isOpen: boolean } };
 type SliderRoot = HTMLDivElement & { _mw?: Slider };
 type SliderWindow = Window & { MwSlider?: { init(root: HTMLElement): Slider | null } };
 let runtime: Promise<void> | undefined;
@@ -50,19 +50,17 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     let cancelled = false;
     let slider: Slider | undefined;
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
-    let savedOverflow: string | undefined;
-    const syncPreview = () => {
-      const open = element.hasAttribute("data-mw-open");
-      if (open && savedOverflow === undefined) {
-        savedOverflow = document.documentElement.style.overflow;
-        document.documentElement.style.overflow = "hidden";
-        element.setAttribute("data-lenis-prevent", "");
-      } else if (!open && savedOverflow !== undefined) {
-        document.documentElement.style.overflow = savedOverflow;
-        savedOverflow = undefined;
-        element.removeAttribute("data-lenis-prevent");
+    const syncPreview = () => { fitPreview(); };
+    const dismissOnScroll = () => {
+      if (slider?.state().isOpen) slider.close();
+    };
+    const dismissOnWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey && !event.shiftKey && Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        dismissOnScroll();
+        // Upstream otherwise consumes vertical wheel events as card changes.
+        // Stop that handler, while leaving the browser's page scroll intact.
+        event.stopImmediatePropagation();
       }
-      fitPreview();
     };
     const fitPreview = () => {
       if (!slider) return;
@@ -94,14 +92,19 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     const rebuild = () => { if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
     window.addEventListener("resize", fitPreview);
+    window.addEventListener("scroll", dismissOnScroll, { passive: true });
+    element.addEventListener("wheel", dismissOnWheel, { passive: true, capture: true });
+    element.addEventListener("touchmove", dismissOnScroll, { passive: true });
     const previewObserver = new MutationObserver(syncPreview);
     previewObserver.observe(element, { attributes: true, attributeFilter: ["data-mw-open"] });
     return () => {
       cancelled = true;
       preference.removeEventListener("change", rebuild);
       window.removeEventListener("resize", fitPreview);
+      window.removeEventListener("scroll", dismissOnScroll);
+      element.removeEventListener("wheel", dismissOnWheel, true);
+      element.removeEventListener("touchmove", dismissOnScroll);
       previewObserver.disconnect();
-      if (savedOverflow !== undefined) document.documentElement.style.overflow = savedOverflow;
       (slider ?? element._mw)?.destroy();
     };
   }, [sheets, fallback]);
