@@ -4,7 +4,8 @@ import PricingReveal from "./PricingReveal";
 
 export default function PricingSection() {
   return (
-    <PricingReveal className={GeistSans.variable}>
+    <div className="pricing-reveal-backdrop">
+      <PricingReveal className={GeistSans.variable}>
       <div className="pricing-container">
         <header className="pricing-intro">
           <h2 id="pricing-title"><em>Get a Premium Experience<br />at a Discounted Rate.</em></h2>
@@ -23,9 +24,6 @@ export default function PricingSection() {
               <ul className="pricing-plan-features" aria-label={`${plan.name} features`}>
                 {plan.features.map(feature => (
                   <li key={feature}>
-                    <span className="pricing-feature-check" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="m3.5 8 3 3 6-6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    </span>
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -36,6 +34,7 @@ export default function PricingSection() {
         </div>
         <p className="pricing-early-rate-note">Discounted rates for our first 5 clients. From planning to launch, we’ll be with you every step of the way.</p>
       </div>
-    </PricingReveal>
+      </PricingReveal>
+    </div>
   );
 }
