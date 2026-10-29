@@ -1,6 +1,7 @@
 const groups = [
   {
     title: "Websites",
+    summary: "Help customers find your business and get in touch.",
     items: [
       ["Landing Pages", "Focused pages that introduce an offer and help visitors take the next step."],
       ["Business Websites", "Responsive websites that present your business, services, and contact information."],
@@ -11,6 +12,7 @@ const groups = [
   },
   {
     title: "Business Systems",
+    summary: "Bring your daily operations into one shared workspace.",
     items: [
       ["ERP & Operations", "Connected tools for the daily workflows your team needs to manage."],
       ["Inventory & Orders", "Keep track of products, stock, quotations, and customer orders."],
@@ -21,6 +23,7 @@ const groups = [
   },
   {
     title: "Custom Solutions",
+    summary: "Build software around the way your business works.",
     items: [
       ["Custom Web Apps", "Purpose-built web applications shaped around your users and requirements."],
       ["Integrated Platforms", "Connect your public website with the systems that run your business."],
@@ -40,7 +43,6 @@ export default function Services() {
     <section id="services" aria-labelledby="services-title" className="home-updated-section home-services-section prometheus-services">
       <div className="w-layout-blockcontainer home-container w-container">
         <div className="home-services-top">
-          <p className="home-title-upcase">Services</p>
           <h2 id="services-title" className="home-title home-services-title"><em className="is-italic">What We Offer</em></h2>
         </div>
         <div className="home-services-content-wrapper">
@@ -48,6 +50,11 @@ export default function Services() {
             {groups.map(group => (
               <article id={`services-${group.title.toLowerCase().replace(/\s+/g, "-")}`} key={group.title} className="home-services-content-item">
                 <h3 className="home-services-content-item-title">{group.title}</h3>
+                <p className="prometheus-service-summary">{group.summary}</p>
+                <details className="prometheus-service-list">
+                  <summary className="prometheus-service-list-toggle" aria-label={`Explore ${group.title.toLowerCase()} services`}>
+                    <span>Explore services</span><span className="prometheus-service-list-plus" aria-hidden="true">+</span>
+                  </summary>
                 <div className="home-services-content-items">
                   {group.items.map(([title, description]) => (
                     <details key={title} className="prometheus-service">
@@ -59,6 +66,7 @@ export default function Services() {
                     </details>
                   ))}
                 </div>
+                </details>
               </article>
             ))}
           </div>
