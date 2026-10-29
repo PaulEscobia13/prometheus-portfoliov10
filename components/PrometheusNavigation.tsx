@@ -64,7 +64,7 @@ export default function PrometheusNavigation() {
           <div id="prometheus-menu" ref={menu} className="prometheus-nav-links" data-open={open} inert={mobile && !open} data-lenis-prevent="">
             {links.map(link => <div className={`prometheus-nav-item${link.label === "Services" ? " is-services" : ""}`} key={link.label}>
               <div className="prometheus-nav-row">
-                <a className="prometheus-nav-primary-link" href={link.href} onClick={closeMenu}>{link.label}</a>
+                <a className="prometheus-nav-primary-link" href={link.href} onClick={closeMenu} aria-label={link.label}><span className="prometheus-nav-label-window" aria-hidden="true"><span className="prometheus-nav-label-roll"><span>{link.label}</span><span className="prometheus-nav-label-copy">{link.label}</span></span></span></a>
                 {link.label === "Services" && <button type="button" className="prometheus-services-toggle" aria-label={servicesOpen ? "Collapse services" : "Expand services"} aria-expanded={servicesOpen} aria-controls="prometheus-services-submenu" onClick={() => setServicesOpen(value => !value)}><span>Services</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="m3 6 6 6 6-6" stroke="currentColor" strokeWidth="1.6" /></svg></button>}
               </div>
               {link.label === "Services" && <div id="prometheus-services-submenu" className="prometheus-services-submenu" hidden={!servicesOpen}>

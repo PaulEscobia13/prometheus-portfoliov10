@@ -447,6 +447,18 @@
 }
 
 .prometheus-nav-links a:hover { color: var(--prometheus-teal); }
+.prometheus-nav-label-copy { display: none; }
+@media (min-width: 992px) {
+  .prometheus-nav-label-window { display: block; height: 1.5em; overflow: hidden; }
+  .prometheus-nav-label-roll { display: block; transition: transform .3s cubic-bezier(.23, 1, .32, 1); }
+  .prometheus-nav-label-roll > span { display: block; line-height: 1.5em; }
+  .prometheus-nav-label-copy { color: var(--prometheus-teal); }
+  .prometheus-nav-links .prometheus-nav-primary-link:hover { color: var(--prometheus-off-white); }
+  .prometheus-nav-primary-link:is(:hover, :focus-visible) .prometheus-nav-label-roll { transform: translateY(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-nav-label-roll { transition: none; }
+}
 .prometheus-nav-links a:focus-visible {
   outline: 2px solid var(--prometheus-off-white);
   outline-offset: 6px;
