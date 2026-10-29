@@ -3,7 +3,7 @@
 .prometheus-webflow-showcase { position: relative; padding: 64px 0 clamp(48px, 6vw, 112px); }
 .prometheus-webflow-showcase .webgl_slider_heading_center { position: relative; z-index: 20; pointer-events: none; }
 .prometheus-webflow-showcase h2 { margin-bottom: 0; }
-.prometheus-webflow-stage {
+.prometheus-webflow-stage-slot {
   --mw-stage-h: clamp(560px, 90svh, 1200px);
   --mw-card-w: clamp(280px, 30cqw, 740px);
   --mw-card-h: calc(var(--mw-card-w) * 4 / 7);
@@ -11,8 +11,30 @@
   --mw-focus: 2px solid #eddcc6;
   position: relative;
   height: var(--mw-stage-h);
+}
+.prometheus-webflow-stage {
+  position: relative;
+  height: var(--mw-stage-h);
   min-height: var(--mw-stage-h);
   isolation: isolate;
+}
+/* Keep the in-page slot while the opened renderer fits the visible screen. */
+.prometheus-webflow-stage[data-mw-open] {
+  position: fixed;
+  inset: 80px 0 0;
+  z-index: 1001;
+  width: 100%;
+  height: calc(100svh - 80px);
+  height: calc(100dvh - 80px);
+  min-height: 0;
+  background: #080909;
+}
+@media (max-width: 991px) {
+  .prometheus-webflow-stage[data-mw-open] {
+    top: 64px;
+    height: calc(100svh - 64px);
+    height: calc(100dvh - 64px);
+  }
 }
 .prometheus-webflow-stage:not([data-mw-ready]) [data-webgl-item] { opacity: 0; }
 .prometheus-webflow-opener { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; border: 0; padding: 0; background: transparent; cursor: pointer; }
@@ -27,6 +49,6 @@
 @media (max-width: 767px) {
   .prometheus-webflow-showcase { padding-top: 48px; }
   .prometheus-webflow-showcase h2 { font-size: clamp(22px, 7.5vw, 38px); }
-  .prometheus-webflow-stage { --mw-stage-h: clamp(440px, 76svh, 800px); }
+  .prometheus-webflow-stage-slot { --mw-stage-h: clamp(440px, 76svh, 800px); }
   .prometheus-webflow-close { left: -12px; top: 24px; }
 }
