@@ -9,7 +9,7 @@ body:has(.prometheus-showcase), .prometheus-preview.page-wrapper { width: 100%; 
   --showcase-active-scale: 1.025;
   color: var(--prometheus-off-white);
   background: linear-gradient(to bottom, #0d1116, #080909 18rem);
-  padding: 8rem 0 0;
+  padding: 8rem 0 clamp(48px, 6vw, 112px);
   overflow: clip;
   scroll-margin-top: 10rem;
 }
