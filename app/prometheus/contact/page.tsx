@@ -8,7 +8,8 @@ import "./contact.css";
 export const metadata: Metadata = { title: "Let’s talk about your project | Prometheus", icons: { icon: { url: "/favicons/prometheus-cream.png", type: "image/png" }, apple: "/favicons/prometheus-cream.png" }, robots: { index: false, follow: false } };
 
 export default function ContactPage() {
-  return <main className="inquiry-page">\n    <RotatingFavicon />
+  return <main className="inquiry-page">
+    <RotatingFavicon />
     <header className="inquiry-header"><a href="/prometheus" aria-label="Prometheus home">prometheus</a><a href="/prometheus">Back to home</a></header>
     <div className="inquiry-layout">
       <aside className="inquiry-profile">
