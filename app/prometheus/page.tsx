@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function PrometheusPreview() {
   return (
-    <div className="page-wrapper prometheus-preview">
+    <div id="top" className="page-wrapper prometheus-preview">
       <SmoothScroll />
       <HeroPointer />
       <RotatingFavicon />
