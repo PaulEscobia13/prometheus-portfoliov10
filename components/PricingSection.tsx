@@ -22,18 +22,6 @@ export default function PricingSection() {
               </p>
               <p className="pricing-plan-description">{plan.description}</p>
               <a className="pricing-plan-action" href="#contacts" aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
-              <div className="pricing-plan-included">
-                <p>What’s Included</p>
-                <div className="pricing-build-first">We build it first for free, no payment.</div>
-                <ul>
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={feature}>
-                      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><defs><mask id={`pricing-check-${plan.id}-${featureIndex}`}><rect width="20" height="20" fill="white" /><path d="m5.5 10 3 3 6-6" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></mask></defs><circle cx="10" cy="10" r="9" fill="currentColor" mask={`url(#pricing-check-${plan.id}-${featureIndex})`} /></svg>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </article>
           ))}
         </div>
