@@ -51,7 +51,7 @@ export default function FAQItem({ id, question, answer }: { id: string; question
     <details ref={details} className="prometheus-faq-item">
       <summary aria-controls={`faq-${id}-answer`}>
         <h3>{question}</h3>
-        <svg className="prometheus-faq-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        <svg className="prometheus-faq-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" /></svg>
       </summary>
       <div id={`faq-${id}-answer`} className="prometheus-faq-answer"><p>{answer}</p></div>
     </details>

@@ -5,23 +5,28 @@
 
 /* The FAQ is the rounded foreground sheet above the sticky burgundy drawer.
    Clip this last section only, preserving sticky galleries and the team stage. */
-.prometheus-faq { position: relative; z-index: 2; padding: 12rem 0 14rem; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); background: #fff; color: #090914; scroll-margin-top: 10.8rem; }
-.prometheus-faq-container { width: min(100% - 12rem, 120rem); margin-inline: auto; }
-.prometheus-faq-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 4rem; }
-.prometheus-faq-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 10rem; font-weight: 400; line-height: 1.1; letter-spacing: -.05em; }
-.prometheus-faq-label { display: inline-flex; align-items: center; gap: 1.6rem; flex-shrink: 0; margin: 1.6rem 0 0; font-family: Manrope, Arial, sans-serif; font-size: 1.2rem; line-height: 1.5; }
-.prometheus-faq-label > span { display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border: 1px solid #0909140d; border-radius: 50%; }
-.prometheus-faq-list { width: 80%; margin: 14.5rem 0 0 auto; }
-.prometheus-faq-item { padding: 0 0 3.2rem; border-bottom: 1px solid #0909141a; }
-.prometheus-faq-item + .prometheus-faq-item { margin-top: 4rem; }
-.prometheus-faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 3rem; min-height: 4.4rem; list-style: none; cursor: pointer; }
+.prometheus-faq { position: relative; z-index: 2; padding: 8rem 0 9rem; border-radius: 0 0 var(--prometheus-footer-radius) var(--prometheus-footer-radius); background: #fff; color: #090914; scroll-margin-top: 10.8rem; }
+.prometheus-faq-container { display: grid; grid-template-columns: minmax(0, .65fr) minmax(0, 1.65fr); align-items: start; gap: 6rem; width: min(100% - 12rem, 120rem); margin-inline: auto; }
+.prometheus-faq-header { display: flex; flex-direction: column; align-items: flex-start; gap: 3.2rem; }
+.prometheus-faq-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 7.2rem; font-weight: 400; line-height: 1.1; letter-spacing: -.05em; }
+.prometheus-faq-socials { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+.prometheus-faq-socials a { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; border: 1px solid #09091426; border-radius: 50%; color: #090914; transition: color .2s, border-color .2s; }
+.prometheus-faq-socials a:hover { color: #642b2d; border-color: currentColor; }
+.prometheus-faq-socials a:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 4px; }
+.prometheus-faq-social-icon { display: block; width: 2rem; height: 2rem; background: currentColor; mask: var(--social-icon) center / contain no-repeat; }
+.prometheus-faq-social-icon.is-facebook { --social-icon: url('/icons/social/facebook.svg'); }
+.prometheus-faq-social-icon.is-instagram { --social-icon: url('/icons/social/instagram.svg'); }
+.prometheus-faq-list { min-width: 0; width: 100%; margin: 0; border-top: 1px solid #0909141a; }
+.prometheus-faq-item { padding: 0; border-bottom: 1px solid #0909141a; }
+.prometheus-faq-item + .prometheus-faq-item { margin-top: 0; }
+.prometheus-faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 2.4rem; min-height: 7.6rem; padding: 2.4rem 0; list-style: none; cursor: pointer; }
 .prometheus-faq-item summary::-webkit-details-marker { display: none; }
 .prometheus-faq-item summary::marker { content: ""; }
-.prometheus-faq-item h3 { margin: 0; padding-bottom: .32rem; font-family: Georgia, "Times New Roman", serif; font-size: 3.2rem; font-weight: 400; line-height: 1.15; letter-spacing: -.02em; }
+.prometheus-faq-item h3 { margin: 0; padding-bottom: .32rem; font-family: Georgia, "Times New Roman", serif; font-size: 2.8rem; font-weight: 400; line-height: 1.15; letter-spacing: -.02em; }
 .prometheus-faq-arrow { flex-shrink: 0; transition: transform .4s ease; }
-.prometheus-faq-item[open]:not([data-expanded="false"]) .prometheus-faq-arrow { transform: rotate(90deg); }
+.prometheus-faq-item[open]:not([data-expanded="false"]) .prometheus-faq-arrow { transform: rotate(45deg); }
 .prometheus-faq-answer { overflow: hidden; }
-.prometheus-faq-answer p { margin: 0; padding: 2.4rem 15% 0 0; font-family: Manrope, Arial, sans-serif; font-size: 1.8rem; font-weight: 400; line-height: 1.5; color: #606062; }
+.prometheus-faq-answer p { margin: 0; padding: 0 4.8rem 2.4rem 0; font-family: Manrope, Arial, sans-serif; font-size: 1.8rem; font-weight: 400; line-height: 1.5; color: #606062; }
 .prometheus-faq-item summary:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 8px; border-radius: .3rem; }
 
 .prometheus-editorial-footer { position: sticky; bottom: 0; z-index: 1; border-radius: 0; background: #642b2d; color: #fff4ea; overflow: clip; scroll-margin-top: 10.8rem; }
@@ -42,9 +47,9 @@
 .prometheus-footer-wordmark { position: absolute; z-index: 0; left: 50%; bottom: -.25em; transform: translateX(-50%) scaleX(1.075); transform-origin: center bottom; white-space: nowrap; color: #fff4ea; font: 400 14.7cqw/.9 Georgia, "Times New Roman", serif; letter-spacing: -.075em; pointer-events: none; user-select: none; }
 
 @media (max-width: 1100px) {
-  .prometheus-faq-header h2 { font-size: 8rem; }
+  .prometheus-faq-header h2 { font-size: 6.4rem; }
   .prometheus-faq-container { width: calc(100% - 8rem); }
-  .prometheus-faq-list { margin-top: 10rem; }
+  .prometheus-faq-container { gap: 4rem; }
 }
 @media (max-width: 900px) {
   .prometheus-preview { --prometheus-footer-radius: 5.2rem; }
@@ -57,17 +62,15 @@
 }
 @media (max-width: 767px) {
   .prometheus-faq { padding: 8rem 0 9rem; scroll-margin-top: 6.8rem; }
-  .prometheus-faq-container { width: calc(100% - 4rem); }
-  .prometheus-faq-header { display: block; }
+  .prometheus-faq-container { grid-template-columns: 1fr; gap: 3.2rem; width: calc(100% - 4rem); }
+  .prometheus-faq-header { gap: 2.4rem; }
   .prometheus-faq-header h2 { font-size: clamp(4rem, 8.5vw, 6.4rem); letter-spacing: -.05em; }
-  .prometheus-faq-label { margin-top: 2.4rem; font-size: 1rem; gap: 1rem; }
-  .prometheus-faq-label > span { width: 2.8rem; height: 2.8rem; }
-  .prometheus-faq-list { width: 100%; margin-top: 6.4rem; }
-  .prometheus-faq-item { padding-bottom: 2.4rem; }
-  .prometheus-faq-item + .prometheus-faq-item { margin-top: 2.4rem; }
+  .prometheus-faq-list { width: 100%; margin-top: 0; }
+  .prometheus-faq-item { padding-bottom: 0; }
+  .prometheus-faq-item + .prometheus-faq-item { margin-top: 0; }
   .prometheus-faq-item summary { gap: 2rem; }
   .prometheus-faq-item h3 { font-size: 2.4rem; }
-  .prometheus-faq-answer p { padding: 1.8rem 0 0; font-size: 1.5rem; }
+  .prometheus-faq-answer p { padding: 0 0 2.4rem; font-size: 1.5rem; }
 }
 @media (max-width: 600px) {
   .prometheus-preview { --prometheus-footer-radius: 3.6rem; }
@@ -87,7 +90,7 @@
   .prometheus-footer-wordmark { font-size: 15.6cqw; bottom: -.34em; transform: translateX(-50%) scaleX(1.08); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .prometheus-faq-arrow, .prometheus-footer-cta { transition: none; }
+  .prometheus-faq-arrow, .prometheus-faq-socials a, .prometheus-footer-cta { transition: none; }
   .prometheus-editorial-footer { position: relative; }
   .prometheus-footer-foreground { transform: none; }
 }
