@@ -413,6 +413,46 @@
 
 .prometheus-nav-inner { gap: 2.4rem; }
 
+/* Compact header: center the controls without inherited top/bottom padding. */
+.prometheus-preview .prometheus-navbar {
+  height: 80px;
+  padding-block: 0;
+  display: flex;
+  align-items: center;
+}
+.prometheus-preview .prometheus-nav-inner {
+  min-height: 80px;
+  padding-block: 0;
+}
+.prometheus-preview .prometheus-navbar .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  min-height: 48px;
+  padding: 8px 8px 8px 20px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.prometheus-preview .prometheus-navbar .button_arrow-wrapper-2 {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.prometheus-preview .prometheus-navbar .nav-cta::before {
+  width: 32px;
+  height: 32px;
+  top: 8px;
+  right: 8px;
+}
+.prometheus-preview .prometheus-navbar .nav-cta:is(:hover, :focus-visible)::before {
+  top: -1px;
+  right: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+}
+
 .prometheus-navbar {
   background-color: transparent;
   -webkit-backdrop-filter: blur(5px);
@@ -478,6 +518,13 @@
 .prometheus-services-submenu { display: none; }
 
 @media (max-width: 991px) {
+  .prometheus-preview .prometheus-navbar { height: 64px; }
+  .prometheus-preview .prometheus-nav-inner { min-height: 64px; }
+  .prometheus-preview .prometheus-navbar .nav-cta {
+    height: 44px;
+    min-height: 44px;
+    padding: 6px 16px;
+  }
   .prometheus-nav-inner { flex-wrap: nowrap; gap: 1.6rem; }
   .prometheus-navbar .navbar_logo-wrapper { margin-right: auto; }
   .prometheus-menu-toggle {
@@ -510,7 +557,7 @@
   .prometheus-menu-toggle:focus-visible { outline: 2px solid var(--prometheus-off-white); outline-offset: 3px; }
   .prometheus-nav-menu-shell {
     position: absolute;
-    inset: 7.2rem 0 auto;
+    inset: 64px 0 auto;
     display: block;
     padding-inline: 1.6rem;
     pointer-events: none;
@@ -580,9 +627,6 @@
 
 .prometheus-services .home-services-content-item { scroll-margin-top: 12rem; }
 
-@media (max-width: 479px) {
-  .prometheus-navbar { padding-top: 1.2rem; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .prometheus-navbar,
