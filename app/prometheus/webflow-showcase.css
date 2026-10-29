@@ -4,8 +4,8 @@
 .prometheus-webflow-showcase .webgl_slider_heading_center { position: relative; z-index: 20; pointer-events: none; }
 .prometheus-webflow-showcase h2 { margin-bottom: 0; }
 .prometheus-webflow-stage {
-  --mw-stage-h: clamp(520px, 76svh, 960px);
-  --mw-card-w: clamp(240px, 26cqw, 620px);
+  --mw-stage-h: clamp(560px, 90svh, 1200px);
+  --mw-card-w: clamp(280px, 30cqw, 740px);
   --mw-card-h: calc(var(--mw-card-w) * 4 / 7);
   --mw-backdrop: rgb(0 0 0 / 78%);
   --mw-focus: 2px solid #eddcc6;
@@ -27,6 +27,6 @@
 @media (max-width: 767px) {
   .prometheus-webflow-showcase { padding-top: 48px; }
   .prometheus-webflow-showcase h2 { font-size: clamp(22px, 7.5vw, 38px); }
-  .prometheus-webflow-stage { --mw-stage-h: clamp(400px, 64svh, 700px); }
+  .prometheus-webflow-stage { --mw-stage-h: clamp(440px, 76svh, 800px); }
   .prometheus-webflow-close { left: -12px; top: 24px; }
 }
