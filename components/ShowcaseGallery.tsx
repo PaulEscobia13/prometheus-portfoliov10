@@ -22,9 +22,10 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const pitch = useRef(0);
   const initialized = useRef(false);
   const velocity = useRef(0);
+  const coasting = useRef(false);
   const closing = useRef(false);
   const keyboardIndex = useRef(0);
-  const drag = useRef<{ id: number; x: number; y: number; lastX: number; moved: boolean } | null>(null);
+  const drag = useRef<{ id: number; x: number; y: number; lastX: number; lastTime: number; moved: boolean } | null>(null);
   const suppressClickUntil = useRef(0);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
@@ -34,7 +35,6 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const [announcement, setAnnouncement] = useState("");
   const [copies, setCopies] = useState(4);
   const [keyboardFocused, setKeyboardFocused] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const paint = useCallback(() => {
     // Keep a complete predecessor cycle to the left even immediately before a
@@ -44,7 +44,6 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
 
   const keyboardSelect = useCallback((index: number) => {
     keyboardIndex.current = wrap(index, sheets.length);
-    setCurrentIndex(keyboardIndex.current);
     const sheet = sheets[keyboardIndex.current];
     const width = stage.current?.clientWidth ?? 0;
     const sheetElement = track.current?.querySelector<HTMLElement>(".showcase-sheet");
@@ -54,10 +53,11 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     const projectedWidth = (sheetElement?.offsetWidth ?? 0) * Math.abs(matrix.a) / scale * activeScale;
     phase.current = wrap(width / 2 - projectedWidth / 2 - keyboardIndex.current * pitch.current, period.current);
     velocity.current = 0;
+    coasting.current = false;
     paint();
     setActive(sheet.id);
     setAnnouncement(`${sheet.title}, ${keyboardIndex.current + 1} of ${sheets.length}.`);
-  }, [sheets, paint, setCurrentIndex, setActive, setAnnouncement]);
+  }, [sheets, paint]);
 
   useEffect(() => {
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
@@ -85,7 +85,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       precedingCycles.current = loop.precedingCycles;
       setCopies(loop.copies);
       const focused = document.activeElement;
-      if (focused === stage.current || stage.current?.parentElement?.querySelector(".showcase-controls")?.contains(focused)) {
+      if (focused === stage.current) {
         keyboardSelect(keyboardIndex.current);
       }
       paint();
@@ -104,7 +104,12 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       const dt = last ? Math.min((time - last) / 1000, .05) : 0;
       last = time;
       const target = paused || active || selected || dragging || keyboardFocused ? 0 : pitch.current * .22;
-      velocity.current += (target - velocity.current) * (1 - Math.exp(-dt * 9));
+      // Preserve release velocity, then ease back to the conveyor speed. Time
+      // based damping keeps flicks consistent across 60Hz and 120Hz displays.
+      if (!dragging) {
+        velocity.current += (target - velocity.current) * (1 - Math.exp(-dt * (coasting.current ? 3 : 9)));
+        if (Math.abs(target - velocity.current) < 1) coasting.current = false;
+      }
       if (!dragging && Math.abs(velocity.current) > .02) {
         phase.current = wrap(phase.current + velocity.current * dt, period.current);
         paint();
@@ -121,7 +126,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
       frame = undefined;
       last = 0;
       if (visible && !document.hidden && !reducedMotion) frame = requestAnimationFrame(tick);
-      else velocity.current = 0;
+      else { velocity.current = 0; coasting.current = false; }
     };
     const observer = new IntersectionObserver(entries => { visible = entries[0]?.isIntersecting ?? false; refresh(); }, { threshold: .01 });
     if (stage.current) observer.observe(stage.current);
@@ -143,7 +148,6 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     if (timeStamp < suppressClickUntil.current) return;
     sourceButton.current = element;
     keyboardIndex.current = Math.max(0, sheets.findIndex(item => item.id === sheet.id));
-    setCurrentIndex(keyboardIndex.current);
     const focused = document.activeElement;
     returnFocus.current = focused instanceof HTMLElement && !focused.closest('[aria-hidden="true"]') && focused !== document.body ? focused : stage.current;
     sourceOrigin.current = originFor(element);
@@ -205,7 +209,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   return (
     <section id="showcase" className="prometheus-showcase" aria-labelledby="showcase-title">
       <h2 id="showcase-title">#MadeByPrometheus</h2>
-      <p id="showcase-instructions" className="showcase-sr-only">Angled concept gallery. Drag horizontally, or use the left and right arrow keys. Press Enter to preview a sheet and Escape to close it.</p>
+      <p id="showcase-instructions" className="showcase-sr-only">Angled concept gallery. Drag horizontally, or use the left and right arrow keys. Press Enter to preview a sheet, Space to pause or resume motion, and Escape to close a preview.</p>
       <div ref={stage} className="showcase-stage" tabIndex={0} role="group" aria-label="Concept gallery" aria-describedby="showcase-instructions" data-active={active ?? ""} data-dragging={dragging} data-preview={selected?.id ?? ""}
         onFocus={event => {
           if (event.target !== event.currentTarget) return;
@@ -222,13 +226,25 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
           if (event.target !== event.currentTarget) return;
           if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); keyboardSelect(keyboardIndex.current + (event.key === "ArrowRight" ? 1 : -1)); }
           if (event.key === "Home" || event.key === "End") { event.preventDefault(); keyboardSelect(event.key === "Home" ? 0 : sheets.length - 1); }
-          if (event.key === "Enter" || event.key === " ") {
+          if (event.key === " ") {
+            event.preventDefault();
+            if (!event.repeat) {
+              setPaused(!paused);
+              setAnnouncement(paused ? "Gallery motion resumed." : "Gallery motion paused.");
+            }
+          }
+          if (event.key === "Enter") {
             event.preventDefault();
             previewCurrent(event.timeStamp);
           }
           if (event.key === "Escape") setActive(null);
         }}
-        onPointerDown={event => { if (event.isPrimary && event.button === 0) drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, moved: false }; }}
+        onPointerDown={event => {
+          if (event.isPrimary && event.button === 0) {
+            coasting.current = false;
+            drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastTime: event.timeStamp, moved: false };
+          }
+        }}
         onPointerMove={event => {
           const pointer = drag.current;
           if (!pointer || pointer.id !== event.pointerId) return;
@@ -241,20 +257,36 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
           }
           if (pointer.moved) {
             if (event.cancelable) event.preventDefault();
-            phase.current = wrap(phase.current + event.clientX - pointer.lastX, period.current);
+            const delta = event.clientX - pointer.lastX;
+            const elapsed = Math.max(1, event.timeStamp - pointer.lastTime);
+            // Cap anomalous input samples and blend them instead of using one
+            // final pointer event as the entire throw velocity.
+            const sample = Math.max(-1800, Math.min(1800, delta / elapsed * 1000));
+            velocity.current += (sample - velocity.current) * .5;
+            phase.current = wrap(phase.current + delta, period.current);
             paint();
           }
           pointer.lastX = event.clientX;
+          pointer.lastTime = event.timeStamp;
         }}
         onPointerUp={event => {
-          if (drag.current?.moved) suppressClickUntil.current = event.timeStamp + 250;
+          if (drag.current?.moved) {
+            suppressClickUntil.current = event.timeStamp + 250;
+            coasting.current = !reducedMotion;
+            if (event.timeStamp - drag.current.lastTime > 100) velocity.current = 0;
+          }
           drag.current = null;
           setDragging(false);
           setActive(null);
           if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
         }}
-        onPointerCancel={() => { drag.current = null; setDragging(false); setActive(null); }}
-        onLostPointerCapture={() => { drag.current = null; setDragging(false); }}>
+        onPointerCancel={() => { drag.current = null; velocity.current = 0; coasting.current = false; setDragging(false); setActive(null); }}
+        onLostPointerCapture={() => {
+          // Normal release also emits lostpointercapture; only cancel inertia
+          // when capture is lost while a drag is still in progress.
+          if (drag.current) { velocity.current = 0; coasting.current = false; }
+          drag.current = null; setDragging(false);
+        }}>
         <div ref={track} className="showcase-track" aria-hidden="true">
           {Array.from({ length: copies }, (_, copy) => sheets.map((sheet, index) => (
             <div className="showcase-slot" key={`${copy}-${sheet.id}`} style={{ zIndex: sheets.length * copies - (copy * sheets.length + index) }}>
@@ -264,14 +296,6 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
             </div>
           )))}
         </div>
-      </div>
-      <div className="showcase-toolbar">
-        <div className="showcase-controls" role="group" aria-label={`Browse all ${sheets.length} concepts`} onFocusCapture={() => setKeyboardFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) { setKeyboardFocused(false); if (!selected) setActive(null); } }}>
-          <button type="button" aria-label="Previous concept" onClick={() => keyboardSelect(keyboardIndex.current - 1)}>←</button>
-          <button type="button" className="showcase-preview-trigger" aria-label={`Preview ${sheets[currentIndex].title}, ${currentIndex + 1} of ${sheets.length}`} onClick={event => previewCurrent(event.timeStamp)}>Preview {String(currentIndex + 1).padStart(2, "0")} <span aria-hidden="true">/ {sheets.length}</span></button>
-          <button type="button" aria-label="Next concept" onClick={() => keyboardSelect(keyboardIndex.current + 1)}>→</button>
-        </div>
-        <button type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} disabled={reducedMotion}>{reducedMotion ? "Motion reduced" : paused ? "Play motion" : "Pause motion"}</button>
       </div>
       <p className="showcase-sr-only" role="status" aria-live="polite">{announcement}</p>
       <dialog ref={dialog} className="showcase-dialog" aria-labelledby="showcase-preview-title" data-lenis-prevent="" onCancel={event => { event.preventDefault(); void closePreview(); }} onClick={event => { if (event.target === event.currentTarget) void closePreview(); }}>
@@ -292,3 +316,4 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
 function SheetContent({ sheet }: { sheet: ShowcaseSheet }) {
   return sheet.image ? <Image src={sheet.image} alt="" width={1400} height={800} unoptimized draggable={false} className="showcase-image" /> : <div className="showcase-blank"><span>{sheet.title}</span><span aria-hidden="true">{sheet.id.slice(-2)}</span></div>;
 }
+
