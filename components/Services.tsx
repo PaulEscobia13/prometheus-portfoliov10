@@ -16,7 +16,7 @@ const groups = [
       ["Inventory & Orders", "Keep track of products, stock, quotations, and customer orders."],
       ["Payments & Deliveries", "Manage payment records and delivery workflows alongside your orders."],
       ["Scheduling & Bookings", "Organize appointments, availability, staff, and customer bookings."],
-      ["Customer Management", "Bring client information and service history into a shared workspace."],
+      ["Client Relational Management (CRM)", "Bring client information and service history into a shared workspace."],
     ],
   },
   {

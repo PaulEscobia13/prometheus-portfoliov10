@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navigation from "../../components/Navigation";
 import Hero from "../../components/Hero";
 import SmoothScroll from "../../components/SmoothScroll";
+import HeroPointer from "../../components/HeroPointer";
 import Services from "../../components/Services";
 import CaseStudySection from "../../components/CaseStudySection";
 import RotatingFavicon from "../../components/RotatingFavicon";
@@ -28,6 +29,7 @@ export default function PrometheusPreview() {
   return (
     <div className="page-wrapper prometheus-preview">
       <SmoothScroll />
+      <HeroPointer />
       <RotatingFavicon />
       <Navigation brand="prometheus" />
       <main className="page-main">

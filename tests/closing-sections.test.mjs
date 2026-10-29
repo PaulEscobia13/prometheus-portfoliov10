@@ -5,9 +5,45 @@ import { createRoot } from "react-dom/client";
 import { JSDOM } from "jsdom";
 import FAQItemModule from "../components/FAQItem.tsx";
 import FooterRevealModule from "../components/FooterReveal.tsx";
+import HeroPointerModule from "../components/HeroPointer.tsx";
 
 const FAQItem = FAQItemModule.default ?? FAQItemModule;
 const FooterReveal = FooterRevealModule.default ?? FooterRevealModule;
+const HeroPointer = HeroPointerModule.default ?? HeroPointerModule;
+
+test("logo cursor scopes mouse feedback, gently moves CTAs, resets on motion changes and cleans up", async t => {
+  // The pointer component's media query matches when fine-pointer motion is enabled.
+  const env = await mount(t, React.createElement(React.Fragment, null,
+    React.createElement(HeroPointer),
+    React.createElement("h1", { className: "prometheus-hero-title" }, "Title"),
+    React.createElement("div", { className: "prometheus-navbar" }, React.createElement("a", { className: "nav-cta", href: "#contacts" }, "Contacts"))), { reduced: true });
+  const title = document.querySelector("h1"), cta = document.querySelector("a"), badge = document.querySelector(".prometheus-logo-cursor");
+  cta.getBoundingClientRect = () => ({ left: 100, top: 100, width: 120, height: 44 });
+  const move = (target, pointerType = "mouse") => {
+    const event = new window.MouseEvent("pointermove", { bubbles: true, clientX: 200, clientY: 135 });
+    Object.defineProperty(event, "pointerType", { value: pointerType });
+    target.dispatchEvent(event);
+  };
+  move(title);
+  assert.equal(badge.dataset.visible, "true");
+  assert.equal(title.classList.contains("has-logo-cursor"), true);
+  move(cta); env.flush();
+  assert.equal(title.classList.contains("has-logo-cursor"), false);
+  assert.equal(badge.dataset.cta, "true");
+  assert.match(cta.style.translate, /^0\.896/);
+  env.changeMotion(false);
+  assert.equal(cta.style.translate, "");
+  assert.equal(env.frames.size, 0);
+  assert.equal(badge.hasAttribute("data-visible"), false);
+  env.changeMotion(true);
+  move(cta, "touch");
+  assert.equal(badge.hasAttribute("data-visible"), false);
+  move(cta); env.flush();
+  await env.unmount();
+  assert.equal(document.querySelector(".prometheus-logo-cursor"), null);
+  assert.equal(env.frames.size, 0);
+  assert.equal(env.listeners.size, 0);
+});
 
 async function mount(t, children, { reduced = false, animate = true } = {}) {
   const dom = new JSDOM("<div id='root'></div>", { pretendToBeVisual: true });
@@ -16,7 +52,7 @@ async function mount(t, children, { reduced = false, animate = true } = {}) {
     saved.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
     Object.defineProperty(globalThis, name, { configurable: true, writable: true, value });
   };
-  for (const name of ["window", "document", "HTMLElement"]) install(name, name === "window" ? dom.window : dom.window[name]);
+  for (const name of ["window", "document", "HTMLElement", "Element"]) install(name, name === "window" ? dom.window : dom.window[name]);
   install("IS_REACT_ACT_ENVIRONMENT", true);
   const listeners = new Set();
   const media = { matches: reduced, addEventListener: (_, fn) => listeners.add(fn), removeEventListener: (_, fn) => listeners.delete(fn) };
