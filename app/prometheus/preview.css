@@ -331,13 +331,19 @@
 .prometheus-services .home-services-content {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
   gap: 1.6rem;
   padding: 2.4rem;
   background: var(--prometheus-off-white);
 }
 .prometheus-services .home-services-content-item {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  min-height: 240px;
+  box-sizing: border-box;
+  justify-self: stretch;
   padding: 2.4rem;
   min-width: 0;
   background: color-mix(in srgb, var(--prometheus-cream) 28%, var(--prometheus-off-white));
@@ -350,15 +356,17 @@
   margin: 0;
   border: 0;
   color: var(--prometheus-ink);
+  font-size: clamp(20px, 1.6vw, 28px);
+  line-height: 1.2;
 }
 .prometheus-service-summary {
   max-width: 29ch;
   margin: 1.6rem 0 2.4rem;
   color: rgb(16 18 22 / 72%);
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 1.6;
 }
-.prometheus-service-list { width: 100%; }
+.prometheus-service-list { width: 100%; margin-top: auto; }
 .prometheus-service-list-toggle {
   display: flex;
   justify-content: space-between;
@@ -367,11 +375,12 @@
   min-height: 44px;
   border-top: 1px solid rgb(16 18 22 / 12%);
   color: var(--prometheus-ink);
-  font-size: 1.4rem;
+  font-size: 14px;
   font-weight: 500;
   list-style: none;
   cursor: pointer;
 }
+.prometheus-service-list-toggle > span:first-child { white-space: nowrap; }
 .prometheus-service-list-toggle::-webkit-details-marker { display: none; }
 .prometheus-service-list-toggle::marker { content: ""; }
 .prometheus-service-list-toggle:hover { color: var(--prometheus-red); }
