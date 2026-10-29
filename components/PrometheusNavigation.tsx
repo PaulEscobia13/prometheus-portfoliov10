@@ -12,7 +12,6 @@ const links = [
 export default function PrometheusNavigation() {
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
@@ -27,8 +26,8 @@ export default function PrometheusNavigation() {
   useEffect(() => {
     const query = window.matchMedia("(max-width: 991px)");
     const update = () => {
-      setMobile(query.matches);
-      if (!query.matches) { setOpen(false); setServicesOpen(false); }
+      setOpen(false);
+      setServicesOpen(false);
     };
     update();
     query.addEventListener("change", update);
@@ -61,11 +60,11 @@ export default function PrometheusNavigation() {
         <div className="navbar_main prometheus-nav-inner">
           <a href="#top" onClick={closeMenu} aria-label="Prometheus home" className="navbar_logo-wrapper w-inline-block"><span className="prometheus-wordmark">prometheus</span></a>
           <div className="prometheus-nav-menu-shell" data-open={open}>
-          <div id="prometheus-menu" ref={menu} className="prometheus-nav-links" data-open={open} inert={mobile && !open} data-lenis-prevent="">
+          <div id="prometheus-menu" ref={menu} className="prometheus-nav-links" data-open={open} inert={!open} data-lenis-prevent="">
             {links.map(link => <div className={`prometheus-nav-item${link.label === "Services" ? " is-services" : ""}`} key={link.label}>
               <div className="prometheus-nav-row">
                 <a className="prometheus-nav-primary-link" href={link.href} onClick={closeMenu} aria-label={link.label}><span className="prometheus-nav-label-window" aria-hidden="true"><span className="prometheus-nav-label-roll"><span>{link.label}</span><span className="prometheus-nav-label-copy">{link.label}</span></span></span></a>
-                {link.label === "Services" && <button type="button" className="prometheus-services-toggle" aria-label={servicesOpen ? "Collapse services" : "Expand services"} aria-expanded={servicesOpen} aria-controls="prometheus-services-submenu" onClick={() => setServicesOpen(value => !value)}><span>Services</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="m3 6 6 6 6-6" stroke="currentColor" strokeWidth="1.6" /></svg></button>}
+                {link.label === "Services" && <button type="button" className="prometheus-services-toggle" aria-label={servicesOpen ? "Collapse services" : "Expand services"} aria-expanded={servicesOpen} aria-controls="prometheus-services-submenu" onClick={() => setServicesOpen(value => !value)}><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="m3 6 6 6 6-6" stroke="currentColor" strokeWidth="1.6" /></svg></button>}
               </div>
               {link.label === "Services" && <div id="prometheus-services-submenu" className="prometheus-services-submenu" hidden={!servicesOpen}>
                 {[
@@ -77,8 +76,8 @@ export default function PrometheusNavigation() {
             </div>)}
           </div>
           </div>
-          <a href="#contacts" onClick={closeMenu} className="button-cta nav-cta w-inline-block">
-            <span className="button_text">Contacts</span>
+          <a href="#contacts" onClick={closeMenu} aria-label="Contact Us" className="button-cta nav-cta w-inline-block">
+            <span className="button_text">Contact Us</span>
             <span className="button_arrow-wrapper-2"><span className="code-embed navbar_button-arrow w-embed"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7H12M12 7L6.5 1.5M12 7L6.5 12.5" stroke="currentColor" strokeWidth="1.8" /></svg></span></span>
           </a>
           <button ref={toggle} type="button" className="prometheus-menu-toggle" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="prometheus-menu" onClick={() => { setOpen(value => !value); setServicesOpen(false); }}>
