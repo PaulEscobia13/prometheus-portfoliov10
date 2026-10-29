@@ -1,6 +1,5 @@
 import { GeistSans } from "geist/font/sans";
 import { pricingPlans } from "../content/pricing";
-import { PricingAudienceSelector } from "./PricingSelector";
 
 export default function PricingSection() {
   return (
@@ -11,7 +10,6 @@ export default function PricingSection() {
           <p><strong>We help you get where you want to go.</strong></p>
         </header>
 
-        <PricingAudienceSelector />
         <div className="pricing-plans">
           {pricingPlans.map(plan => (
             <article key={plan.id} className={`pricing-plan${plan.featured ? " pricing-plan-featured" : ""}`} aria-labelledby={`pricing-${plan.id}-title`}>
