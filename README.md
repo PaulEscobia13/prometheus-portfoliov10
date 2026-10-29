@@ -68,3 +68,12 @@ Book a Call opens `/prometheus/contact`, featuring Oliver Jumawid, Co-Founder & 
 The required name, email, budget, and project fields continue to the existing Cal.com consultation calendar with prefilled details.
 The visitor must finish scheduling on Cal.com; this page does not store inquiries or send email independently.
 Budget ranges are editable in `components/ProjectInquiry.tsx`.
+
+
+### Showcase artwork footer
+
+The large footer wordmark crossfades between the same local artwork used by #MadeByPrometheus every 4.5 seconds while visible.
+Artwork is clipped inside the existing letters, preserving the footer layout and cream base.
+The gallery and footer read their canonical fourteen slots through `lib/showcase-assets.ts`.
+Only the next artwork is loaded as needed; failed images preserve the previous appearance.
+Offscreen and hidden-tab playback pauses, and reduced-motion preferences show the static cream wordmark.
