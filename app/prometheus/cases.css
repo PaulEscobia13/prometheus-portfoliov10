@@ -200,3 +200,7 @@
 .prometheus-case-tags { gap: .8rem; }
 .prometheus-case-tags .prometheus-case-country { padding-inline: 1.4rem; }
 .prometheus-case-country svg { display: block; border-radius: .2rem; }
+
+.prometheus-case-avatar.is-photo { object-fit: cover; object-position: 62% 40%; background-image: none; }
+.prometheus-case-brand-cover { padding: 0; }
+.prometheus-case-brand-cover img { display: block; width: 100%; height: auto; object-fit: contain; }

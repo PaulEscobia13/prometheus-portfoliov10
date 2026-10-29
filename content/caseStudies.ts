@@ -9,6 +9,7 @@ export type CaseStudy = {
   logo: string;
   liveUrl: string;
   screenshots?: readonly string[];
+  coverImage?: string;
   feedback: {
     quote: string;
     name: string;
@@ -16,12 +17,14 @@ export type CaseStudy = {
     rating: number;
     isSample: boolean;
     portraitPosition: "left" | "right";
+    portrait?: string;
   };
 };
 
 export const caseStudies: readonly CaseStudy[] = [
   {
     id: "furniture-odyssey",
+    coverImage: "/cases/furniture-odyssey-cover.png",
     name: "Furniture Odyssey",
     tags: ["Website", "Business System"],
     headline: "A connected furniture platform, from product discovery to business operations.",
@@ -32,8 +35,9 @@ export const caseStudies: readonly CaseStudy[] = [
     liveUrl: "https://furniture-odyssey-catalog-website.vercel.app/",
     feedback: {
       quote: "The team paid attention to how our business works and made the platform easy to use. From browsing products to managing orders, the experience feels connected, clear, and thoughtfully put together.",
-      name: "Alex Reyes",
-      role: "Sample client representative",
+      name: "Jane Escobia",
+      role: "Owner, Furniture Odyssey",
+      portrait: "/cases/jane-escobia.jpg",
       rating: 5,
       isSample: true,
       portraitPosition: "left",

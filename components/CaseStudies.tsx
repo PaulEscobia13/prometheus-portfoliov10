@@ -1,4 +1,5 @@
 import type { CaseStudy } from "../content/caseStudies";
+import Image from "next/image";
 
 export default function CaseStudies({ cases }: { cases: readonly CaseStudy[] }) {
   return (
@@ -23,7 +24,7 @@ export default function CaseStudies({ cases }: { cases: readonly CaseStudy[] }) 
                 </div>
                 <div className="prometheus-case-footer">
                   <div className="prometheus-case-person">
-                    <span className={`prometheus-case-avatar is-${item.feedback.portraitPosition}`} role="img" aria-label="Fictional sample client portrait" />
+                    {item.feedback.portrait ? <Image src={item.feedback.portrait} alt={item.feedback.name} width={64} height={64} className="prometheus-case-avatar is-photo" /> : <span className={`prometheus-case-avatar is-${item.feedback.portraitPosition}`} role="img" aria-label="Fictional sample client portrait" />}
                     <div className="prometheus-case-signature">
                       <p className="prometheus-case-name">{item.feedback.name}</p>
                       <p className="prometheus-case-category">{item.feedback.role}</p>
@@ -38,7 +39,8 @@ export default function CaseStudies({ cases }: { cases: readonly CaseStudy[] }) 
                 </div>
               </div>
               <div className="prometheus-case-gallery" aria-label={`${item.name} project gallery`}>
-                {(item.screenshots ?? []).map((source, imageIndex) => (
+                {item.coverImage && <figure className="prometheus-case-visual prometheus-case-brand-cover"><Image src={item.coverImage} alt={`${item.name} brand artwork`} width={1254} height={1254} sizes="(max-width: 767px) 100vw, 60vw" /></figure>}
+                {(item.coverImage ? (item.screenshots ?? []).slice(1) : (item.screenshots ?? [])).map((source, imageIndex) => (
                   <figure key={source} className={`prometheus-case-visual prometheus-case-screenshot-card is-${item.id}`}>
                     <a href={item.liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${item.name} live website`} className={`prometheus-case-device${source.includes("-mobile") ? " is-mobile" : ""}`}>
                       <div className="prometheus-case-device-bar" aria-hidden="true"><i /><i /><i /><span>{item.name}</span></div>
