@@ -317,8 +317,8 @@
 /* Move only the artwork and light; page content and contrast stay stable. */
 @media (prefers-reduced-motion: no-preference) {
   .prometheus-background-stage::before {
-    background-size: 100% 100%, 124% auto;
-    animation: prometheus-ambient-waves 12s ease-in-out infinite alternate;
+    background-size: 100% 100%, 150% auto;
+    animation: prometheus-ambient-waves 6s ease-in-out infinite alternate;
   }
   .prometheus-intro-stage::before {
     content: "";
@@ -329,8 +329,8 @@
     background-image:
       radial-gradient(ellipse at 25% 60%, rgb(216 75 60 / 38%), transparent 55%),
       radial-gradient(ellipse at 75% 30%, rgb(191 70 70 / 22%), transparent 50%);
-    background-size: 160% 150%;
-    animation: prometheus-ambient-light 8s ease-in-out infinite alternate;
+    background-size: 220% 180%;
+    animation: prometheus-ambient-light 4s ease-in-out infinite alternate;
   }
 }
 @keyframes prometheus-ambient-waves {
