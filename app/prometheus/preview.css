@@ -327,20 +327,69 @@
   color: var(--prometheus-off-white);
 }
 
-.prometheus-services .home-title-upcase { color: var(--prometheus-cream); }
-
+.prometheus-services .home-services-top { display: flex; justify-content: center; }
 .prometheus-services .home-services-content {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 1.6rem;
+  padding: 2.4rem;
   background: var(--prometheus-off-white);
 }
-
 .prometheus-services .home-services-content-item {
+  display: block;
+  padding: 2.4rem;
+  min-width: 0;
   background: color-mix(in srgb, var(--prometheus-cream) 28%, var(--prometheus-off-white));
   color: var(--prometheus-ink);
-  min-width: 0;
 }
-
 .prometheus-services .home-services-content-item-title {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: 0;
   color: var(--prometheus-ink);
+}
+.prometheus-service-summary {
+  max-width: 29ch;
+  margin: 1.6rem 0 2.4rem;
+  color: rgb(16 18 22 / 72%);
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+.prometheus-service-list { width: 100%; }
+.prometheus-service-list-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.6rem;
+  min-height: 44px;
+  border-top: 1px solid rgb(16 18 22 / 12%);
+  color: var(--prometheus-ink);
+  font-size: 1.4rem;
+  font-weight: 500;
+  list-style: none;
+  cursor: pointer;
+}
+.prometheus-service-list-toggle::-webkit-details-marker { display: none; }
+.prometheus-service-list-toggle::marker { content: ""; }
+.prometheus-service-list-toggle:hover { color: var(--prometheus-red); }
+.prometheus-service-list-toggle:focus-visible { outline: 2px solid var(--prometheus-red); outline-offset: 4px; }
+.prometheus-service-list-plus { font-size: 2rem; line-height: 1; transition: transform .2s ease; }
+.prometheus-service-list[open] > summary .prometheus-service-list-plus { transform: rotate(45deg); }
+.prometheus-services .prometheus-service-list .home-services-content-items { display: block; width: 100%; margin-top: .8rem; }
+.prometheus-services .prometheus-service-list .prometheus-service { width: 100%; }
+.prometheus-services .prometheus-service-list .home-services-content-item-link { min-height: 56px; padding: 1.4rem 0; }
+.prometheus-services .prometheus-service-list .home-services-content-item-text { font-size: 1.4rem; line-height: 1.5; }
+.prometheus-service-list .home-services-content-item-icon svg { width: 22px; height: 22px; }
+@media (max-width: 767px) {
+  .prometheus-services .home-services-content { grid-template-columns: 1fr; padding: 1.6rem; }
+  .prometheus-services .home-services-content-item { padding: 2rem; }
+  .prometheus-service-summary { max-width: none; margin-block: 1.2rem 1.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-service-list-plus { transition: none; }
 }
 
 .prometheus-service { width: 100%; min-width: 0; }
