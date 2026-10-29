@@ -1,12 +1,13 @@
 import { GeistSans } from "geist/font/sans";
 import { pricingPlans } from "../content/pricing";
+import PricingReveal from "./PricingReveal";
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className={`prometheus-pricing ${GeistSans.variable}`} aria-labelledby="pricing-title">
+    <PricingReveal className={GeistSans.variable}>
       <div className="pricing-container">
         <header className="pricing-intro">
-          <h2 id="pricing-title"><em>The Full Premium Experience.<br />Introductory Pricing.</em></h2>
+          <h2 id="pricing-title"><em>Get a Premium Experience<br />at a Discounted Rate.</em></h2>
           <p><strong>We help you get where you want to go.</strong></p>
         </header>
 
@@ -19,12 +20,22 @@ export default function PricingSection() {
                 {plan.unit && <span className="pricing-plan-unit">{plan.unit}</span>}
               </p>
               <p className="pricing-plan-description">{plan.description}</p>
+              <ul className="pricing-plan-features" aria-label={`${plan.name} features`}>
+                {plan.features.map(feature => (
+                  <li key={feature}>
+                    <span className="pricing-feature-check" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="m3.5 8 3 3 6-6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
               <a className="pricing-plan-action" href="#contacts" aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
             </article>
           ))}
         </div>
-        <p className="pricing-early-rate-note">These are our early rates. Prices will increase as we grow.</p>
+        <p className="pricing-early-rate-note">Discounted rates for our first 5 clients. From planning to launch, we’ll be with you every step of the way.</p>
       </div>
-    </section>
+    </PricingReveal>
   );
 }

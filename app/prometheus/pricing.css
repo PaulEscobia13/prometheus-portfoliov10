@@ -109,6 +109,10 @@
 .pricing-plan-price > span:first-child { font-size: clamp(3.6rem, 3.1vw, 4.8rem); font-weight: 500; line-height: 1.1; letter-spacing: -.065em; }
 .pricing-plan-unit { color: rgb(16 18 22 / 48%); font-size: 1.4rem; line-height: 1.5; letter-spacing: -.025em; }
 .pricing-plan-description { flex-grow: 1; margin: 0 0 2.4rem; color: rgb(16 18 22 / 68%); font-size: 1.5rem; line-height: 1.55; letter-spacing: -.025em; }
+.pricing-plan-features { display: grid; align-content: start; gap: 1.6rem; margin: 0 0 3.2rem; padding: 0; list-style: none; }
+.pricing-plan-features li { display: flex; align-items: flex-start; gap: 1.2rem; color: rgb(16 18 22 / 78%); font-size: 1.5rem; line-height: 1.6; }
+.pricing-feature-check { display: grid; place-items: center; flex: 0 0 2rem; width: 2rem; height: 2rem; margin-top: .2rem; border: 1px solid rgb(100 43 45 / 38%); border-radius: .5rem; background: rgb(100 43 45 / 7%); color: #642b2d; }
+.pricing-plan-features svg { display: block; }
 .pricing-plan-action {
   display: inline-flex;
   align-self: flex-start;
@@ -204,10 +208,29 @@
 
 /* Shared rows align prices and actions to the longest plan copy. */
 @media (min-width: 768px) {
-  .pricing-plans { grid-template-rows: auto auto minmax(min-content, 1fr) auto; row-gap: 0; }
-  .pricing-plan { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+  .pricing-plans { grid-template-rows: auto auto auto minmax(min-content, 1fr) auto; row-gap: 0; }
+  .pricing-plan { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
   .pricing-plan-description { flex-grow: 0; }
   .pricing-plan-action { justify-self: start; align-self: start; }
+}
+
+/* Folira-inspired expanding ellipse. Default/SSR content remains fully visible. */
+@supports (mask-image: radial-gradient(black, transparent)) {
+  .prometheus-pricing[data-animated="true"][data-reveal-complete="false"] {
+    -webkit-mask-image: radial-gradient(ellipse closest-side, #000 99.7%, transparent 100%);
+    mask-image: radial-gradient(ellipse closest-side, #000 99.7%, transparent 100%);
+    -webkit-mask-size: var(--pricing-mask-width) var(--pricing-mask-height);
+    mask-size: var(--pricing-mask-width) var(--pricing-mask-height);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  .prometheus-pricing[data-animated="true"] > .pricing-container { transform: scale(var(--pricing-content-scale, 1)); transform-origin: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prometheus-pricing { -webkit-mask-image: none !important; mask-image: none !important; }
+  .prometheus-pricing > .pricing-container { transform: none !important; }
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
