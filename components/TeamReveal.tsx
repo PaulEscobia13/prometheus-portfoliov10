@@ -5,7 +5,6 @@ import { useEffect, useRef, type ReactNode } from "react";
 export default function TeamReveal({ children }: { children: ReactNode }) {
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const skip = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const root = section.current;
@@ -24,7 +23,6 @@ export default function TeamReveal({ children }: { children: ReactNode }) {
       const progress = Math.min(1, Math.max(0, (-root.getBoundingClientRect().top / distance - .08) / .82));
       root.style.setProperty("--team-open", String(progress));
       root.dataset.revealed = String(progress >= 1);
-      if (skip.current) skip.current.inert = progress >= 1 || media.matches;
     }
 
     function schedule() {
@@ -53,16 +51,6 @@ export default function TeamReveal({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  function revealTeam() {
-    const root = section.current;
-    if (!root) return;
-    const distance = root.dataset.animated === "true" ? window.innerHeight : 0;
-    const top = window.scrollY + root.getBoundingClientRect().top + distance;
-    const request = new window.CustomEvent("prometheus:scroll-to", { detail: top, cancelable: true });
-    if (window.dispatchEvent(request)) window.scrollTo({ top, behavior: "instant" });
-    root.querySelector<HTMLElement>("#team-title")?.focus({ preventScroll: true });
-  }
-
   return (
     <section id="about" ref={section} className="prometheus-team" aria-labelledby="team-title">
       <div ref={stage} className="team-sticky">
@@ -70,9 +58,7 @@ export default function TeamReveal({ children }: { children: ReactNode }) {
         <div className="team-cover" aria-hidden="true">
           <div className="team-cover-half team-cover-left"><div className="team-cover-face"><span>Team</span></div></div>
           <div className="team-cover-half team-cover-right"><div className="team-cover-face"><span>Team</span></div></div>
-          <p className="team-cover-caption">The people behind Prometheus</p>
         </div>
-        <button ref={skip} className="team-reveal-skip" type="button" onClick={revealTeam}>Meet the team <span aria-hidden="true">↓</span></button>
       </div>
     </section>
   );

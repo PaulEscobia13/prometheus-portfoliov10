@@ -266,7 +266,6 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
         </div>
       </div>
       <div className="showcase-toolbar">
-        <p>{sheets.some(sheet => sheet.image) ? "Concept explorations" : "Blank concept sheets"}</p>
         <div className="showcase-controls" role="group" aria-label={`Browse all ${sheets.length} concepts`} onFocusCapture={() => setKeyboardFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) { setKeyboardFocused(false); if (!selected) setActive(null); } }}>
           <button type="button" aria-label="Previous concept" onClick={() => keyboardSelect(keyboardIndex.current - 1)}>←</button>
           <button type="button" className="showcase-preview-trigger" aria-label={`Preview ${sheets[currentIndex].title}, ${currentIndex + 1} of ${sheets.length}`} onClick={event => previewCurrent(event.timeStamp)}>Preview {String(currentIndex + 1).padStart(2, "0")} <span aria-hidden="true">/ {sheets.length}</span></button>

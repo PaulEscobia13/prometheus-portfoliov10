@@ -32,7 +32,7 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
    if (playMarkup) html = html.replace(playMarkup, "");
    prometheusHero.paragraphs.forEach((text, index) => {
      html = html.replace(new RegExp(`<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">[\\s\\S]*?<\\/p>`),
-       `<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">${escapeHtml(text)}</p>`);
+       `<p class="home-hero-quote_text home-hero-quote_text-${index + 1}">${escapeHtml(text).replace(/([,.]) /g, "$1&#8194;")}</p>`);
    });
    const tags = prometheusHero.tags.map(text => `<a href="#services" class="link-white-text w-inline-block"><span class="hero_title-tag home-hero-tag">${escapeHtml(text)}</span></a>`).join("");
    html = html.replace(/<a\b[^>]*href="https:\/\/arounda.agency\/industries\/(saas|ai|web3)"[^>]*>[\s\S]*?<\/a>/g,
@@ -48,6 +48,10 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
      ).join("")}</div>`
    );
    html = html.replace("Partnering with enterprise platforms across global markets", "Trusted by our clients");
+   // Keep the headline, supporting text and CTA in their own full-height screen.
+   html = html.replace('class="hero_main"', 'class="prometheus-hero-layout"');
+   html = html.replace(/(<div class="prometheus-hero-layout"[^>]*>)/, '$1<div class="hero_main prometheus-hero-screen">');
+   html = html.replace(/(<div id="[^"]*" class="home-hero_logos-wrapper")/, '</div>$1');
  }
  return <div dangerouslySetInnerHTML={{__html:html}} />;
 }

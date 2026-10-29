@@ -1,7 +1,7 @@
-// Sample profiles only. Replace these names, roles and portrait paths together.
+// Team portraits will be supplied separately.
 export const teamMembers = [
-  { id: "alex", name: "Alex Morgan", role: "Product Designer", portrait: "/team/placeholder-01.svg" },
-  { id: "jamie", name: "Jamie Rivera", role: "Software Engineer", portrait: "/team/placeholder-02.svg" },
-  { id: "sam", name: "Sam Chen", role: "Strategy & Operations", portrait: "/team/placeholder-03.svg" },
-  { id: "taylor", name: "Taylor Brooks", role: "Creative Developer", portrait: "/team/placeholder-04.svg" },
+  { id: "paul", name: "Paul Escobia", role: "Lead/Product", portrait: "/team/paul-escobia.png" },
+  { id: "philip", name: "Philip Martinez", role: "Executive/Developer", portrait: "/team/philip-martinez.png" },
+  { id: "rex", name: "Rex Oliver Jumawid", role: "DevOps", portrait: "/team/rex-oliver-jumawid.png" },
+  { id: "adrian", name: "Adrian Muros", role: "Software Engineer", portrait: "/team/adrian-muros.png" },
 ] as const;

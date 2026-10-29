@@ -3,6 +3,7 @@ import test from "node:test";
 import { calculateShowcaseLoop, resizePhase, wrapPhase } from "../lib/showcase-loop.ts";
 
 const scenarios = [
+  { name: "fourteen artwork cards", viewport: 1920, pitch: 300, count: 14, extent: 550 },
   { name: "mobile", viewport: 375, pitch: 170, count: 12, extent: 269 },
   { name: "desktop", viewport: 1440, pitch: 230, count: 12, extent: 421 },
   { name: "ultrawide", viewport: 7680, pitch: 170, count: 12, extent: 269 },

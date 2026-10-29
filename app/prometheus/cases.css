@@ -50,7 +50,7 @@
   min-width: 0;
   min-height: 54rem;
   margin: 0;
-  border: 1px solid rgb(255 244 234 / 10%);
+  border: 0;
   border-radius: 4rem;
   background: radial-gradient(ellipse at 70% 20%, rgb(126 172 181 / 38%), transparent 65%), #18252a;
 }
@@ -202,5 +202,97 @@
 .prometheus-case-country svg { display: block; border-radius: .2rem; }
 
 .prometheus-case-avatar.is-photo { object-fit: cover; object-position: 62% 40%; background-image: none; }
-.prometheus-case-brand-cover { height: clamp(32rem, 40vw, 54rem); min-height: 0; padding: 0; }
-.prometheus-case-brand-cover img { position: absolute; inset: 2rem; display: block; width: calc(100% - 4rem); height: calc(100% - 4rem); object-fit: contain; }
+.prometheus-case-brand-cover { height: auto; aspect-ratio: 1614 / 975; min-height: 0; padding: 0; background: #f1e8d9; }
+.prometheus-case-brand-cover img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+
+.prometheus-case-testimonial,
+.prometheus-case-category { letter-spacing: normal; word-spacing: .04em; }
+
+/* Longer client copy retains the reference's compact editorial hierarchy. */
+@media (min-width: 992px) {
+  .prometheus-cases > .home-container {
+    width: 100%;
+    max-width: none;
+    padding-left: clamp(24px, 2vw, 40px);
+    padding-right: 16px;
+  }
+  .prometheus-case-layout {
+    grid-template-columns: minmax(0, 34%) minmax(0, 1fr);
+    gap: clamp(56px, 7vw, 132px);
+  }
+  .prometheus-case-gallery { gap: 12px; }
+  .prometheus-case-visual { border-radius: 40px; }
+  .prometheus-case-brand-cover {
+    aspect-ratio: 1.406;
+    background: #f1e8d9;
+  }
+  .prometheus-case-tags { margin-bottom: 32px; }
+  .prometheus-case-title {
+    font-size: clamp(28px, 1.8vw, 36px);
+    line-height: 1.28;
+    letter-spacing: -.025em;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    text-wrap: pretty;
+  }
+  .prometheus-case-rating-row { gap: 18px; min-height: 28px; }
+  .prometheus-case-review-source { font-size: 26px; }
+  .prometheus-case-stars { gap: 8px; }
+  .prometheus-case-testimonial {
+    max-width: none;
+    margin-top: 18px;
+    font-size: clamp(17px, 1.05vw, 20px);
+    line-height: 1.5;
+    word-spacing: normal;
+  }
+  .prometheus-case-footer { margin-top: 24px; gap: 16px; }
+  .prometheus-case-person { gap: 16px; }
+  .prometheus-case-footer .prometheus-case-name { font-size: 24px; line-height: 1.35; }
+  .prometheus-case-category { margin-top: 4px; font-size: 16px; line-height: 1.4; word-spacing: normal; }
+  .prometheus-case-controls :is(a, button) { width: 60px; height: 60px; }
+}
+@media (min-width: 992px) and (max-height: 800px) {
+  .prometheus-case-tags { margin-bottom: 24px; }
+  .prometheus-case-title { font-size: clamp(26px, 1.65vw, 32px); padding-bottom: 22px; margin-bottom: 22px; }
+  .prometheus-case-testimonial { font-size: 17px; line-height: 1.45; margin-top: 14px; }
+  .prometheus-case-footer { margin-top: 18px; }
+}
+
+/* Every card uses the same frame, independent of its content. */
+.prometheus-case-gallery > .prometheus-case-visual {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1614 / 975;
+  contain: size;
+  flex-shrink: 0;
+}
+.prometheus-case-gallery .prometheus-case-overview {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  height: 100%;
+}
+@media (min-width: 992px) {
+  .prometheus-case-gallery > .prometheus-case-visual { aspect-ratio: 1.406; }
+}
+
+.prometheus-case-avatar.is-team { object-position: center; }
+.prometheus-case-gallery > figure { scroll-margin-top: 150px; }
+
+.prometheus-case-showcase { padding: 0; background: #e9edef; }
+.prometheus-case-showcase > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.prometheus-case-review:not(:has(.prometheus-case-rating-row)) .prometheus-case-testimonial { margin-top: 0; }
+
+#case-piercing-corner .prometheus-case-brand-cover > img { object-fit: cover; }
+.prometheus-case-showcase.is-full-screenshot { background-size: cover; background-position: center; }
+.prometheus-case-showcase.is-full-screenshot::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+}
+.prometheus-case-showcase.is-full-screenshot > img { object-fit: contain; }

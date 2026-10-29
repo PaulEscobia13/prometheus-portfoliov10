@@ -1,27 +1,9 @@
 export const frequentlyAskedQuestions = [
-  {
-    id: "scope",
-    question: "Can I request more than one thing?",
-    answer: "Yes. Share everything you have in mind and we’ll help you prioritize it. Each project starts with an agreed scope; additional requests can be planned as a next phase or discussed as part of an ongoing partnership.",
-  },
-  {
-    id: "team",
-    question: "Who does the work?",
-    answer: "You’ll work directly with the Prometheus team. We bring design and development together, so the people shaping your website or system stay involved from the first conversation through delivery.",
-  },
-  {
-    id: "timeline",
-    question: "How fast does Prometheus work?",
-    answer: "The timeline depends on what we’re building, the content available, and the integrations involved. We’ll agree on milestones before starting and keep you updated as the work progresses.",
-  },
-  {
-    id: "feedback",
-    question: "What if I want something changed?",
-    answer: "Feedback is part of the process. We’ll review the work together and refine it within the agreed scope. If an idea changes the direction or adds new features, we’ll discuss its impact before moving forward.",
-  },
-  {
-    id: "start",
-    question: "How do I get started?",
-    answer: "Start with a conversation about your business, your users, and the problem you want to solve. Bring any existing website, examples, or workflow notes, and we’ll help define a practical next step.",
-  },
+  { id: "free-start", question: "Is it really free to get started?", answer: "Yes! For our business website offer, we'll build an initial version for you to see first, with no upfront payment, contract, or commitment. Once you've seen our work and you're happy with it, we can discuss the agreement and move forward." },
+  { id: "initial-build", question: "What if I don't like what you've built?", answer: "No worries! You're free to walk away without paying for the initial build. We want you to feel confident about what you're getting before making any commitment." },
+  { id: "build-first", question: "Why do you build first before asking for payment?", answer: "Because we believe our work should speak for itself. Instead of asking you to trust promises, we'd rather show you what we can actually deliver." },
+  { id: "modular-development", question: "What if I only need one feature instead of an entire system?", answer: "That's exactly what our Modular Development service is for! We can focus on solving one major business problem first, build and deploy a working solution, then expand it with additional features whenever you're ready." },
+  { id: "budget", question: "What if my budget is lower than your listed prices?", answer: "Tell us what you're working with! We're happy to explore what we can realistically build within your budget. Sometimes, starting with a smaller but useful solution is all you need." },
+  { id: "payment", question: "Are your prices one-time payments or monthly subscriptions?", answer: "Our listed project prices are one-time development fees. Any optional paid services, third-party subscriptions, or future upgrades will be discussed separately before you agree to them." },
+  { id: "hosting-domain", question: "Do I need to purchase hosting or a domain?", answer: "Our Business Website package includes free website hosting and a branded subdomain. If you'd prefer your own custom domain, we can help you set that up, with any additional costs discussed beforehand." },
 ] as const;

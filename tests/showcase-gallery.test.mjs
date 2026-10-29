@@ -146,10 +146,10 @@ test("initial reduced motion disables autoplay and WAAPI while keeping keyboard 
   const motionControl = [...document.querySelectorAll("button")].find(button => button.textContent === "Motion reduced");
   assert.ok(motionControl?.disabled);
   await gallery.key("ArrowRight");
-  assert.match(document.querySelector('[role="status"]').textContent, /Concept 02/);
+  assert.match(document.querySelector('[role="status"]').textContent, /Hardware/);
   await gallery.key("Enter");
   assert.ok(gallery.dialog.open);
-  assert.equal(document.querySelector("#showcase-preview-title").textContent, "Concept 02");
+  assert.equal(document.querySelector("#showcase-preview-title").textContent, "Hardware");
   assert.equal(document.activeElement.getAttribute("aria-label"), "Close preview");
   assert.equal(document.documentElement.style.overflow, "hidden");
   assert.equal(gallery.animations.length, 0);
@@ -281,15 +281,15 @@ test("Previous and Next wrap accessibly and announce the concept without stage-o
   const status = document.querySelector('[role="status"]');
   await gallery.focus(previous);
   await gallery.click(previous);
-  assert.equal(status.textContent, "Concept 12, 12 of 12.");
-  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Concept 12, 12 of 12");
+  assert.equal(status.textContent, "Wedding RSVP, 14 of 14.");
+  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Wedding RSVP, 14 of 14");
   assert.equal(document.activeElement, previous);
   await gallery.focus(next);
   await gallery.click(next);
-  assert.equal(status.textContent, "Concept 01, 1 of 12.");
-  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Concept 01, 1 of 12");
+  assert.equal(status.textContent, "Nail Salon, 1 of 14.");
+  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Nail Salon, 1 of 14");
   assert.equal(document.activeElement, next);
-  assert.equal(document.querySelector(".showcase-controls").getAttribute("aria-label"), "Browse all 12 concepts");
+  assert.equal(document.querySelector(".showcase-controls").getAttribute("aria-label"), "Browse all 14 concepts");
   assert.equal(gallery.dialog.open, false);
 });
 
@@ -316,5 +316,5 @@ test("resizing keeps the selected card centered while stage or browse controls r
   await gallery.resize({ viewport: 1920, pitch: 310, sheetWidth: 800, extent: 500 });
   assertCentered("sheet-09");
   assert.equal(document.activeElement, next);
-  assert.equal(document.querySelector('[role="status"]').textContent, "Concept 09, 9 of 12.");
+  assert.equal(document.querySelector('[role="status"]').textContent, "Lendfolio, 9 of 14.");
 });

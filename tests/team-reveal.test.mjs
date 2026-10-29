@@ -7,7 +7,7 @@ import TeamRevealModule from "../components/TeamReveal.tsx";
 
 const TeamReveal = TeamRevealModule.default ?? TeamRevealModule;
 
-test("team reveal follows scroll in both directions, skips accessibly, and respects live motion changes", async () => {
+test("team reveal follows scroll in both directions without a skip button and respects live motion changes", async () => {
   const dom = new JSDOM("<div id='root'></div>", { pretendToBeVisual: true });
   const saved = new Map();
   const install = (name, value) => {
@@ -42,7 +42,7 @@ test("team reveal follows scroll in both directions, skips accessibly, and respe
   try {
     await act(async () => root.render(React.createElement(TeamReveal, null, React.createElement("h2", { id: "team-title", tabIndex: -1 }, "Team"))));
     const section = document.querySelector("#about");
-    const button = document.querySelector("button");
+    assert.equal(document.querySelector(".team-reveal-skip"), null);
     assert.equal(section.dataset.animated, "true");
     assert.equal(section.style.getPropertyValue("--team-height"), "1200px");
     assert.equal(section.style.getPropertyValue("--team-open"), "0");
@@ -52,32 +52,16 @@ test("team reveal follows scroll in both directions, skips accessibly, and respe
     assert.equal(frames.size, 1, "scroll work is coalesced into one frame");
     flush();
     assert.ok(Number(section.style.getPropertyValue("--team-open")) > .5);
-    assert.equal(button.inert, false, "skip stays usable throughout the reveal");
     top = -800;
     window.dispatchEvent(new window.Event("scroll")); flush();
     assert.equal(section.dataset.revealed, "true");
-    assert.equal(button.inert, true, "finished reveal removes its skip button from keyboard order");
     top = 100;
     window.dispatchEvent(new window.Event("scroll")); flush();
     assert.equal(section.dataset.revealed, "false");
     assert.equal(section.style.getPropertyValue("--team-open"), "0");
-    assert.equal(button.inert, false);
-    await act(async () => button.click());
-    assert.equal(scrollTarget.top, 2800);
-    assert.equal(scrollTarget.behavior, "instant");
-    assert.equal(document.activeElement.id, "team-title");
-    scrollTarget = undefined;
-    let smoothTarget;
-    const smoothHandler = event => { event.preventDefault(); smoothTarget = event.detail; };
-    window.addEventListener("prometheus:scroll-to", smoothHandler);
-    await act(async () => button.click());
-    assert.equal(smoothTarget, 2800, "smooth scrolling receives the exact reveal endpoint");
-    assert.equal(scrollTarget, undefined, "native scrolling cannot compete with a handled smooth scroll");
-    window.removeEventListener("prometheus:scroll-to", smoothHandler);
     media.matches = true;
     for (const listener of listeners) listener();
     assert.equal(section.dataset.animated, "false");
-    assert.equal(button.inert, true);
     media.matches = false;
     for (const listener of listeners) listener();
     assert.equal(section.dataset.animated, "true");

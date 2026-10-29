@@ -25,6 +25,8 @@
 
 .prometheus-preview .button-primary {
   color: var(--prometheus-off-white);
+  /* Magnetic translate is animated by HeroPointer, without a second CSS tween. */
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
 
 .prometheus-preview .button-primary :is(.button-primary_arrow, .button-primary_text-wrapper) {
@@ -43,6 +45,7 @@
 .prometheus-preview .nav-cta {
   color: var(--prometheus-ink);
   background-color: var(--prometheus-button-light);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
 
 /* The expanding circle is the captured navbar's animated background layer. */
@@ -687,4 +690,22 @@
 
 @media (max-width: 479px) {
   .prometheus-wordmark { font-size: 2.5rem; }
+}
+
+/* Reserve the first viewport for the hero; frame the client strip evenly. */
+.prometheus-preview .home-section-hero { padding-bottom: 0; }
+.prometheus-preview .prometheus-hero-screen {
+  visibility: visible;
+  min-height: calc(100svh - var(--_spacing---space--140));
+  align-content: start;
+  padding-top: clamp(3.6rem, 6.5svh, 6.8rem);
+}
+.prometheus-preview .home-hero_logos-wrapper {
+  margin-top: 0;
+  padding-block: clamp(3rem, 3vw, 4rem);
+  padding-bottom: clamp(6rem, 6vw, 8rem);
+}
+.prometheus-preview .prometheus-services { padding-top: 0; }
+@media (max-width: 767px) {
+  .prometheus-preview .prometheus-hero-screen { min-height: calc(100svh - 13.6rem); }
 }

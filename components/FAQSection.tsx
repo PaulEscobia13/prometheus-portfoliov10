@@ -6,7 +6,7 @@ export default function FAQSection() {
     <section id="faq" className="prometheus-faq" aria-labelledby="faq-title">
       <div className="prometheus-faq-container">
         <header className="prometheus-faq-header">
-          <h2 id="faq-title">Frequently asked<br />questions</h2>
+          <h2 id="faq-title">Frequently Asked<br />Questions</h2>
           <p className="prometheus-faq-label">FAQ’S <span>07</span></p>
         </header>
         <div className="prometheus-faq-list">
