@@ -29,7 +29,7 @@ export default function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <a className="pricing-plan-action" href={contact.meetingUrl} aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
+              <a className="pricing-plan-action" href={contact.meetingUrl} target="_blank" rel="noopener noreferrer" aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
             </article>
           ))}
         </div>
