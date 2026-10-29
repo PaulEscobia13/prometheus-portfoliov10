@@ -202,5 +202,5 @@
 .prometheus-case-country svg { display: block; border-radius: .2rem; }
 
 .prometheus-case-avatar.is-photo { object-fit: cover; object-position: 62% 40%; background-image: none; }
-.prometheus-case-brand-cover { padding: 0; }
-.prometheus-case-brand-cover img { display: block; width: 100%; height: auto; object-fit: contain; }
+.prometheus-case-brand-cover { height: clamp(32rem, 40vw, 54rem); min-height: 0; padding: 0; }
+.prometheus-case-brand-cover img { position: absolute; inset: 2rem; display: block; width: calc(100% - 4rem); height: calc(100% - 4rem); object-fit: contain; }
