@@ -34,6 +34,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
   const [dragging, setDragging] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [selected, setSelected] = useState<ShowcaseSheet | null>(null);
+  const [previewReady, setPreviewReady] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const [copies, setCopies] = useState(4);
   const [keyboardFocused, setKeyboardFocused] = useState(false);
@@ -156,6 +157,7 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     returnFocus.current = focused instanceof HTMLElement && !focused.closest('[aria-hidden="true"]') && focused !== document.body ? focused : stage.current;
     sourceOrigin.current = originFor(element);
     closing.current = false;
+    setPreviewReady(false);
     setSelected(sheet);
   }
 
@@ -166,24 +168,41 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
     const root = document.documentElement;
     const previousOverflow = root.style.overflow;
     root.style.overflow = "hidden";
+    let cancelled = false;
+    setPreviewReady(false);
     modal.showModal();
-    closeButton.current?.focus({ preventScroll: true });
+    modal.focus({ preventScroll: true });
     const bounds = panel.current.getBoundingClientRect();
     const origin = sourceOrigin.current;
+    let opening: Animation | undefined;
     if (origin && !reducedMotion) {
       const from = `matrix(${origin.a * origin.width / bounds.width},${origin.b * origin.width / bounds.width},${origin.c * origin.height / bounds.height},${origin.d * origin.height / bounds.height},${origin.x - bounds.x},${origin.y - bounds.y})`;
-      panel.current.animate([{ transform: from }, { transform: "matrix(1,0,0,1,0,0)" }], { duration: 650, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
+      opening = panel.current.animate([{ transform: from }, { transform: "matrix(1,0,0,1,0,0)" }], { duration: 650, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
     }
+    const image = preview.querySelector("img");
+    // A cached thumbnail may still need decoding at preview size. Keep the
+    // controls out of the image's opening motion, including slow image loads.
+    const decoded = image?.decode ? image.decode().catch(() => {}) : Promise.resolve();
+    void Promise.all([decoded, opening?.finished.catch(() => {})]).then(() => {
+      if (cancelled || closing.current) return;
+      setPreviewReady(true);
+    });
     return () => {
+      cancelled = true;
       preview.getAnimations().forEach(animation => animation.cancel());
       modal.close();
       root.style.overflow = previousOverflow;
     };
   }, [selected, reducedMotion]);
 
+  useLayoutEffect(() => {
+    if (previewReady && selected && !closing.current) closeButton.current?.focus({ preventScroll: true });
+  }, [previewReady, selected]);
+
   async function closePreview() {
     if (closing.current) return;
     closing.current = true;
+    setPreviewReady(false);
     if (panel.current && sourceButton.current?.isConnected && !reducedMotion) {
       const origin = originFor(sourceButton.current);
       const currentTransform = getComputedStyle(panel.current).transform;
@@ -314,14 +333,14 @@ export default function ShowcaseGallery({ sheets }: { sheets: ShowcaseSheet[] })
         </div>
       </div>
       <p className="showcase-sr-only" role="status" aria-live="polite">{announcement}</p>
-      <dialog ref={dialog} className="showcase-dialog" aria-labelledby="showcase-preview-title" data-lenis-prevent="" onCancel={event => { event.preventDefault(); void closePreview(); }} onClick={event => { if (event.target === event.currentTarget) void closePreview(); }}>
+      <dialog ref={dialog} tabIndex={-1} className="showcase-dialog" aria-labelledby="showcase-preview-title" data-lenis-prevent="" onCancel={event => { event.preventDefault(); void closePreview(); }} onClick={event => { if (event.target === event.currentTarget) void closePreview(); }}>
         {selected && <>
-          <div className="showcase-preview-frame">
+          <div className="showcase-preview-frame" data-ready={previewReady}>
+          <h3 id="showcase-preview-title" className="showcase-sr-only">{selected.title}</h3>
           <div ref={panel} className={`showcase-preview-panel tone-${selected.tone}`}>
             <SheetContent sheet={selected} />
           </div>
-          <div className="showcase-preview-caption"><h3 id="showcase-preview-title">{selected.title}</h3><p>{selected.image ? "Concept exploration" : "Image placeholder"}</p></div>
-          <button ref={closeButton} type="button" className="showcase-preview-close" aria-label="Close preview" onClick={() => void closePreview()}><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" strokeWidth="1.8" /></svg></button>
+          <button ref={closeButton} type="button" className="showcase-preview-close" aria-label="Close preview" disabled={!previewReady} onClick={() => void closePreview()}><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" strokeWidth="1.8" /></svg></button>
           </div>
         </>}
       </dialog>
