@@ -1,6 +1,7 @@
-.pricing-reveal-backdrop { background: var(--prometheus-off-white); }
+/* Continue the showcase background behind the expanding pricing reveal. */
+.pricing-reveal-backdrop { background: #080909; }
 .prometheus-pricing {
-  padding: 12rem 0 clamp(7.2rem, 7vw, 11.2rem);
+  padding: 16rem 0;
   background:
     radial-gradient(ellipse at 12% 18%, rgb(191 70 70 / 22%), transparent 48%),
     radial-gradient(ellipse at 90% 78%, rgb(126 172 181 / 12%), transparent 44%),
@@ -69,7 +70,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 56rem;
+  min-height: 64rem;
   padding: 3.2rem;
   border: 1px solid rgb(255 255 255 / 82%);
   border-radius: 2.8rem;
@@ -140,7 +141,7 @@
   .pricing-plan { padding: 2.4rem; }
 }
 @media (max-width: 767px) {
-  .prometheus-pricing { padding-block: 9.6rem 6.4rem; scroll-margin-top: 6.8rem; }
+  .prometheus-pricing { padding-block: 12.8rem 9.6rem; scroll-margin-top: 6.8rem; }
   .pricing-container { width: calc(100% - 3.2rem); }
   .pricing-intro h2 { font-size: clamp(3.2rem, 8.5vw, 4.4rem); }
   .pricing-intro > p { max-width: 38rem; margin: 1.6rem auto 0; font-size: 1.4rem; }
