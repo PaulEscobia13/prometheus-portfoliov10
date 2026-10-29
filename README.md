@@ -57,3 +57,14 @@ Sample names, roles and portrait paths are centralized in `content/team.ts`. The
 `#contacts` contains the burgundy editorial footer based on the supplied Furniture Odyssey reference. The desktop drawer is sticky behind the rounded FAQ sheet; foreground text moves from 40px to zero while the cropped wordmark remains in its artboard. Focus entering a covered footer link reveals it through the existing smooth-scroll integration. Mobile, short viewports, and reduced motion use normal flow for access. `content/contact.ts` centralizes links and the reference team booking URL; review the Furniture Odyssey consultation calendar before publishing a general portfolio.
 
 Automated regression coverage includes FAQ reversal, independent rows, reduced-motion changes, missing-animation fallback, footer progress/clamping, covered-link keyboard access and cleanup. Visual fidelity still requires browser verification; see HANDOVER.md for the current check status.
+
+
+### Hero demo and project inquiry
+
+The Prometheus hero Play button opens a native video dialog with controls, Escape dismissal, focus return, and media cleanup on close.
+The server selects a supported video from `public/videos`, preferring a Furniture Odyssey filename, and sends only its public URL to the client.
+If media is missing or fails to load, the dialog shows an unavailable message.
+Book a Call opens `/prometheus/contact`, featuring Oliver Jumawid, Co-Founder & DevOps, and the existing team portrait.
+The required name, email, budget, and project fields continue to the existing Cal.com consultation calendar with prefilled details.
+The visitor must finish scheduling on Cal.com; this page does not store inquiries or send email independently.
+Budget ranges are editable in `components/ProjectInquiry.tsx`.

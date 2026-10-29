@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import HeroVideo from "./HeroVideo";
 import { prometheusHero } from "../content/prometheusHero";
 
 const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -12,7 +13,7 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
  let html = readFileSync(join(process.cwd(), "reference/hero.html"), "utf8");
  if (brand === "prometheus") {
    const playMarkup = html.match(/<div class="home-hero-title-decor-play"[^>]*>[\s\S]*?<\/div>/)?.[0] ?? "";
-   const inlinePlay = playMarkup.replace(/^<div\b[^>]*>/, '<span class="home-hero-title-decor-play">').replace(/<\/div>$/, "</span>");
+   const inlinePlay = playMarkup.replace(/^<div\b[^>]*>/, '<button type="button" data-play-demo aria-label="Play our Furniture Odyssey demo" class="home-hero-title-decor-play prometheus-play-button">').replace(/<\/div>$/, "</button>");
    html = html.replace(/<h1 class="home-hero-subtitle">[\s\S]*?<\/h1>/,
      `<p class="home-hero-subtitle">${escapeHtml(prometheusHero.eyebrow)}</p>`);
    const headline = prometheusHero.headline.map(part => {
@@ -47,11 +48,20 @@ export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prome
        `<div class="prometheus-partner" role="img" aria-label="${name}" tabindex="0"><img src="/partners/${neutral}" alt="" aria-hidden="true" class="prometheus-partner-logo prometheus-partner-neutral" loading="eager" decoding="async"><img src="/partners/${file}" alt="" aria-hidden="true" class="prometheus-partner-logo prometheus-partner-color" loading="eager" decoding="async"></div>`
      ).join("")}</div>`
    );
+   html = html.replaceAll('href="https://arounda.agency/contact"', 'href="/prometheus/contact"');
    html = html.replace("Partnering with enterprise platforms across global markets", "Trusted by our clients");
    // Keep the headline, supporting text and CTA in their own full-height screen.
    html = html.replace('class="hero_main"', 'class="prometheus-hero-layout"');
    html = html.replace(/(<div class="prometheus-hero-layout"[^>]*>)/, '$1<div class="hero_main prometheus-hero-screen">');
    html = html.replace(/(<div id="[^"]*" class="home-hero_logos-wrapper")/, '</div>$1');
  }
- return <div dangerouslySetInnerHTML={{__html:html}} />;
+ const markup = <div dangerouslySetInnerHTML={{__html:html}} />;
+ if (brand !== "prometheus") return markup;
+ let videoSrc: string | null = null;
+ try {
+   const videos = readdirSync(join(process.cwd(), "public/videos")).filter(file => /\.(mp4|webm|ogv)$/i.test(file)).sort();
+   const video = videos.find(file => /furniture.*odyssey/i.test(file)) ?? videos[0];
+   if (video) videoSrc = `/videos/${encodeURIComponent(video)}`;
+ } catch { /* The player shows an unavailable message when no video is installed. */ }
+ return <HeroVideo videoSrc={videoSrc}>{markup}</HeroVideo>;
 }
