@@ -57,9 +57,8 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     const dismissOnWheel = (event: WheelEvent) => {
       if (!event.ctrlKey && !event.shiftKey && Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
         dismissOnScroll();
-        // Upstream otherwise consumes vertical wheel events as card changes.
-        // Stop that handler, while leaving the browser's page scroll intact.
-        event.stopImmediatePropagation();
+        // Let this event bubble to Lenis. Blocking it desynchronizes smooth
+        // scrolling from the native page position and causes jumps on exit.
       }
     };
     const fitPreview = () => {
