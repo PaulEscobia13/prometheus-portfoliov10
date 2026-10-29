@@ -1,17 +1,17 @@
 import { GeistSans } from "geist/font/sans";
 import { pricingPlans } from "../content/pricing";
-import { PricingAudienceSelector } from "./PricingSelector";
+import PricingReveal from "./PricingReveal";
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className={`prometheus-pricing ${GeistSans.variable}`} aria-labelledby="pricing-title">
+    <div className="pricing-reveal-backdrop">
+      <PricingReveal className={GeistSans.variable}>
       <div className="pricing-container">
         <header className="pricing-intro">
-          <h2 id="pricing-title"><em>Premium Experiences</em></h2>
-          <p><strong>We help you get where you want to go.</strong></p>
+          <h2 id="pricing-title"><em>Get a Premium Experience<br />at a Discounted Rate.</em></h2>
+          <p><strong>We’ll help you find the product you’re looking for.</strong></p>
         </header>
 
-        <PricingAudienceSelector />
         <div className="pricing-plans">
           {pricingPlans.map(plan => (
             <article key={plan.id} className={`pricing-plan${plan.featured ? " pricing-plan-featured" : ""}`} aria-labelledby={`pricing-${plan.id}-title`}>
@@ -21,23 +21,20 @@ export default function PricingSection() {
                 {plan.unit && <span className="pricing-plan-unit">{plan.unit}</span>}
               </p>
               <p className="pricing-plan-description">{plan.description}</p>
+              <ul className="pricing-plan-features" aria-label={`${plan.name} features`}>
+                {plan.features.map(feature => (
+                  <li key={feature}>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
               <a className="pricing-plan-action" href="#contacts" aria-label={`${plan.action}: ${plan.name} plan`}>{plan.action}</a>
-              <div className="pricing-plan-included">
-                <p>What’s Included</p>
-                <div className="pricing-build-first">We build it first for free, no payment.</div>
-                <ul>
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={feature}>
-                      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><defs><mask id={`pricing-check-${plan.id}-${featureIndex}`}><rect width="20" height="20" fill="white" /><path d="m5.5 10 3 3 6-6" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></mask></defs><circle cx="10" cy="10" r="9" fill="currentColor" mask={`url(#pricing-check-${plan.id}-${featureIndex})`} /></svg>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </article>
           ))}
         </div>
+        <p className="pricing-early-rate-note">Discounted rates for our first 5 clients. From planning to launch, we’ll be with you every step of the way.</p>
       </div>
-    </section>
+      </PricingReveal>
+    </div>
   );
 }
