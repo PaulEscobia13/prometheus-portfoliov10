@@ -40,8 +40,8 @@ export default function HeroPointer() {
       const dt = elapsed / steps / (1000 / 60);
       for (const [element, spring] of magnets) {
         for (let i = 0; i < steps; i++) {
-          spring.vx = (spring.vx + (spring.aimX - spring.x) * .15 * dt) * Math.pow(.72, dt);
-          spring.vy = (spring.vy + (spring.aimY - spring.y) * .15 * dt) * Math.pow(.72, dt);
+          spring.vx = (spring.vx + (spring.aimX - spring.x) * .21 * dt) * Math.pow(.78, dt);
+          spring.vy = (spring.vy + (spring.aimY - spring.y) * .21 * dt) * Math.pow(.78, dt);
           spring.x += spring.vx * dt;
           spring.y += spring.vy * dt;
         }
@@ -78,8 +78,8 @@ export default function HeroPointer() {
           const spring = magnets.get(active) ?? { x: 0, y: 0, vx: 0, vy: 0, aimX: 0, aimY: 0 };
           magnets.set(active, spring);
           const rect = active.getBoundingClientRect();
-          spring.aimX = Math.max(-16, Math.min(16, (pointerX - (rect.left - spring.x + rect.width / 2)) * .25));
-          spring.aimY = Math.max(-11, Math.min(11, (pointerY - (rect.top - spring.y + rect.height / 2)) * .25));
+          spring.aimX = Math.max(-24, Math.min(24, (pointerX - (rect.left - spring.x + rect.width / 2)) * .38));
+          spring.aimY = Math.max(-16, Math.min(16, (pointerY - (rect.top - spring.y + rect.height / 2)) * .38));
         }
       }
       if (positioned || magnets.size) schedule();

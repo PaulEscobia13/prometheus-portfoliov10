@@ -173,7 +173,8 @@
 }
 .prometheus-logo-cursor img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .prometheus-logo-cursor[data-visible] .prometheus-logo-cursor-face { opacity: 1; transform: scale(1); }
-.prometheus-logo-cursor[data-cta="true"] { width: 6.4rem; height: 6.4rem; }
+.prometheus-preview .prometheus-hero-title,
+.prometheus-preview .prometheus-hero-title * { cursor: default; }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
   .prometheus-logo-cursor { display: none; }
 }
