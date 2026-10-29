@@ -10,7 +10,7 @@
   grid-template-columns: minmax(0, 40.5rem) minmax(0, 1fr);
   gap: 5.5rem;
   align-items: start;
-  scroll-margin-top: 110px;
+  scroll-margin-top: 134px;
 }
 .prometheus-case-tags { display: flex; flex-wrap: wrap; margin-bottom: 4rem; }
 .prometheus-case-tags span {
@@ -98,7 +98,7 @@
 /* The recording uses normal page scroll: each summary sticks within its own
    image stack, then releases when the next project reaches it. */
 .prometheus-case-stack { display: flex; flex-direction: column; gap: 14rem; }
-.prometheus-case-details { position: sticky; top: 110px; align-self: start; }
+.prometheus-case-details { position: sticky; top: 134px; align-self: start; }
 .prometheus-case-gallery { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
 .prometheus-case-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-top: 3rem; }
 .prometheus-case-footer .prometheus-case-signature { margin-top: 0; min-width: 0; }
@@ -124,7 +124,7 @@
 .prometheus-case-device.is-mobile::after { display: none; }
 @media (min-width: 1440px) { .prometheus-case-stack { gap: 24rem; } }
 @media (min-width: 768px) and (max-height: 740px) {
-  .prometheus-case-details { top: 110px; }
+  .prometheus-case-details { top: 134px; }
   .prometheus-case-tags { margin-bottom: 2rem; }
   .prometheus-case-title { padding-bottom: 2rem; font-size: 2.6rem; }
   .prometheus-case-scope { padding-top: 2rem; }
@@ -196,3 +196,7 @@
   .prometheus-case-footer { gap: 2rem 1rem; }
   .prometheus-case-avatar { flex-basis: 56px; width: 56px; height: 56px; }
 }
+
+.prometheus-case-tags { gap: .8rem; }
+.prometheus-case-tags .prometheus-case-country { padding-inline: 1.4rem; }
+.prometheus-case-country svg { display: block; border-radius: .2rem; }
