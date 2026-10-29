@@ -125,9 +125,9 @@ async function mountGallery(t, { reduced = false } = {}) {
     await act(async () => current.forEach(callback => callback(time)));
   };
   let pointerTime = 1000;
-  const pointer = async (type, x, y = 0, id = 7) => {
+  const pointer = async (type, x, y = 0, id = 7, pointerType = "touch") => {
     const event = new window.MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0 });
-    Object.defineProperties(event, { timeStamp: { value: pointerTime += 16 }, pointerId: { value: id }, pointerType: { value: "touch" }, isPrimary: { value: true } });
+    Object.defineProperties(event, { timeStamp: { value: pointerTime += 16 }, pointerId: { value: id }, pointerType: { value: pointerType }, isPrimary: { value: true } });
     await act(async () => stage.dispatchEvent(event));
   };
   return {
@@ -309,4 +309,28 @@ test("resizing keeps the keyboard-selected card centered", async t => {
   assertCentered("sheet-09");
   assert.equal(document.activeElement, gallery.stage);
   assert.equal(document.querySelector('[role="status"]').textContent, "Lendfolio, 9 of 14.");
+});
+
+test("mouse edge hover browses both directions and touch movement does not steer", async t => {
+  const gallery = await mountGallery(t);
+  const x = () => Number(gallery.track.style.transform.match(/translate3d\(([-\d.]+)px/)[1]);
+  await gallery.frame(1000);
+  await gallery.pointer("pointermove", 10, 30, 1, "mouse");
+  const beforeLeft = x();
+  await gallery.frame(1050); await gallery.frame(1100);
+  assert.ok(x() > beforeLeft, "left edge reveals the preceding cards");
+  await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
+  for (let time=1150; time<=1600; time+=50) await gallery.frame(time);
+  const beforeRight = x();
+  await gallery.frame(1650);
+  assert.ok(x() < beforeRight, "right edge reveals the following cards");
+  await gallery.pointer("pointerout", 1450, 30, 1, "mouse");
+  for (let time=1700; time<=2200; time+=50) await gallery.frame(time);
+  await gallery.pointer("pointermove", 1430, 30, 2, "touch");
+  const beforeTouch = x();
+  await gallery.frame(2250);
+  assert.ok(x() > beforeTouch, "touch hover leaves autoplay direction unchanged");
+  await gallery.preference(true);
+  await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
+  assert.equal(gallery.frames.size, 0, "reduced motion disables edge motion");
 });
