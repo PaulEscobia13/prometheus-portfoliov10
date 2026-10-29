@@ -22,8 +22,8 @@ export default function ProjectInquiry() {
       <label>Email address<span aria-hidden="true"> *</span><input name="email" type="email" autoComplete="email" required maxLength={254} /></label>
     </div>
     <fieldset><legend>What budget are you working with?</legend><div className="inquiry-budgets">{budgets.map(budget => <label key={budget}><input type="radio" name="budget" value={budget} required /><span>{budget}</span></label>)}</div></fieldset>
-    <label>About your project<span aria-hidden="true"> *</span><textarea name="project" rows={3} required maxLength={2000} placeholder="What does your business do, and what would you like to improve?" /></label>
-    <button className="inquiry-submit" type="submit"><span aria-hidden="true">↘</span>Choose a call time</button>
+    <label>About your project<span aria-hidden="true"> *</span><textarea name="project" rows={2} required maxLength={2000} placeholder="What does your business do, and what would you like to improve?" /></label>
+    <button className="inquiry-submit" type="submit">Choose a call time</button>
     <p className="inquiry-note">Next, choose an available time on our booking calendar. Your details will be carried over. No payment or contract required to start a conversation.</p>
   </form>;
 }
