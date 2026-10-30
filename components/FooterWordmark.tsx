@@ -12,13 +12,14 @@ export default function FooterWordmark({ images }: { images: string[] }) {
     if (!element || !images.length) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
+    let hovered = false;
     let disposed = false;
     let pending = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let index = 0;
     let slot = 0;
     let hasImage = false;
-    const allowed = () => !disposed && visible && !document.hidden && !preference.matches;
+    const allowed = () => !disposed && visible && hovered && !document.hidden && !preference.matches;
     const stop = () => { clearTimeout(timer); timer = undefined; };
 
     async function advance() {
@@ -54,6 +55,21 @@ export default function FooterWordmark({ images }: { images: string[] }) {
       if (preference.matches) { setActive(null); hasImage = false; }
       if (allowed() && !pending) timer = setTimeout(advance, hasImage ? 300 : 600);
     }
+    const enter = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      hovered = true;
+      element.dataset.hovered = "true";
+      refresh();
+    };
+    const leave = () => {
+      hovered = false;
+      element.dataset.hovered = "false";
+      setActive(null);
+      hasImage = false;
+      stop();
+    };
+    element.addEventListener("pointerenter", enter);
+    element.addEventListener("pointerleave", leave);
     const observer = new IntersectionObserver(entries => {
       visible = entries[0]?.isIntersecting ?? false;
       refresh();
@@ -65,6 +81,8 @@ export default function FooterWordmark({ images }: { images: string[] }) {
       disposed = true;
       stop();
       observer.disconnect();
+      element.removeEventListener("pointerenter", enter);
+      element.removeEventListener("pointerleave", leave);
       preference.removeEventListener("change", refresh);
       document.removeEventListener("visibilitychange", refresh);
     };

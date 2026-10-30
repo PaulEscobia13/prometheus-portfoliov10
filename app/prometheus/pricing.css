@@ -2,10 +2,7 @@
 .pricing-reveal-backdrop { background: #080909; }
 .prometheus-pricing {
   padding: 16rem 0;
-  background:
-    radial-gradient(ellipse at 12% 18%, rgb(191 70 70 / 22%), transparent 48%),
-    radial-gradient(ellipse at 90% 78%, rgb(126 172 181 / 12%), transparent 44%),
-    linear-gradient(145deg, #28191f, #48272f 65%, #2b1c23);
+  background: var(--prometheus-off-white);
   color: var(--prometheus-ink);
   font-family: var(--font-geist-sans), sans-serif;
   font-weight: 400;
@@ -17,7 +14,7 @@
 .pricing-intro { max-width: 80rem; margin-inline: auto; text-align: center; }
 .pricing-intro h2 {
   margin: 0;
-  color: var(--prometheus-off-white);
+  color: var(--prometheus-ink);
   font-size: clamp(4.8rem, 4.3vw, 6.4rem);
   font-weight: 600;
   line-height: 1.1;
@@ -25,7 +22,7 @@
 }
 .pricing-intro > p {
   margin: 2rem 0 0;
-  color: rgb(255 244 234 / 76%);
+  color: rgb(16 18 22 / 68%);
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 1.6;
@@ -33,7 +30,7 @@
 .pricing-early-rate-note {
   max-width: 60rem;
   margin: 3.2rem auto 0;
-  color: rgb(255 244 234 / 76%);
+  color: rgb(16 18 22 / 68%);
   font-size: 1.4rem;
   line-height: 1.6;
   text-align: center;

@@ -9,7 +9,6 @@ export default function FooterSection() {
     <FooterReveal>
       <div className="prometheus-footer-artboard">
         <div className="prometheus-footer-foreground">
-          <div className="prometheus-footer-top"><span>PROMETHEUS</span><a href="#contact-actions">CONTACT US</a></div>
           <div className="prometheus-footer-main">
             <h2>Let’s build a system around how your business actually works.</h2>
             <p>Tell us where work becomes repetitive, fragmented, or difficult to keep track of. We’ll start there.</p>

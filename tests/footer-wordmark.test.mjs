@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 import FooterWordmarkModule from "../components/FooterWordmark.tsx";
 const FooterWordmark = FooterWordmarkModule.default ?? FooterWordmarkModule;
 
-test("footer cycles decoded artwork only while visible and stops for reduced motion and cleanup", async t => {
+test("footer cycles decoded artwork only while hovered and visible and stops for reduced motion and cleanup", async t => {
   const dom = new JSDOM('<div id="root"></div>');
   const saved = new Map();
   const install = (name, value) => { saved.set(name, Object.getOwnPropertyDescriptor(globalThis,name)); Object.defineProperty(globalThis,name,{configurable:true,writable:true,value}); };
@@ -28,12 +28,21 @@ test("footer cycles decoded artwork only while visible and stops for reduced mot
     await advance(5000);
     assert.deepEqual(requested,[], 'no offscreen artwork downloads');
     await act(async()=>observe([{isIntersecting:true}]));
+    await advance(5000);
+    assert.deepEqual(requested,[], 'visible wordmark stays white until hovered');
+    const wordmark = document.querySelector('.prometheus-footer-wordmark');
+    await act(async()=>wordmark.dispatchEvent(new window.Event('pointerenter')));
     await advance(600);
     assert.deepEqual(requested,['/showcase/one.webp']);
     assert.match(document.querySelector('[data-active="true"]').style.backgroundImage,/one.webp/);
     await advance(4500);
     assert.deepEqual(requested,['/showcase/one.webp','/showcase/two.webp']);
     assert.match(document.querySelector('[data-active="true"]').style.backgroundImage,/two.webp/);
+    await act(async()=>wordmark.dispatchEvent(new window.Event('pointerleave')));
+    assert.equal(document.querySelector('[data-active="true"]'),null, 'pointer exit immediately restores white');
+    await advance(9000);
+    assert.equal(requested.length,2, 'no cycling after pointer leaves');
+    await act(async()=>wordmark.dispatchEvent(new window.Event('pointerenter')));
     await act(async()=>observe([{isIntersecting:false}]));
     await advance(9000);
     assert.equal(requested.length,2);

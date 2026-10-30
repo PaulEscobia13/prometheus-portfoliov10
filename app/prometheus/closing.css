@@ -45,7 +45,7 @@
 .prometheus-footer-links a { color: #fff4ea; text-decoration: none; }
 .prometheus-footer-links a:hover, .prometheus-footer-top a:hover { text-decoration: underline; text-underline-offset: .3em; }
 .prometheus-editorial-footer a:focus-visible { outline: 2px solid #fff4ea; outline-offset: 6px; }
-.prometheus-footer-wordmark { position: absolute; z-index: 0; left: 50%; bottom: -.25em; transform: translateX(-50%) scaleX(1.075); transform-origin: center bottom; white-space: nowrap; color: #fff4ea; font: 400 14.7cqw/.9 Georgia, "Times New Roman", serif; letter-spacing: -.075em; pointer-events: none; user-select: none; }
+.prometheus-footer-wordmark { position: absolute; z-index: 0; left: 50%; bottom: -.25em; transform: translateX(-50%) scaleX(1.075); transform-origin: center bottom; white-space: nowrap; color: #fff4ea; font: 400 14.7cqw/.9 Georgia, "Times New Roman", serif; letter-spacing: -.075em; pointer-events: auto; user-select: none; }
 
 @media (max-width: 1100px) {
   .prometheus-faq-header h2 { font-size: 6.4rem; }
@@ -101,9 +101,12 @@
 }
 
 /* Showcase artwork stays inside the existing wordmark silhouette. */
+/* Let pointer input reach the wordmark beneath the full-height foreground. */
+.prometheus-footer-foreground { pointer-events: none; }
+.prometheus-footer-main, .prometheus-footer-lower { pointer-events: auto; }
 .footer-wordmark-base { display: block; }
 .footer-wordmark-art { position: absolute; inset: 0; display: block; background-size: cover; background-position: center; background-repeat: no-repeat; background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; opacity: 0; transition: opacity .1s ease; }
-.footer-wordmark-art[data-active="true"] { opacity: 1; }
+.prometheus-footer-wordmark[data-hovered="true"] .footer-wordmark-art[data-active="true"] { opacity: 1; }
 @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
   .footer-wordmark-art { display: none; }
 }

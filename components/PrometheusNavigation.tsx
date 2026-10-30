@@ -10,6 +10,7 @@ const links = [
 ] as const;
 
 export default function PrometheusNavigation() {
+  const [mobile, setMobile] = useState(false);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -25,6 +26,7 @@ export default function PrometheusNavigation() {
   useEffect(() => {
     const query = window.matchMedia("(max-width: 991px)");
     const update = () => {
+      setMobile(query.matches);
       setOpen(false);
     };
     update();
@@ -57,7 +59,7 @@ export default function PrometheusNavigation() {
         <div className="navbar_main prometheus-nav-inner">
           <a href="#top" onClick={closeMenu} aria-label="Prometheus home" className="navbar_logo-wrapper w-inline-block"><span className="prometheus-wordmark">prometheus</span></a>
           <div className="prometheus-nav-menu-shell" data-open={open}>
-          <div id="prometheus-menu" ref={menu} className="prometheus-nav-links" data-open={open} inert={!open} data-lenis-prevent="">
+          <div id="prometheus-menu" ref={menu} className="prometheus-nav-links" data-open={open} inert={mobile && !open} data-lenis-prevent="">
             {links.map(link => <div className="prometheus-nav-item" key={link.label}>
               <div className="prometheus-nav-row">
                 <a className="prometheus-nav-primary-link" href={link.href} onClick={closeMenu} aria-label={link.label}><span className="prometheus-nav-label-window" aria-hidden="true"><span className="prometheus-nav-label-roll"><span>{link.label}</span><span className="prometheus-nav-label-copy">{link.label}</span></span></span></a>

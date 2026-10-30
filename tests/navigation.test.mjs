@@ -28,7 +28,7 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
     const toggle = document.querySelector(".prometheus-menu-toggle");
     const click = async el => act(async () => el.click());
     const open = async () => click(toggle);
-    assert.equal(menu.hasAttribute("inert"), true, "closed desktop menu cannot receive keyboard focus");
+    assert.equal(menu.hasAttribute("inert"), false, "desktop section links are always keyboard accessible");
     await open();
     assert.equal(toggle.getAttribute("aria-expanded"), "true");
     assert.equal(menu.hasAttribute("inert"), false);
@@ -55,6 +55,7 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
     query.matches = true;
     await act(async () => { for (const fn of listeners) fn(); });
     assert.equal(toggle.getAttribute("aria-expanded"), "false");
+    assert.equal(menu.hasAttribute("inert"), true, "closed mobile menu cannot receive focus");
     await open();
     assert.equal(menu.hasAttribute("inert"), false, "mobile uses the same operable menu");
     assert.equal(document.querySelector(".nav-cta").textContent, "Contact Us");
