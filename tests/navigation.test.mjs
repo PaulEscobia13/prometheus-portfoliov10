@@ -8,7 +8,7 @@ import NavigationModule from "../components/PrometheusNavigation.tsx";
 const Navigation = NavigationModule.default ?? NavigationModule;
 
 test("desktop and mobile menu retain section anchors, direct Services navigation, dismissal and focus return", async () => {
-  const dom = new JSDOM("<div id='root'></div>", { pretendToBeVisual: true });
+  const dom = new JSDOM("<div id='root'></div><main></main><footer id='contacts'></footer>", { pretendToBeVisual: true });
   const saved = new Map();
   const install = (name, value) => {
     saved.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
@@ -24,6 +24,19 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
   const root = createRoot(document.querySelector("#root"));
   try {
     await act(async () => root.render(React.createElement(Navigation)));
+    const navbar = document.querySelector('.prometheus-navbar');
+    let mainBottom = window.innerHeight + 100;
+    document.querySelector('main').getBoundingClientRect = () => ({bottom:mainBottom});
+    Object.defineProperty(window, 'scrollY', {configurable:true,value:1000});
+    await act(async()=>window.dispatchEvent(new window.Event('scroll')));
+    assert.equal(navbar.dataset.scrolled, 'true');
+    assert.equal(navbar.dataset.footerVisible, 'false', 'scrolling other sections keeps the transparent navbar');
+    mainBottom = window.innerHeight - 50;
+    await act(async()=>window.dispatchEvent(new window.Event('scroll')));
+    assert.equal(navbar.dataset.footerVisible, 'true', 'revealing the sticky footer enables the opaque surface');
+    mainBottom = window.innerHeight + 100;
+    await act(async()=>window.dispatchEvent(new window.Event('scroll')));
+    assert.equal(navbar.dataset.footerVisible, 'false', 'scrolling back above the footer restores transparency');
     const menu = document.querySelector("#prometheus-menu");
     const toggle = document.querySelector(".prometheus-menu-toggle");
     const click = async el => act(async () => el.click());

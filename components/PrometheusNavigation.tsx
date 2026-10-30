@@ -12,15 +12,26 @@ const links = [
 export default function PrometheusNavigation() {
   const [mobile, setMobile] = useState(false);
   const [open, setOpen] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 16);
+    const update = () => {
+      setScrolled(window.scrollY > 16);
+      // The footer is sticky behind main, so its own bounds can appear onscreen
+      // before it is revealed. Use the foreground page edge instead.
+      const main = document.getElementById("contacts")?.previousElementSibling;
+      setFooterVisible(!!main && main.getBoundingClientRect().bottom < window.innerHeight);
+    };
     update();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function PrometheusNavigation() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <nav aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-menu-open={open} onKeyDown={event => {
+    <nav aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-footer-visible={footerVisible} data-menu-open={open} onKeyDown={event => {
       if (event.key === "Escape" && open) {
         closeMenu();
         toggle.current?.focus();
