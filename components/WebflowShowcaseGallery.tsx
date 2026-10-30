@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ShowcaseSheet } from "../content/showcase";
 import ShowcaseGallery from "./ShowcaseGallery";
+import { getShowcasePreviewBounds } from "../lib/showcase-preview";
 import "../app/prometheus/webflow-showcase.css";
 
 type Slider = { close(): void; destroy(): void; set(key: string, value: number): void; state(): { isOpen: boolean } };
@@ -75,7 +76,16 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       }
     };
     const fitPreview = () => {
+      const viewport = window.visualViewport;
+      const viewportTop = viewport?.offsetTop ?? 0;
+      const navBottom = document.querySelector(".prometheus-navbar")?.getBoundingClientRect().bottom ?? 0;
+      const { top, height } = getShowcasePreviewBounds(navBottom, viewport?.height ?? window.innerHeight, viewportTop);
+      element.style.setProperty("--mw-preview-top", `${top}px`);
+      element.style.setProperty("--mw-preview-height", `${height}px`);
       if (!slider) return;
+      // The opened card must stay on the fitting plane. A positive Z offset
+      // magnifies it after fitting and clips its edges on shorter screens.
+      slider.set("openZ", 0);
       // Upstream adds a 7%-of-width inset before frameGap. Replace that
       // generous inset with a small responsive safe margin for our artwork.
       const baseInset = Math.max(28, Math.min(96, element.clientWidth * .07));
@@ -104,6 +114,11 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
     const rebuild = () => { if ((window as SliderWindow).MwSlider) initialize(); };
     preference.addEventListener("change", rebuild);
     window.addEventListener("resize", fitPreview);
+    window.visualViewport?.addEventListener("resize", fitPreview);
+    const sizeObserver = new ResizeObserver(fitPreview);
+    sizeObserver.observe(element);
+    const navbar = document.querySelector(".prometheus-navbar");
+    if (navbar) sizeObserver.observe(navbar);
     window.addEventListener("scroll", dismissOnScroll, { passive: true });
     element.addEventListener("wheel", dismissOnWheel, { passive: true, capture: true });
     element.addEventListener("touchmove", dismissOnScroll, { passive: true });
@@ -113,6 +128,8 @@ export default function WebflowShowcaseGallery({ sheets }: { sheets: ShowcaseShe
       cancelled = true;
       preference.removeEventListener("change", rebuild);
       window.removeEventListener("resize", fitPreview);
+      window.visualViewport?.removeEventListener("resize", fitPreview);
+      sizeObserver.disconnect();
       window.removeEventListener("scroll", dismissOnScroll);
       element.removeEventListener("wheel", dismissOnWheel, true);
       element.removeEventListener("touchmove", dismissOnScroll);
