@@ -431,13 +431,14 @@
   .prometheus-navbar[data-menu-open="true"] { background-color: rgb(11 11 11 / 92%); }
 }
 
-/* Stay black over the closing sections; fade to the footer color at page end. */
+/* Scroll-driven blend finishes at page bottom, without a delayed fade. */
 .prometheus-navbar[data-footer-visible="true"] {
   background-color: #0b0b0b;
+  background-color: color-mix(in srgb, #0b0b0b, #642b2d var(--footer-nav-burgundy, 0%));
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   box-shadow: none;
-  transition: background-color .85s ease-in-out, box-shadow .25s ease;
+  transition: box-shadow .25s ease;
 }
 .prometheus-navbar[data-footer-visible="true"][data-page-end="true"] {
   background-color: #642b2d;

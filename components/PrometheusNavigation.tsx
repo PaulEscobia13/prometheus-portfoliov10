@@ -25,9 +25,11 @@ export default function PrometheusNavigation() {
       const faq = document.querySelector(".prometheus-faq");
       const inClosingSections = !!faq && !!navbar.current && faq.getBoundingClientRect().top <= navbar.current.getBoundingClientRect().bottom;
       setFooterVisible(inClosingSections);
-      // Stay black through the FAQ and footer scroll. Only the actual page
-      // bottom starts the burgundy fade; there is no timer on FAQ entry.
+      // Blend during the final 160px of scrolling, finishing at page bottom.
+      // Paint directly so the color tracks scrolling without a timed CSS lag.
       const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      const progress = inClosingSections ? remaining <= 2 ? 1 : Math.min(1, Math.max(0, 1 - remaining / 160)) : 0;
+      navbar.current?.style.setProperty("--footer-nav-burgundy", `${progress * 100}%`);
       setAtPageEnd(inClosingSections && remaining <= 2);
     };
     update();
