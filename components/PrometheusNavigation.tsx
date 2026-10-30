@@ -13,6 +13,7 @@ export default function PrometheusNavigation() {
   const [mobile, setMobile] = useState(false);
   const [open, setOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
+  const [atPageEnd, setAtPageEnd] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navbar = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -21,10 +22,13 @@ export default function PrometheusNavigation() {
   useEffect(() => {
     const update = () => {
       setScrolled(window.scrollY > 16);
-      // The footer is sticky behind main, so its own bounds can appear onscreen
-      // before it is revealed. Wait until the FAQ clears the navbar itself.
-      const main = document.getElementById("contacts")?.previousElementSibling;
-      setFooterVisible(!!main && !!navbar.current && main.getBoundingClientRect().bottom <= navbar.current.getBoundingClientRect().bottom);
+      const faq = document.querySelector(".prometheus-faq");
+      const inClosingSections = !!faq && !!navbar.current && faq.getBoundingClientRect().top <= navbar.current.getBoundingClientRect().bottom;
+      setFooterVisible(inClosingSections);
+      // Stay black through the FAQ and footer scroll. Only the actual page
+      // bottom starts the burgundy fade; there is no timer on FAQ entry.
+      const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      setAtPageEnd(inClosingSections && remaining <= 2);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -61,7 +65,7 @@ export default function PrometheusNavigation() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <nav ref={navbar} aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-footer-visible={footerVisible} data-menu-open={open} onKeyDown={event => {
+    <nav ref={navbar} aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-footer-visible={footerVisible} data-page-end={atPageEnd} data-menu-open={open} onKeyDown={event => {
       if (event.key === "Escape" && open) {
         closeMenu();
         toggle.current?.focus();

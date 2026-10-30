@@ -431,20 +431,19 @@
   .prometheus-navbar[data-menu-open="true"] { background-color: rgb(11 11 11 / 92%); }
 }
 
-/* Once the FAQ clears the navbar, hold black briefly, then fade to burgundy. */
+/* Stay black over the closing sections; fade to the footer color at page end. */
 .prometheus-navbar[data-footer-visible="true"] {
-  background-color: #642b2d;
+  background-color: #0b0b0b;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   box-shadow: none;
-  animation: prometheus-footer-nav-arrive 1.1s ease-in-out both;
+  transition: background-color .85s ease-in-out, box-shadow .25s ease;
 }
-@keyframes prometheus-footer-nav-arrive {
-  0%, 25% { background-color: #0b0b0b; }
-  100% { background-color: #642b2d; }
+.prometheus-navbar[data-footer-visible="true"][data-page-end="true"] {
+  background-color: #642b2d;
 }
 @media (prefers-reduced-motion: reduce) {
-  .prometheus-navbar[data-footer-visible="true"] { animation: none; }
+  .prometheus-navbar[data-footer-visible="true"] { transition: none; }
 }
 
 .prometheus-nav-links {
