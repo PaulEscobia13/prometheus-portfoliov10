@@ -59,6 +59,7 @@ for (const reducedMotion of [true, false]) test(`slider autoplays only when allo
   }
   instance.close();instance.debugStep(16.7);
   assert.equal(instance.state().isOpen,false);
+  assert.ok(cards.some((card,index)=>index!==2 && card.style.visibility!=='hidden' && card._op>0),'surrounding panels return on the first closing frame, without waiting for the spring to settle');
   for(let frame=0;frame<240;frame++) instance.debugStep(16.7);
   assert.ok(cards.some((card,index)=>index!==2 && card._op>.9 && card.style.pointerEvents==='auto'),'carousel panels return after preview closes');
   instance.destroy();
