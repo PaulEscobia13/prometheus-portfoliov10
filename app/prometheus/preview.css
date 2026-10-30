@@ -422,13 +422,15 @@
 
 .prometheus-navbar[data-scrolled="true"],
 .prometheus-navbar[data-menu-open="true"] {
-  background-color: rgb(11 11 11 / 62%);
+  background-color: #0b0b0b;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   box-shadow: 0 1px 0 rgb(255 244 234 / 8%);
 }
 
 @supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
   .prometheus-navbar[data-scrolled="true"],
-  .prometheus-navbar[data-menu-open="true"] { background-color: rgb(11 11 11 / 92%); }
+  .prometheus-navbar[data-menu-open="true"] { background-color: #0b0b0b; }
 }
 
 .prometheus-nav-links {
@@ -579,11 +581,6 @@
 }
 
 .prometheus-services .home-services-content-item { scroll-margin-top: 12rem; }
-@media (max-width: 359px) {
-  .prometheus-preview .prometheus-navbar .nav-cta { width: 5.2rem; padding: .5rem; gap: 0; }
-  .prometheus-navbar .nav-cta .button_text { display: none; }
-}
-
 
 @media (prefers-reduced-motion: reduce) {
   .prometheus-navbar,
@@ -718,27 +715,3 @@
 .prometheus-video-panel video { display: block; width: 100%; max-height: calc(92svh - 6rem); object-fit: contain; background: #000; border-radius: 1rem; }
 .prometheus-video-panel p { padding: 3rem; font-size: 1.6rem; }
 .prometheus-video-close { position: absolute; right: 1rem; top: .3rem; width: 4.4rem; height: 4.4rem; background: transparent; color: inherit; border: 0; cursor: pointer; font-size: 3rem; }
-
-/* Contact pill retains the showcase reference silhouette beside desktop links. */
-.prometheus-preview .prometheus-navbar { height: 10.9rem; padding-block: 0; display: flex; align-items: center; }
-.prometheus-navbar > .container { width: calc(100% - 8rem); max-width: 144rem; }
-.prometheus-preview .prometheus-nav-inner { min-height: 10.9rem; padding-block: 0; flex-wrap: nowrap; }
-.prometheus-preview .prometheus-navbar .nav-cta { display: inline-flex; align-items: center; width: auto; height: 6.4rem; min-height: 6.4rem; padding: .6rem .6rem .6rem 2.8rem; gap: 1.8rem; border-radius: 999px; font-size: 1.8rem; letter-spacing: -.025em; }
-.prometheus-preview .prometheus-navbar .button_arrow-wrapper-2 { display: flex; width: 5.2rem; height: 5.2rem; flex-shrink: 0; margin: 0; border-radius: 50%; background: #0b0b0b; }
-.prometheus-preview .prometheus-navbar .navbar_button-arrow svg { width: 2rem; height: 2rem; }
-.prometheus-preview .prometheus-navbar .nav-cta::before { width: 5.2rem; height: 5.2rem; top: .6rem; right: .6rem; background: #0b0b0b; }
-.prometheus-preview .prometheus-navbar .nav-cta:is(:hover, :focus-visible)::before { top: -1px; right: -1px; width: calc(100% + 2px); height: calc(100% + 2px); background: var(--prometheus-red); }
-@media (max-width: 991px) {
-  .prometheus-preview .prometheus-navbar { height: 8rem; }
-  .prometheus-navbar > .container { width: calc(100% - 4rem); }
-  .prometheus-preview .prometheus-nav-inner { min-height: 8rem; }
-  .prometheus-preview .prometheus-navbar .nav-cta { height: 5.2rem; min-height: 5.2rem; padding: .5rem .5rem .5rem 2rem; gap: 1rem; font-size: 1.5rem; }
-  .prometheus-preview .prometheus-navbar .button_arrow-wrapper-2 { width: 4.2rem; height: 4.2rem; }
-  .prometheus-preview .prometheus-navbar .nav-cta::before { width: 4.2rem; height: 4.2rem; top: .5rem; right: .5rem; }
-  .prometheus-preview .prometheus-navbar .nav-cta:is(:hover, :focus-visible)::before { top: -1px; right: -1px; width: calc(100% + 2px); height: calc(100% + 2px); }
-  .prometheus-nav-item.is-services .prometheus-nav-primary-link { display: block; }
-}
-@media (max-width: 479px) {
-  .prometheus-preview .prometheus-nav-inner { gap: .8rem; }
-  .prometheus-preview .prometheus-navbar .nav-cta { padding-left: 1.4rem; gap: .8rem; font-size: 1.3rem; }
-}

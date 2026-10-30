@@ -58,7 +58,7 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
     assert.equal(menu.hasAttribute("inert"), true, "closed mobile menu cannot receive focus");
     await open();
     assert.equal(menu.hasAttribute("inert"), false, "mobile uses the same operable menu");
-    assert.equal(document.querySelector(".nav-cta").textContent, "Contact Us");
+    assert.equal(document.querySelector(".nav-cta").textContent, "Contacts");
     assert.equal(document.querySelector(".nav-cta").getAttribute("href"), "#contacts");
     await act(async () => root.unmount());
     assert.equal(listeners.size, 0);

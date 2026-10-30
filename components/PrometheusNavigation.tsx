@@ -67,8 +67,8 @@ export default function PrometheusNavigation() {
             </div>)}
           </div>
           </div>
-          <a href="#contacts" onClick={closeMenu} aria-label="Contact Us" className="button-cta nav-cta w-inline-block">
-            <span className="button_text">Contact Us</span>
+          <a href="#contacts" onClick={closeMenu} aria-label="Contacts" className="button-cta nav-cta w-inline-block">
+            <span className="button_text">Contacts</span>
             <span className="button_arrow-wrapper-2"><span className="code-embed navbar_button-arrow w-embed"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7H12M12 7L6.5 1.5M12 7L6.5 12.5" stroke="currentColor" strokeWidth="1.8" /></svg></span></span>
           </a>
           <button ref={toggle} type="button" className="prometheus-menu-toggle" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="prometheus-menu" onClick={() => setOpen(value => !value)}>
