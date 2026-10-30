@@ -22,15 +22,22 @@ export default function PrometheusNavigation() {
   useEffect(() => {
     const update = () => {
       setScrolled(window.scrollY > 16);
-      const faq = document.querySelector(".prometheus-faq");
-      const inClosingSections = !!faq && !!navbar.current && faq.getBoundingClientRect().top <= navbar.current.getBoundingClientRect().bottom;
-      setFooterVisible(inClosingSections);
-      // Blend during the final 160px of scrolling, finishing at page bottom.
-      // Paint directly so the color tracks scrolling without a timed CSS lag.
-      const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-      const progress = inClosingSections ? remaining <= 2 ? 1 : Math.min(1, Math.max(0, 1 - remaining / 160)) : 0;
+      const faq = document.querySelector<HTMLElement>(".prometheus-faq");
+      const navBottom = navbar.current?.getBoundingClientRect().bottom ?? 0;
+      const faqBottom = faq?.getBoundingClientRect().bottom ?? Infinity;
+      const style = faq ? window.getComputedStyle(faq) : null;
+      const cornerHeight = Math.max(parseFloat(style?.borderBottomLeftRadius ?? "0") || 0, parseFloat(style?.borderBottomRightRadius ?? "0") || 0);
+      // Remain translucent through FAQ content. Mask only its rounded bottom
+      // edge as that curve enters the navbar, then blend after it clears.
+      const maskingCorner = !!faq && faqBottom - cornerHeight <= navBottom;
+      setFooterVisible(maskingCorner);
+      const passed = Math.max(0, navBottom - faqBottom);
+      const remaining = Math.max(0, document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
+      const cleared = maskingCorner && faqBottom <= navBottom;
+      const fadeDistance = Math.max(1, Math.min(160, passed + remaining));
+      const progress = cleared ? remaining <= 2 ? 1 : Math.min(1, passed / fadeDistance) : 0;
       navbar.current?.style.setProperty("--footer-nav-burgundy", `${progress * 100}%`);
-      setAtPageEnd(inClosingSections && remaining <= 2);
+      setAtPageEnd(cleared && remaining <= 2);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });

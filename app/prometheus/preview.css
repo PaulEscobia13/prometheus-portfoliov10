@@ -431,7 +431,7 @@
   .prometheus-navbar[data-menu-open="true"] { background-color: rgb(11 11 11 / 92%); }
 }
 
-/* Scroll-driven blend finishes at page bottom, without a delayed fade. */
+/* Mask the FAQ corners in black, then blend as the cleared footer scrolls up. */
 .prometheus-navbar[data-footer-visible="true"] {
   background-color: #0b0b0b;
   background-color: color-mix(in srgb, #0b0b0b, #642b2d var(--footer-nav-burgundy, 0%));
