@@ -297,24 +297,16 @@
 }
 .prometheus-case-showcase.is-full-screenshot > img { object-fit: contain; }
 
-/* Each story owns its artwork. Long copy stays in normal document flow, so
-   scrolling cannot replace it before the reader reaches the final line. */
-.prometheus-case-group { display: grid; gap: clamp(64px, 9vw, 128px); scroll-margin-top: var(--case-nav-offset, 134px); }
-.prometheus-case-layout { scroll-margin-top: var(--case-nav-offset, 134px); }
-.prometheus-case-details { position: static; min-width: 0; }
-.prometheus-case-gallery > figure { scroll-margin-top: var(--case-nav-offset, 134px); }
-@media (min-width: 768px) {
-  .prometheus-case-details[data-fits="true"] { position: sticky; top: var(--case-nav-offset, 134px); }
-  .prometheus-case-gallery > .prometheus-case-visual {
-    height: min(52vw, calc(100svh - var(--case-nav-offset, 134px) - 24px));
-    min-height: 220px;
-    max-height: 760px;
-    aspect-ratio: auto;
-  }
-  .prometheus-case-gallery .prometheus-case-showcase > img,
-  .prometheus-case-gallery .prometheus-case-brand-cover > img { object-fit: contain; }
+/* Preserve the single transitioning summary from main, fitting its complete
+   copy below the actual navbar rather than clipping the author or controls. */
+.prometheus-case-layout, .prometheus-case-gallery > figure { scroll-margin-top: var(--case-nav-offset, 134px); }
+.prometheus-case-details { top: var(--case-nav-offset, 134px); height: var(--case-copy-height, auto); }
+.prometheus-case-copy { transform: scale(var(--case-copy-scale, 1)); transform-origin: top left; }
+@media (min-width: 992px) {
+  .prometheus-case-gallery > .prometheus-case-visual { height: var(--case-view-height, calc(100svh - 158px)); min-height: 0; aspect-ratio: auto; }
+  .prometheus-case-gallery :is(.prometheus-case-brand-cover, .prometheus-case-showcase) > img { object-fit: contain; }
 }
-@media (min-width: 768px) and (max-height: 850px) {
+@media (min-width: 992px) and (max-height: 850px) {
   .prometheus-case-layout { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); }
   .prometheus-case-tags { margin-bottom: 18px; }
   .prometheus-case-tags span { min-height: 36px; padding: 7px 12px; font-size: 14px; }
@@ -326,9 +318,9 @@
   .prometheus-case-footer .prometheus-case-name { font-size: 21px; }
   .prometheus-case-controls :is(a, button) { width: 44px; height: 44px; }
 }
-@media (max-width: 767px) {
-  .prometheus-case-layout { gap: 24px; }
-  .prometheus-case-testimonial { font-size: 16px; line-height: 1.6; }
-  .prometheus-case-gallery > .prometheus-case-visual { aspect-ratio: auto; height: auto; contain: none; }
-  .prometheus-case-gallery :is(.prometheus-case-showcase, .prometheus-case-brand-cover) > img { position: static; height: auto; object-fit: contain; }
-}
+.prometheus-case-layout[data-manual="true"] { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+[data-manual="true"] .prometheus-case-details { position: static; height: auto; }
+[data-manual="true"] .prometheus-case-gallery > figure[data-selected="false"] { display: none; }
+[data-manual="true"] .prometheus-case-copy { transform: none; }
+[data-manual="true"] .prometheus-case-gallery > .prometheus-case-visual { height: auto; aspect-ratio: auto; contain: none; }
+[data-manual="true"] .prometheus-case-gallery :is(.prometheus-case-brand-cover, .prometheus-case-showcase) > img { position: static; height: auto; object-fit: contain; }
