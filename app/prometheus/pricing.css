@@ -28,14 +28,32 @@
   line-height: 1.6;
 }
 .pricing-early-rate-note {
-  max-width: 60rem;
+  display: grid;
+  gap: .8rem;
+  max-width: 72rem;
   margin: 3.2rem auto 0;
-  color: rgb(16 18 22 / 68%);
-  font-size: 1.4rem;
-  line-height: 1.6;
+  padding: 2.4rem;
+  border: 1px solid rgb(191 70 70 / 20%);
+  border-radius: 2rem;
+  background: rgb(191 70 70 / 5%);
+  color: var(--prometheus-ink);
   text-align: center;
   text-wrap: balance;
 }
+.pricing-early-rate-note > strong {
+  font-size: clamp(1.8rem, 1.5vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -.025em;
+}
+.pricing-early-rate-note > strong span { color: #642b2d; }
+.pricing-early-rate-note > p {
+  margin: 0;
+  color: rgb(16 18 22 / 78%);
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
 .pricing-plans {
   position: relative;
   isolation: isolate;

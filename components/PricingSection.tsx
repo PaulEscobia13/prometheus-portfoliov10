@@ -33,7 +33,10 @@ export default function PricingSection() {
             </article>
           ))}
         </div>
-        <p className="pricing-early-rate-note">Discounted rates for our first 5 clients. From planning to launch, we’ll be with you every step of the way.</p>
+        <aside className="pricing-early-rate-note" aria-label="Early-client pricing">
+          <strong>Discounted rates for our <span>first 5 clients.</span></strong>
+          <p>From planning to launch, we’ll be with you every step of the way.</p>
+        </aside>
       </div>
       </PricingReveal>
     </div>
