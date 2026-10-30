@@ -50,8 +50,17 @@ for (const reducedMotion of [true, false]) test(`slider autoplays only when allo
   instance.debugStep(16.7);
   assert.equal(instance.state().isOpen,true);
   assert.equal(instance.state().activeIndex,2);
+  const cards=[...root.querySelectorAll('[data-webgl-item]')];
+  assert.equal(cards[2]._op,1,'selected artwork remains fully opaque');
+  for(const card of cards.filter((card,index)=>index!==2 && card.style.visibility!=='hidden')) {
+    assert.equal(card._op,0,'other panels are hidden in the renderer');
+    assert.equal(card.style.opacity,'0','DOM fallback also hides other panels');
+    assert.equal(card.style.pointerEvents,'none');
+  }
   instance.close();instance.debugStep(16.7);
   assert.equal(instance.state().isOpen,false);
+  for(let frame=0;frame<240;frame++) instance.debugStep(16.7);
+  assert.ok(cards.some((card,index)=>index!==2 && card._op>.9 && card.style.pointerEvents==='auto'),'carousel panels return after preview closes');
   instance.destroy();
   assert.equal(root.dataset.mwInit,undefined);
   assert.equal(root.querySelector('.mw-tip-layer'),null);
