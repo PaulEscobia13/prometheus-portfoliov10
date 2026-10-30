@@ -113,6 +113,3 @@
 @media (prefers-reduced-motion: reduce) {
   .footer-wordmark-art { display: none; transition: none; }
 }
-
-/* Keep a steady contour above both artwork layers during the crossfade. */
-.prometheus-footer-wordmark::after { content: "PROMETHEUS"; position: absolute; inset: 0; z-index: 1; color: transparent; -webkit-text-fill-color: transparent; -webkit-text-stroke: 2px #fff4ea; }
