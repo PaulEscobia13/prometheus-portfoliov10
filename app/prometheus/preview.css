@@ -431,24 +431,12 @@
   .prometheus-navbar[data-menu-open="true"] { background-color: rgb(11 11 11 / 92%); }
 }
 
-/* Only the revealed footer gets a fully opaque navigation surface. */
+/* Match the footer surface only while its drawer is revealed. */
 .prometheus-navbar[data-footer-visible="true"] {
-  background-color: #fff;
+  background-color: #642b2d;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  box-shadow: 0 1px 0 rgb(16 18 22 / 10%);
-}
-.prometheus-navbar[data-footer-visible="true"] :is(.prometheus-wordmark, .prometheus-nav-primary-link, .prometheus-menu-toggle) {
-  color: var(--prometheus-ink);
-}
-.prometheus-navbar[data-footer-visible="true"] .prometheus-nav-links .prometheus-nav-primary-link:hover {
-  color: var(--prometheus-ink);
-}
-.prometheus-navbar[data-footer-visible="true"] .prometheus-nav-label-copy {
-  color: var(--prometheus-red);
-}
-.prometheus-navbar[data-footer-visible="true"] :is(a, button):focus-visible {
-  outline-color: var(--prometheus-ink);
+  box-shadow: none;
 }
 
 .prometheus-nav-links {
