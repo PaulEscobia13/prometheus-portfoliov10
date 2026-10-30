@@ -25,6 +25,7 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
   try {
     await act(async () => root.render(React.createElement(Navigation)));
     const navbar = document.querySelector('.prometheus-navbar');
+    navbar.getBoundingClientRect = () => ({bottom:100});
     let mainBottom = window.innerHeight + 100;
     document.querySelector('main').getBoundingClientRect = () => ({bottom:mainBottom});
     Object.defineProperty(window, 'scrollY', {configurable:true,value:1000});
@@ -33,8 +34,14 @@ test("desktop and mobile menu retain section anchors, direct Services navigation
     assert.equal(navbar.dataset.footerVisible, 'false', 'scrolling other sections keeps the transparent navbar');
     mainBottom = window.innerHeight - 50;
     await act(async()=>window.dispatchEvent(new window.Event('scroll')));
-    assert.equal(navbar.dataset.footerVisible, 'true', 'revealing the sticky footer enables the opaque surface');
-    mainBottom = window.innerHeight + 100;
+    assert.equal(navbar.dataset.footerVisible, 'false', 'footer appearing below the FAQ does not change the navbar');
+    mainBottom = 101;
+    await act(async()=>window.dispatchEvent(new window.Event('scroll')));
+    assert.equal(navbar.dataset.footerVisible, 'false', 'FAQ must clear the navbar bottom edge');
+    mainBottom = 100;
+    await act(async()=>window.dispatchEvent(new window.Event('scroll')));
+    assert.equal(navbar.dataset.footerVisible, 'true', 'color changes when the FAQ clears the navbar');
+    mainBottom = 101;
     await act(async()=>window.dispatchEvent(new window.Event('scroll')));
     assert.equal(navbar.dataset.footerVisible, 'false', 'scrolling back above the footer restores transparency');
     const menu = document.querySelector("#prometheus-menu");

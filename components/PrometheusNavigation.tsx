@@ -14,6 +14,7 @@ export default function PrometheusNavigation() {
   const [open, setOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navbar = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
 
@@ -21,9 +22,9 @@ export default function PrometheusNavigation() {
     const update = () => {
       setScrolled(window.scrollY > 16);
       // The footer is sticky behind main, so its own bounds can appear onscreen
-      // before it is revealed. Use the foreground page edge instead.
+      // before it is revealed. Wait until the FAQ clears the navbar itself.
       const main = document.getElementById("contacts")?.previousElementSibling;
-      setFooterVisible(!!main && main.getBoundingClientRect().bottom < window.innerHeight);
+      setFooterVisible(!!main && !!navbar.current && main.getBoundingClientRect().bottom <= navbar.current.getBoundingClientRect().bottom);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -60,7 +61,7 @@ export default function PrometheusNavigation() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <nav aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-footer-visible={footerVisible} data-menu-open={open} onKeyDown={event => {
+    <nav ref={navbar} aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-footer-visible={footerVisible} data-menu-open={open} onKeyDown={event => {
       if (event.key === "Escape" && open) {
         closeMenu();
         toggle.current?.focus();
