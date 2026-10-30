@@ -296,3 +296,39 @@
   filter: blur(20px);
 }
 .prometheus-case-showcase.is-full-screenshot > img { object-fit: contain; }
+
+/* Each story owns its artwork. Long copy stays in normal document flow, so
+   scrolling cannot replace it before the reader reaches the final line. */
+.prometheus-case-group { display: grid; gap: clamp(64px, 9vw, 128px); scroll-margin-top: var(--case-nav-offset, 134px); }
+.prometheus-case-layout { scroll-margin-top: var(--case-nav-offset, 134px); }
+.prometheus-case-details { position: static; min-width: 0; }
+.prometheus-case-gallery > figure { scroll-margin-top: var(--case-nav-offset, 134px); }
+@media (min-width: 768px) {
+  .prometheus-case-details[data-fits="true"] { position: sticky; top: var(--case-nav-offset, 134px); }
+  .prometheus-case-gallery > .prometheus-case-visual {
+    height: min(52vw, calc(100svh - var(--case-nav-offset, 134px) - 24px));
+    min-height: 220px;
+    max-height: 760px;
+    aspect-ratio: auto;
+  }
+  .prometheus-case-gallery .prometheus-case-showcase > img,
+  .prometheus-case-gallery .prometheus-case-brand-cover > img { object-fit: contain; }
+}
+@media (min-width: 768px) and (max-height: 850px) {
+  .prometheus-case-layout { grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); }
+  .prometheus-case-tags { margin-bottom: 18px; }
+  .prometheus-case-tags span { min-height: 36px; padding: 7px 12px; font-size: 14px; }
+  .prometheus-case-title { font-size: clamp(22px, 1.9vw, 28px); padding-bottom: 16px; margin-bottom: 16px; }
+  .prometheus-case-review-source { font-size: 22px; }
+  .prometheus-case-testimonial { font-size: 16px; line-height: 1.5; margin-top: 12px; }
+  .prometheus-case-footer { margin-top: 18px; }
+  .prometheus-case-avatar { width: 48px; height: 48px; flex-basis: 48px; }
+  .prometheus-case-footer .prometheus-case-name { font-size: 21px; }
+  .prometheus-case-controls :is(a, button) { width: 44px; height: 44px; }
+}
+@media (max-width: 767px) {
+  .prometheus-case-layout { gap: 24px; }
+  .prometheus-case-testimonial { font-size: 16px; line-height: 1.6; }
+  .prometheus-case-gallery > .prometheus-case-visual { aspect-ratio: auto; height: auto; contain: none; }
+  .prometheus-case-gallery :is(.prometheus-case-showcase, .prometheus-case-brand-cover) > img { position: static; height: auto; object-fit: contain; }
+}
