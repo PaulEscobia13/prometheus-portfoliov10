@@ -433,9 +433,22 @@
 
 /* Only the revealed footer gets a fully opaque navigation surface. */
 .prometheus-navbar[data-footer-visible="true"] {
-  background-color: #0b0b0b;
+  background-color: #fff;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  box-shadow: 0 1px 0 rgb(16 18 22 / 10%);
+}
+.prometheus-navbar[data-footer-visible="true"] :is(.prometheus-wordmark, .prometheus-nav-primary-link, .prometheus-menu-toggle) {
+  color: var(--prometheus-ink);
+}
+.prometheus-navbar[data-footer-visible="true"] .prometheus-nav-links .prometheus-nav-primary-link:hover {
+  color: var(--prometheus-ink);
+}
+.prometheus-navbar[data-footer-visible="true"] .prometheus-nav-label-copy {
+  color: var(--prometheus-red);
+}
+.prometheus-navbar[data-footer-visible="true"] :is(a, button):focus-visible {
+  outline-color: var(--prometheus-ink);
 }
 
 .prometheus-nav-links {
