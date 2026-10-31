@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { homepageMetadata, homepageStructuredData } from "../../lib/seo";
 import Navigation from "../../components/Navigation";
 import Hero from "../../components/Hero";
 import SmoothScroll from "../../components/SmoothScroll";
@@ -20,14 +20,12 @@ import "./pricing.css";
 import "./team.css";
 import "./closing.css";
 
-export const metadata: Metadata = {
-  title: "Prometheus | Tech Products and Services",
-  robots: { index: false, follow: false },
-};
+export const metadata = homepageMetadata;
 
 export default function PrometheusPreview() {
   return (
     <div className="page-wrapper prometheus-preview">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageStructuredData).replace(/</g, "\\u003c") }} />
       <SmoothScroll />
       <HeroPointer />
       <RotatingFavicon />

@@ -54,14 +54,3 @@ export default function PricingSelector({ options, value, onChange }: {
     >{option.label}</button>)}
   </div>;
 }
-
-const audiences = [
-  { value: "personal", label: "Personal" },
-  { value: "business", label: "Business" },
-  { value: "others", label: "Others" },
-];
-
-export function PricingAudienceSelector() {
-  const [audience, setAudience] = useState("business");
-  return <PricingSelector options={audiences} value={audience} onChange={setAudience} />;
-}

@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 
 for (const reducedMotion of [true, false]) test(`slider autoplays only when allowed and preserves previews (reduced motion: ${reducedMotion})`, () => {
- const dom=new JSDOM(`<section><div data-webgl-canvas data-scroll-span="-3" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1">${Array.from({length:14},(_,i)=>`<div data-webgl-item><button aria-label="Preview ${i}"></button><div><img data-webgl-image src="/showcase/${i}.png"><button data-webgl-close aria-label="Close preview"></button></div></div>`).join('')}</div></section>`,{runScripts:'outside-only',pretendToBeVisual:true,url:'http://localhost'});
+ const dom=new JSDOM(`<section><div data-webgl-canvas data-scroll-span="-3" data-hover-dim="0.75" data-wheel="true" data-hole-x="0" data-hole-y="0" data-hole-w="1" data-hole-h="1">${Array.from({length:14},(_,i)=>`<div data-webgl-item><button aria-label="Preview ${i}"></button><div><img data-webgl-image src="/showcase/${i}.png"><button data-webgl-close aria-label="Close preview"></button></div></div>`).join('')}</div></section>`,{runScripts:'outside-only',pretendToBeVisual:true,url:'http://localhost'});
  const {window}=dom;const frames=new Map();let id=0;
  window.matchMedia=()=>({matches:reducedMotion});
  window.requestAnimationFrame=fn=>{frames.set(++id,fn);return id};
@@ -29,6 +29,19 @@ for (const reducedMotion of [true, false]) test(`slider autoplays only when allo
   for(let frame=0;frame<120;frame++) instance.debugStep(16.7);
   if(reducedMotion) assert.equal(instance.state().target,start,'reduced motion never autoplays');
   else assert.ok(instance.state().target>start+.4,'advances continuously while idle');
+  if (!reducedMotion) {
+   const card=root.querySelector('[data-webgl-item]');
+   card.dispatchEvent(new window.Event('pointerenter'));
+   const paused=instance.state().target;
+   for(let frame=0;frame<60;frame++) instance.debugStep(16.7);
+   assert.equal(instance.state().target,paused,'hover freezes the conveyor without snapping');
+   assert.equal(instance.state().current,paused,'hovered card stays stationary');
+   assert.ok(card._op>.99,'hovered card stays fully lit');
+   assert.ok(root.querySelectorAll('[data-webgl-item]')[1]._op>.749 && root.querySelectorAll('[data-webgl-item]')[1]._op<.751,'other cards match live Webflow 0.75 hover opacity');
+   card.dispatchEvent(new window.Event('pointerleave'));
+   for(let frame=0;frame<60;frame++) instance.debugStep(16.7);
+   assert.ok(instance.state().target>paused+.2,'leaving resumes automatic movement');
+  }
   instance.set('autoAdvance',0);
   assert.equal(root.querySelectorAll('[data-webgl-item]').length,14);
   let pageWheels=0;
