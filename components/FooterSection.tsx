@@ -1,25 +1,33 @@
-import { contact, footerLinks } from "../content/contact";
-import FooterReveal from "./FooterReveal";
-
-export default function FooterSection() {
-  return (
-    <FooterReveal>
-      <div className="prometheus-footer-artboard">
-        <div className="prometheus-footer-foreground">
-          <div className="prometheus-footer-top"><span>PROMETHEUS</span><a href="#contact-actions">CONTACT US</a></div>
-          <div className="prometheus-footer-main">
-            <h2>Let’s build a system around how your business actually works.</h2>
-            <p>Tell us where work becomes repetitive, fragmented, or difficult to keep track of. We’ll start there.</p>
-          </div>
-          <div className="prometheus-footer-lower" id="contact-actions">
-            <a className="prometheus-footer-cta" href={contact.meetingUrl} target="_blank" rel="noopener noreferrer">{contact.meetingLabel} <span aria-hidden="true">↗</span></a>
-            <nav className="prometheus-footer-links" aria-label="Footer navigation">
-              {footerLinks.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}
-            </nav>
-          </div>
-        </div>
-        <div className="prometheus-footer-wordmark" aria-hidden="true">PROMETHEUS</div>
-      </div>
-    </FooterReveal>
-  );
-}
+import { GeistSans } from "geist/font/sans";
+import { contact, footerLinks } from "../content/contact";
+import FooterReveal from "./FooterReveal";
+import FooterWordmark from "./FooterWordmark";
+
+export default function FooterSection() {
+  return (
+    <FooterReveal>
+      <div className="prometheus-footer-artboard">
+        <div className="prometheus-footer-foreground">
+          <div className="prometheus-footer-top"><span className="prometheus-footer-brand"><span className="prometheus-footer-flame" aria-hidden="true" /></span><a className={`prometheus-footer-email ${GeistSans.variable}`} href="mailto:prometheus.exps@gmail.com"><span>Email</span><span>prometheus.exps@gmail.com</span></a></div>
+          <div className="prometheus-footer-main">
+            <h2>Let us show you what we can do for your business.</h2>
+            <p>We’re your very own IT team, here to support you every step of the way.</p>
+          </div>
+          <div className="prometheus-footer-lower" id="contact-actions">
+            <nav className="prometheus-footer-links" aria-label="Footer navigation">
+              {[[{ label: "Services", href: "#services" }, { label: "Work", href: "#works" }, footerLinks[3], footerLinks[2]]].map((links, index) => <div className="prometheus-footer-link-column" key={index}><span className="prometheus-footer-link-label">{index === 0 ? "Main" : "Links"}</span>{links.map(link => <a className="prometheus-footer-main-link" key={link.href} href={link.href} aria-label={link.label}><span className="prometheus-footer-label-window" aria-hidden="true"><span className="prometheus-footer-label-roll"><span>{link.label}</span><span className="prometheus-footer-label-copy">{link.label}</span></span></span></a>)}</div>)}
+            </nav>
+            <a className="prometheus-footer-cta" href={contact.meetingUrl} target="_blank" rel="noopener noreferrer">{contact.meetingLabel} <span aria-hidden="true">↗</span></a>
+          </div>
+          <div className="prometheus-footer-socials" aria-label="Social channels">
+            <button type="button" className="prometheus-footer-social social-facebook" aria-label="Facebook"><img src="/favicons/facebook.svg" alt="" width="48" height="48" /></button>
+            <button type="button" className="prometheus-footer-social social-instagram" aria-label="Instagram"><img src="/favicons/instagram.svg" alt="" width="48" height="48" /></button>
+            <button type="button" className="prometheus-footer-social social-viber" aria-label="Viber"><img src="/favicons/viber.svg" alt="" width="48" height="48" /></button>
+          </div>
+        </div>
+        <FooterWordmark />
+      </div>
+    </FooterReveal>
+  );
+}
+

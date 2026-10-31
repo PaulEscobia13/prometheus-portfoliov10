@@ -84,7 +84,7 @@ export const caseStudies: readonly CaseStudy[] = [
     story: [
       {
         headline: "Behind the Counter of an Iconic Shop",
-        quote: "Here at Piercing Corner, one of the challenges we face is managing physical waiver forms. As more customers avail our piercing services, mas dumarami rin ang paperwork na kailangan naming i-store at i-organize, which is a hassle and takes a lot of time. Another challenge is responding to customer inquiries, especially yung paulit-ulit na pag-send ng pictures ng jewelry at available services, which is also time-consuming and repetitive. Since our owner will also be busy preparing for childbirth, we needed a more efficient way to handle our daily operations and allow her to monitor and manage the business remotely, kahit hindi siya physically present sa shop.",
+        quote: "Here at Piercing Corner, one of the challenges we face is managing physical waiver forms. As more customers avail our piercing services, mas dumarami rin ang paperwork na kailangan naming i-store at i-organize, which is a hassle and takes a lot of time. Another challenge is responding to customer inquiries, especially yung paulit-ulit na pag-send ng pictures ng jewelry at available services, which is also time-consuming and repetitive. We're looking for a more efficient way to handle our daily operations, which would allow us to manage the business more productively.",
         name: "Piercing Corner", role: "Team", portrait: "/cases/piercing-corner-team-logo.png", team: true,
       },
       {

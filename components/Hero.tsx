@@ -11,21 +11,25 @@ const pillArtwork = {
 export default function Hero({ brand = "arounda" }: { brand?: "arounda" | "prometheus" }) {
  let html = readFileSync(join(process.cwd(), "reference/hero.html"), "utf8");
  if (brand === "prometheus") {
+   let letterIndex = 0;
+   const letterCount = prometheusHero.headline.reduce((count, part) => count + part.text.replace(/\s/g, "").length, 0);
+   const revealText = (value: string) => value.split(/(\s+)/).map(word => /^\s+$/.test(word) ? word : `<span class="hero-reveal-word" aria-label="${escapeHtml(word)}">${Array.from(word).map(letter => `<span aria-hidden="true" class="hero-reveal-letter" style="--letter-delay:${(750 + 600 * letterIndex++ / Math.max(1, letterCount - 1)).toFixed(1)}ms">${escapeHtml(letter)}</span>`).join("")}</span>`).join("");
    const playMarkup = html.match(/<div class="home-hero-title-decor-play"[^>]*>[\s\S]*?<\/div>/)?.[0] ?? "";
    const inlinePlay = playMarkup.replace(/^<div\b[^>]*>/, '<span class="home-hero-title-decor-play">').replace(/<\/div>$/, "</span>");
    html = html.replace(/<h1 class="home-hero-subtitle">[\s\S]*?<\/h1>/,
      `<p class="home-hero-subtitle">${escapeHtml(prometheusHero.eyebrow)}</p>`);
    const headline = prometheusHero.headline.map(part => {
-     const text = escapeHtml(part.text);
+     const partDelay = 750 + 600 * letterIndex / Math.max(1, letterCount - 1);
+     const text = revealText(part.text);
      if ("italic" in part) return `<em class="is-italic">${text}</em>`;
      if ("pill" in part) {
        const icons = pillArtwork[part.pill].map((file, index) => `<span aria-hidden="true" class="prometheus-pill-icon prometheus-pill-icon-${index + 1}"><span class="prometheus-icon-glyph" style="mask-image:url('/assets/${file}')"></span></span>`).join("");
-       return `<a href="#services" class="homepage-h1-link prometheus-headline-pill ${part.pill}"><span>${text}</span>${icons}</a>`;
+       return `<a href="#services" class="homepage-h1-link prometheus-headline-pill ${part.pill}" style="--pill-delay:${partDelay.toFixed(1)}ms" aria-label="${escapeHtml(part.text)}"><span>${text}</span>${icons}</a>`;
      }
-     return text.replace(/^ with /, ` <span class="prometheus-hero-with">${inlinePlay} with</span> `);
+     return part.text === " with " ? ` <span class="prometheus-hero-with">${inlinePlay} ${text.trim()}</span> ` : text;
    }).join("");
    html = html.replace(/<div class="homepage_h1-wrapper">[\s\S]*?(?=<div class="home-hero_icons-wrapper">)/,
-     `<div class="homepage_h1-wrapper"><h1 class="home-hero_h1 prometheus-hero-title">${headline}</h1>`);
+     `<div class="homepage_h1-wrapper"><h1 class="home-hero_h1 prometheus-hero-title" aria-label="${escapeHtml(prometheusHero.headline.map(part => part.text).join(""))}">${headline}</h1>`);
    // Captured icons were positioned against the entire old headline. Each new
    // pill owns its decorations, so line wrapping cannot detach them from a word.
    html = html.replace(/<div class="home-hero_icons-wrapper">[\s\S]*?(?=<div class="home-hero-title-decor-play")/, "");

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { elasticOut, springStep } from "../lib/pointer-motion";
 
-const targets = ".prometheus-hero-title, .home-section-hero .button-primary, .prometheus-navbar .nav-cta, .prometheus-footer-cta";
+const targets = ".prometheus-hero-title, .home-section-hero .button-primary, .prometheus-navbar .nav-cta, .prometheus-footer-cta, .prometheus-footer-social";
 type Magnet = { x: number; y: number; fromX: number; fromY: number; elapsed: number; aimX: number; aimY: number };
 
 export default function HeroPointer() {
@@ -75,8 +75,9 @@ export default function HeroPointer() {
       pointerX = event.clientX; pointerY = event.clientY;
       if (!positioned && active) { x = pointerX; y = pointerY; positioned = true; }
       if (active) {
-        badge.dataset.visible = "true";
-        const isButton = active.matches("a");
+        if (!active.matches(".prometheus-footer-social")) badge.dataset.visible = "true";
+        else badge.removeAttribute("data-visible");
+        const isButton = active.matches("a, button");
         badge.dataset.cta = String(isButton);
         if (isButton) {
           const spring = magnets.get(active) ?? { x: 0, y: 0, fromX: 0, fromY: 0, elapsed: 0, aimX: 0, aimY: 0 };

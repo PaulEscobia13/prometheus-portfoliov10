@@ -14,14 +14,26 @@ export default function PrometheusNavigation() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [footerProgress, setFooterProgress] = useState(0);
+  const navigation = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 16);
+    const update = () => {
+      setScrolled(window.scrollY > 16);
+      const footer = document.getElementById("contacts");
+      const main = footer?.previousElementSibling;
+      if (!footer || !main) { setFooterProgress(0); return; }
+      const rect = footer.getBoundingClientRect();
+      const revealEdge = Math.max(0, window.innerHeight - rect.height);
+      const progress = Math.min(1, Math.max(0, (revealEdge + 180 - main.getBoundingClientRect().bottom) / 180));
+      setFooterProgress(navigation.current?.contains(document.activeElement) ? 0 : progress);
+    };
     update();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    window.addEventListener("resize", update);
+    return () => { window.removeEventListener("scroll", update); window.removeEventListener("resize", update); };
   }, []);
 
   useEffect(() => {
@@ -51,7 +63,7 @@ export default function PrometheusNavigation() {
   const closeMenu = () => { setOpen(false); setServicesOpen(false); };
 
   return (
-    <nav aria-label="Main navigation" className="navbar prometheus-navbar" data-scrolled={scrolled} data-menu-open={open} onKeyDown={event => {
+    <nav ref={navigation} aria-label="Main navigation" className="navbar prometheus-navbar" style={{ transform: `translateY(-${open ? 0 : footerProgress * 110}%)` }} inert={footerProgress >= 1 && !open} data-scrolled={scrolled} data-menu-open={open} onKeyDown={event => {
       if (event.key === "Escape" && open) {
         closeMenu();
         toggle.current?.focus();
