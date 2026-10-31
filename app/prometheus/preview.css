@@ -307,7 +307,7 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%) 85%, #0d1116),
+    linear-gradient(180deg, rgb(8 10 14 / 55%), rgb(8 10 14 / 24%) 50%, rgb(8 10 14 / 42%) 85%, #080909),
     url('/backgrounds/prometheus-waves.png');
   background-size: cover;
   background-position: center top;
