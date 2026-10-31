@@ -11,7 +11,7 @@ const ShowcaseGallery = ShowcaseGalleryModule.default ?? ShowcaseGalleryModule;
 // JSDOM does not implement layout, media preferences, observers, pointer capture
 // or WAAPI. These controlled boundaries exercise the real component's effects
 // and event handlers; CSS projection and browser modality are verified manually.
-async function mountGallery(t, { reduced = false } = {}) {
+async function mountGallery(t, { reduced = false, deferOpening = false } = {}) {
   const dom = new JSDOM("<!doctype html><html><body><div id='root'></div></body></html>", { pretendToBeVisual: true, url: "http://localhost/prometheus" });
   const { window } = dom;
   const previousGlobals = new Map();
@@ -91,7 +91,9 @@ async function mountGallery(t, { reduced = false } = {}) {
   window.HTMLElement.prototype.hasPointerCapture = id => capturedPointers.has(id);
   window.HTMLElement.prototype.releasePointerCapture = id => capturedPointers.delete(id);
   window.HTMLElement.prototype.animate = function (keyframes, options) {
-    const animation = { element: this, keyframes, options, canceled: false, finished: Promise.resolve(), cancel() { this.canceled = true; } };
+    let finish = () => {};
+    const finished = deferOpening && options.duration === 650 ? new Promise(resolve => { finish = resolve; }) : Promise.resolve();
+    const animation = { element: this, keyframes, options, canceled: false, finished, finish, cancel() { this.canceled = true; } };
     animations.push(animation);
     return animation;
   };
@@ -124,9 +126,10 @@ async function mountGallery(t, { reduced = false } = {}) {
     frames.clear();
     await act(async () => current.forEach(callback => callback(time)));
   };
-  const pointer = async (type, x, y = 0, id = 7) => {
+  let pointerTime = 1000;
+  const pointer = async (type, x, y = 0, id = 7, pointerType = "touch") => {
     const event = new window.MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0 });
-    Object.defineProperties(event, { pointerId: { value: id }, pointerType: { value: "touch" }, isPrimary: { value: true } });
+    Object.defineProperties(event, { timeStamp: { value: pointerTime += 16 }, pointerId: { value: id }, pointerType: { value: pointerType }, isPrimary: { value: true } });
     await act(async () => stage.dispatchEvent(event));
   };
   return {
@@ -143,8 +146,7 @@ async function mountGallery(t, { reduced = false } = {}) {
 test("initial reduced motion disables autoplay and WAAPI while keeping keyboard previews usable", async t => {
   const gallery = await mountGallery(t, { reduced: true });
   assert.equal(gallery.frames.size, 0);
-  const motionControl = [...document.querySelectorAll("button")].find(button => button.textContent === "Motion reduced");
-  assert.ok(motionControl?.disabled);
+  assert.equal(document.querySelector(".showcase-toolbar"), null);
   await gallery.key("ArrowRight");
   assert.match(document.querySelector('[role="status"]').textContent, /Hardware/);
   await gallery.key("Enter");
@@ -183,7 +185,7 @@ test("live reduced-motion changes cancel the active frame and resume only after 
 
 test("switching to reduced motion cancels an expanded preview animation without closing it", async t => {
   const gallery = await mountGallery(t);
-  await gallery.click(document.querySelector(".showcase-preview-trigger"));
+  await gallery.key("Enter");
   assert.ok(gallery.dialog.open);
   assert.equal(gallery.animations.length, 1);
   await gallery.preference(true);
@@ -241,7 +243,7 @@ test("a hidden document stops autoplay and unmount removes observers, frames and
 test("unmounting an expanded preview cancels its animation and restores page scrolling", async t => {
   const gallery = await mountGallery(t);
   document.documentElement.style.overflow = "scroll";
-  await gallery.click(document.querySelector(".showcase-preview-trigger"));
+  await gallery.key("Enter");
   assert.equal(document.documentElement.style.overflow, "hidden");
   assert.equal(gallery.animations.length, 1);
   await gallery.unmount();
@@ -252,48 +254,42 @@ test("unmounting an expanded preview cancels its animation and restores page scr
   assert.equal(gallery.frames.size, 0);
 });
 
-test("Play resumes movement while the native motion button retains keyboard focus", async t => {
+test("Space pauses motion without a visible toolbar and arrow keys wrap concepts", async t => {
   const gallery = await mountGallery(t);
-  const control = [...document.querySelectorAll("button")].find(button => button.textContent === "Pause motion");
-  await gallery.frame(1000);
-  await gallery.frame(1050);
-  await gallery.focus(control);
-  await gallery.click(control);
-  assert.equal(document.activeElement, control);
-  assert.equal(control.textContent, "Play motion");
-  assert.equal(control.getAttribute("aria-pressed"), "true");
+  assert.equal(document.querySelector(".showcase-toolbar"), null);
+  assert.equal(document.querySelector('[aria-label="Previous concept"]'), null);
+  await gallery.frame(1000); await gallery.frame(1050);
+  await gallery.key(" ");
+  assert.equal(document.querySelector('[role="status"]').textContent, "Gallery motion paused.");
   for (let time = 1100; gallery.frames.size && time < 6000; time += 50) await gallery.frame(time);
-  assert.equal(gallery.frames.size, 0, "pause settles without keeping an idle animation frame alive");
+  assert.equal(gallery.frames.size, 0);
   const paused = gallery.track.style.transform;
-  await gallery.click(control);
-  assert.equal(control.textContent, "Pause motion");
-  assert.equal(control.getAttribute("aria-pressed"), "false");
-  assert.equal(document.activeElement, control, "playing does not move keyboard focus away from its control");
-  await gallery.frame(7000);
-  await gallery.frame(7050);
-  assert.notEqual(gallery.track.style.transform, paused, "the focused motion control does not block autoplay");
+  await gallery.key(" "); await gallery.frame(7000); await gallery.frame(7050);
+  assert.notEqual(gallery.track.style.transform, paused);
+  await gallery.key("ArrowLeft");
+  assert.equal(document.querySelector('[role="status"]').textContent, "Wedding RSVP, 14 of 14.");
+  await gallery.key("ArrowRight");
+  assert.equal(document.querySelector('[role="status"]').textContent, "Nail Salon, 1 of 14.");
 });
 
-test("Previous and Next wrap accessibly and announce the concept without stage-only instructions", async t => {
-  const gallery = await mountGallery(t, { reduced: true });
-  const previous = document.querySelector('[aria-label="Previous concept"]');
-  const next = document.querySelector('[aria-label="Next concept"]');
-  const status = document.querySelector('[role="status"]');
-  await gallery.focus(previous);
-  await gallery.click(previous);
-  assert.equal(status.textContent, "Wedding RSVP, 14 of 14.");
-  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Wedding RSVP, 14 of 14");
-  assert.equal(document.activeElement, previous);
-  await gallery.focus(next);
-  await gallery.click(next);
-  assert.equal(status.textContent, "Nail Salon, 1 of 14.");
-  assert.equal(document.querySelector(".showcase-preview-trigger").getAttribute("aria-label"), "Preview Nail Salon, 1 of 14");
-  assert.equal(document.activeElement, next);
-  assert.equal(document.querySelector(".showcase-controls").getAttribute("aria-label"), "Browse all 14 concepts");
-  assert.equal(gallery.dialog.open, false);
+test("a flick coasts in its release direction and normal capture release preserves momentum", async t => {
+  const gallery = await mountGallery(t);
+  await gallery.pointer("pointerdown", 300);
+  await gallery.pointer("pointermove", 260);
+  await gallery.pointer("pointermove", 200);
+  const released = gallery.track.style.transform;
+  await gallery.pointer("pointerup", 200);
+  await gallery.pointer("lostpointercapture", 200);
+  await gallery.frame(1000); await gallery.frame(1050);
+  const x = value => Number(value.match(/translate3d\(([-\d.]+)px/)[1]);
+  assert.ok(x(gallery.track.style.transform) < x(released), "leftward momentum continues after release");
+  await gallery.preference(true);
+  const stopped = gallery.track.style.transform;
+  await gallery.frame(1100);
+  assert.equal(gallery.track.style.transform, stopped);
 });
 
-test("resizing keeps the selected card centered while stage or browse controls retain focus", async t => {
+test("resizing keeps the keyboard-selected card centered", async t => {
   const gallery = await mountGallery(t, { reduced: true });
   const assertCentered = id => {
     const centers = [...document.querySelectorAll(`[data-sheet-id="${id}"]`)].map(element => {
@@ -309,12 +305,76 @@ test("resizing keeps the selected card centered while stage or browse controls r
   await gallery.resize({ viewport: 375, pitch: 170, sheetWidth: 400, extent: 300 });
   assertCentered("sheet-08");
   assert.equal(document.activeElement, gallery.stage);
-  const next = document.querySelector('[aria-label="Next concept"]');
-  await gallery.focus(next);
-  await gallery.click(next);
+  await gallery.key("ArrowRight");
   assertCentered("sheet-09");
   await gallery.resize({ viewport: 1920, pitch: 310, sheetWidth: 800, extent: 500 });
   assertCentered("sheet-09");
-  assert.equal(document.activeElement, next);
+  assert.equal(document.activeElement, gallery.stage);
   assert.equal(document.querySelector('[role="status"]').textContent, "Lendfolio, 9 of 14.");
+});
+
+test("hovering either edge does not steer or start gallery motion", async t => {
+  const gallery = await mountGallery(t, { reduced: true });
+  const initial = gallery.track.style.transform;
+  await gallery.pointer("pointermove", 10, 30, 1, "mouse");
+  await gallery.frame(1000);
+  assert.equal(gallery.track.style.transform, initial);
+  await gallery.pointer("pointermove", 1430, 30, 1, "mouse");
+  await gallery.frame(1050);
+  assert.equal(gallery.track.style.transform, initial);
+  assert.equal(gallery.frames.size, 0);
+});
+
+test("preview close control waits for the image entrance and caption stays hidden", async t => {
+  const gallery = await mountGallery(t, { deferOpening: true });
+  await gallery.key("Enter");
+  const frame = document.querySelector(".showcase-preview-frame");
+  const close = document.querySelector(".showcase-preview-close");
+  assert.equal(frame.dataset.ready, "false");
+  assert.equal(close.disabled, true);
+  assert.equal(document.activeElement, gallery.dialog);
+  assert.equal(document.querySelector(".showcase-preview-caption"), null);
+  await act(async () => gallery.animations[0].finish());
+  assert.equal(frame.dataset.ready, "true");
+  assert.equal(close.disabled, false);
+  assert.equal(document.activeElement, close);
+  await gallery.click(close);
+  assert.equal(gallery.dialog.open, false);
+});
+
+test("Escape can dismiss the preview before its delayed controls appear", async t => {
+  const gallery = await mountGallery(t, { deferOpening: true });
+  await gallery.key("Enter");
+  await act(async () => gallery.dialog.dispatchEvent(new window.Event("cancel", { cancelable: true })));
+  assert.equal(gallery.dialog.open, false);
+  await act(async () => gallery.animations[0].finish());
+  assert.equal(gallery.dialog.open, false);
+  assert.equal(document.querySelector(".showcase-preview-close"), null);
+});
+
+test("wheel gestures glide, reverse promptly and preserve vertical page scrolling and pinch zoom", async t => {
+  const gallery = await mountGallery(t);
+  const wheel = async options => {
+    const event = new window.WheelEvent("wheel", { bubbles: true, cancelable: true, ...options });
+    await act(async () => gallery.stage.dispatchEvent(event));
+    return event;
+  };
+  const x = () => Number(gallery.track.style.transform.match(/translate3d\(([-\d.]+)px/)[1]);
+  await gallery.frame(1000);
+  const before = x();
+  assert.equal((await wheel({ deltaX: 120 })).defaultPrevented, true);
+  assert.equal(x(), before, "wheel input eases through frames instead of jumping");
+  await gallery.frame(1050); await gallery.frame(1100);
+  assert.ok(x() < before, "scrolling right moves cards left");
+  const reversed = x();
+  await wheel({ deltaX: -120 });
+  await gallery.frame(1150);
+  assert.ok(x() > reversed, "opposite input reverses on the next frame");
+  assert.equal((await wheel({ deltaY: 90 })).defaultPrevented, false, "vertical page scrolling remains native");
+  assert.equal((await wheel({ deltaY: 90, ctrlKey: true })).defaultPrevented, false, "pinch zoom remains native");
+  await gallery.preference(true);
+  const still = x();
+  await wheel({ deltaX: 40 });
+  assert.notEqual(x(), still, "reduced motion supports direct manual browsing");
+  assert.equal(gallery.frames.size, 0, "reduced motion has no coasting frames");
 });

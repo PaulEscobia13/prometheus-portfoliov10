@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { showcaseSheetsFromFiles } from "../content/showcase";
-import ShowcaseGallery from "./ShowcaseGallery";
+import WebflowShowcaseGallery from "./WebflowShowcaseGallery";
 
 export default function ShowcaseSection() {
   const directory = join(process.cwd(), "public", "showcase");
@@ -9,5 +9,5 @@ export default function ShowcaseSection() {
   // Assets fill the fourteen curated slots; a partial collection must never
   // change the cycle length or discard the remaining placeholder cards.
   const sheets = showcaseSheetsFromFiles(files);
-  return <ShowcaseGallery sheets={sheets} />;
+  return <WebflowShowcaseGallery sheets={sheets} />;
 }
