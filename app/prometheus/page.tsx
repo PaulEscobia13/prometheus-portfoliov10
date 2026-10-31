@@ -19,6 +19,7 @@ import "./showcase.css";
 import "./pricing.css";
 import "./team.css";
 import "./closing.css";
+import "./mobile.css";
 
 export const metadata = homepageMetadata;
 
